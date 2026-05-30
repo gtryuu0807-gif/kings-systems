@@ -1,0 +1,250 @@
+#noticeList,
+#adminNoticeList{
+    margin-top:20px;
+    text-align:left;
+}
+
+.noticeCard,
+.adminNoticeCard{
+    margin-top:12px;
+    padding:16px;
+    border-radius:18px;
+    background:white;
+    border:1px solid #dbeafe;
+    box-shadow:0 8px 22px rgba(37,99,235,0.07);
+    text-align:left;
+    animation:cardSlideIn 0.32s ease-out;
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.noticeCard:hover,
+.adminNoticeCard:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 26px rgba(37,99,235,0.12);
+}
+
+.noticeHeader{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+}
+
+.noticeTitleArea strong{
+    display:block;
+    color:#1e3a8a;
+    font-size:17px;
+    line-height:1.5;
+    word-break:break-word;
+}
+
+.noticeNewBadge{
+    display:inline-block;
+    margin-right:4px;
+}
+
+.noticeBody{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:14px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    font-size:14px;
+    color:#334155;
+    line-height:1.8;
+    word-break:break-word;
+}
+
+.noticeBodyPreview{
+    position:relative;
+}
+
+.noticeBodyExpanded{
+    background:#ffffff;
+    border-color:#bfdbfe;
+}
+
+.noticeBodyToggleBtn{
+    width:100%;
+    height:42px;
+    margin-top:10px;
+    background:#eef2ff;
+    color:#1e3a8a;
+}
+
+.noticeMetaBox{
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:14px;
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    font-size:13px;
+    color:#475569;
+    line-height:1.7;
+}
+
+.noticeConfirmArea{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid #e2e8f0;
+}
+
+.noticeConfirmBtn{
+    width:100%;
+    height:44px;
+    margin:0;
+    background:#2563eb;
+    color:white;
+}
+
+.noticeConfirmBtn.confirmed{
+    background:#94a3b8;
+    color:white;
+}
+
+.confirmedUserSummary{
+    margin-top:10px;
+    font-size:13px;
+    color:#64748b;
+    font-weight:700;
+}
+
+.confirmedPreviewList{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+}
+
+.confirmedPreviewItem,
+.confirmedMoreBadge{
+    display:inline-flex;
+    align-items:center;
+    min-height:30px;
+    padding:5px 10px;
+    border-radius:999px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    font-size:13px;
+    color:#334155;
+}
+
+.confirmedMoreBadge{
+    background:#dbeafe;
+    border-color:#bfdbfe;
+    color:#1e3a8a;
+    font-weight:700;
+}
+
+.confirmedToggleBtn{
+    width:100%;
+    height:42px;
+    margin-top:12px;
+    background:#eef2ff;
+    color:#1e3a8a;
+}
+
+.confirmedFullList{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.confirmedFullList.show{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    animation:cardSlideIn 0.24s ease-out;
+}
+
+.confirmedUserItem{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 10px;
+    border-radius:12px;
+    background:white;
+    border:1px solid #e2e8f0;
+    font-size:13px;
+    color:#334155;
+}
+
+.confirmedUserItem span{
+    flex:0 0 auto;
+    width:24px;
+    height:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1e3a8a;
+    font-size:12px;
+    font-weight:700;
+}
+
+.confirmedUserItem strong{
+    font-size:13px;
+    color:#334155;
+    word-break:break-word;
+}
+
+.adminNoticeConfirmBox{
+    margin-top:14px;
+    padding:14px;
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.adminNoticeConfirmBox > strong{
+    display:block;
+    font-size:14px;
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+.noticeDeleteBtn{
+    width:100%;
+    height:44px;
+    margin-top:14px;
+    background:#b91c1c;
+    color:white;
+}
+
+.confirmedUserEmpty,
+.noticeEmpty{
+    padding:14px;
+    border-radius:14px;
+    background:#f8fafc;
+    border:1px dashed #cbd5e1;
+    color:#64748b;
+    font-size:14px;
+}
+
+@media (max-width:380px){
+    .noticeCard,
+    .adminNoticeCard{
+        padding:14px;
+    }
+
+    .noticeTitleArea strong{
+        font-size:16px;
+    }
+
+    .noticeBody{
+        font-size:13px;
+    }
+
+    .confirmedPreviewItem,
+    .confirmedMoreBadge{
+        font-size:12px;
+        padding:5px 9px;
+    }
+}
+

@@ -1,0 +1,62 @@
+.chartBox{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    margin:18px 0 24px;
+    padding:18px;
+    border-radius:20px;
+    background:white;
+    border:1px solid #dbeafe;
+    box-shadow:0 8px 24px rgba(37,99,235,0.08);
+    overflow:hidden;
+    animation:cardSlideIn 0.34s ease-out;
+}
+
+.chartBox h4{
+    margin:0 0 12px;
+    font-size:17px;
+    color:#1e3a8a;
+}
+
+.chartBox canvas{
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    border-radius:14px;
+    background:#f8fafc;
+}
+
+.chartScrollArea{
+    width:100%;
+    max-width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:8px;
+}
+
+.chartScrollArea canvas{
+    max-width:none;
+}
+
+@media (max-width:640px){
+    .chartBox{
+        padding:14px;
+        overflow:hidden;
+    }
+
+    .chartScrollArea{
+        border-radius:14px;
+        background:#f8fafc;
+        border:1px solid #e2e8f0;
+    }
+
+    .chartScrollArea::after{
+        content:"横にスクロールできます →";
+        display:block;
+        padding:6px 10px 8px;
+        font-size:12px;
+        color:#64748b;
+    }
+}

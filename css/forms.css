@@ -1,0 +1,71 @@
+input,
+textarea,
+select{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    margin-top:16px;
+    border-radius:16px;
+    border:1px solid #d1d5db;
+    padding:16px;
+    font-size:17px;
+    box-sizing:border-box;
+    background:#f9fafb;
+    font-family:inherit;
+    position:relative;
+    z-index:2;
+    transition:
+        border 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease;
+}
+
+input,
+select{
+    height:58px;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    outline:none;
+    border:1px solid #2563eb;
+    background:white;
+    box-shadow:0 0 0 4px rgba(37,99,235,0.12);
+    transform:translateY(-1px);
+}
+
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="number"],
+select{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    appearance:auto;
+}
+
+label{
+    min-width:0;
+    max-width:100%;
+    box-sizing:border-box;
+}
+
+@media (max-width:640px){
+    input,
+    textarea,
+    select{
+        font-size:16px;
+        padding-left:13px;
+        padding-right:13px;
+    }
+}

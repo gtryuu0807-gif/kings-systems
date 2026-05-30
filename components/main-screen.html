@@ -1,0 +1,149 @@
+<div id="mainScreen">
+
+    <p class="subTitle">勤怠管理</p>
+
+    <div id="incompleteAttendanceAlert" class="incompleteAttendanceAlert"></div>
+
+    <div id="currentWorkStatusCard" class="currentWorkStatusCard"></div>
+
+    <button id="clockInBtn" class="kingActionBtn kingClockInBtn">
+        <span class="kingBtnIcon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="8"/></svg>
+        </span>
+        <span>出勤する</span>
+    </button>
+    <button id="clockOutBtn">退勤</button>
+
+    <h2>お知らせ</h2>
+    <div id="noticeList"></div>
+
+    <h2>自分の勤怠管理</h2>
+    <p class="mainScreenHelp">
+        勤務履歴の確認、打刻忘れの追加、休み登録をメニューから選択できます。
+    </p>
+
+    <div class="mainHistoryMenu">
+        <button class="mainTabBtn active" data-main-tab="history">
+            <span class="mainTabIcon svgTabIcon icon-history" aria-hidden="true"></span>
+            <span class="mainTabText">
+                <strong>勤務履歴の確認</strong>
+                <small>月別・年別で自分の履歴を確認</small>
+            </span>
+        </button>
+
+        <button class="mainTabBtn" data-main-tab="manual">
+            <span class="mainTabIcon svgTabIcon icon-plus" aria-hidden="true"></span>
+            <span class="mainTabText">
+                <strong>打刻忘れの追加</strong>
+                <small>出勤・退勤の打刻漏れを追加</small>
+            </span>
+        </button>
+
+        <button class="mainTabBtn" data-main-tab="holiday">
+            <span class="mainTabIcon svgTabIcon icon-holiday" aria-hidden="true"></span>
+            <span class="mainTabText">
+                <strong>休み登録</strong>
+                <small>勤務しない日を休みとして登録</small>
+            </span>
+        </button>
+    </div>
+
+    <div class="mainHistoryContent">
+
+        <section id="mainTabHistory" class="mainTabPanel show">
+            <h3>勤務履歴の確認</h3>
+            <p class="mainSectionHelp">
+                自分の勤務履歴を月別または年別で確認できます。
+            </p>
+
+            <div class="historyFilterBox historyFilterCards">
+                <h4>表示条件</h4>
+                <p class="manualAttendanceHelp">
+                    表示したい期間を選択してください。
+                </p>
+
+                <div class="historyFilterCard">
+                    <div class="historyFilterCardTitle">
+                        <span class="filterSvgIcon filterIconRange" aria-hidden="true"></span>
+                        <span>① 表示方法</span>
+                    </div>
+                    <select id="myHistoryRangeType">
+                        <option value="month">月別</option>
+                        <option value="year">年別</option>
+                    </select>
+                </div>
+
+                <div class="historyFilterCard">
+                    <div class="historyFilterCardTitle">
+                        <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                        <span>② 期間を選択</span>
+                    </div>
+                    <input type="month" id="myHistoryMonth">
+                    <input type="number" id="myHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                </div>
+            </div>
+
+            <div id="mySummary" class="summaryGrid"></div>
+
+            <div id="history"></div>
+
+            <div class="pageButtons">
+                <button id="prevPageBtn">前へ</button>
+                <button id="nextPageBtn">次へ</button>
+            </div>
+        </section>
+
+        <section id="mainTabManual" class="mainTabPanel">
+            <h3>打刻忘れの追加</h3>
+            <p class="mainSectionHelp">
+                打刻忘れがあった場合に、自分の出勤・退勤記録を追加できます。
+            </p>
+
+            <div class="manualAttendanceBox">
+                <h4>勤怠記録を追加</h4>
+                <p class="manualAttendanceHelp">
+                    打刻忘れがあった場合に、自分の出勤・退勤記録を追加できます。
+                </p>
+
+                <div id="manualAttendanceRows" class="multiEntryList"></div>
+
+                <button type="button" id="addManualAttendanceRowBtn" class="addRowBtn">
+                    ＋ 行を追加
+                </button>
+
+                <div class="manualPointBox">
+                    <strong>ポイント</strong><br>
+                    出勤だけ、退勤だけの追加もできます。<br>
+                    同じ日の出勤・退勤は最大2セットまでです。
+                </div>
+
+                <button id="addManualAttendanceBtn">登録</button>
+            </div>
+        </section>
+
+        <section id="mainTabHoliday" class="mainTabPanel">
+            <h3>休み登録</h3>
+            <p class="mainSectionHelp">
+                勤務しない日を休みとして登録できます。休みの日は残業計算に含めません。
+            </p>
+
+            <div class="manualAttendanceBox">
+                <h4>休み登録</h4>
+                <p class="manualAttendanceHelp">
+                    勤務しない日を休みとして登録できます。休みの日は残業計算に含めません。
+                </p>
+
+                <div id="myHolidayRows" class="multiEntryList"></div>
+
+                <button type="button" id="addMyHolidayRowBtn" class="addRowBtn">
+                    ＋ 行を追加
+                </button>
+
+                <button id="addMyHolidayBtn">登録</button>
+            </div>
+        </section>
+
+    </div>
+
+</div>
+

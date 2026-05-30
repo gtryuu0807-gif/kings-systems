@@ -1,0 +1,448 @@
+<div id="adminScreen">
+
+    <h2>管理画面</h2>
+
+    <div id="adminMaintenanceBanner" class="adminMaintenanceBanner">
+        ⚠ 現在メンテナンスモード中です（社員はシステムを利用できません）
+    </div>
+
+    <p class="adminScreenHelp">
+        使いたい管理機能を選択してください。
+    </p>
+
+    <div class="adminLayout">
+
+        <div class="adminMenu">
+            <button class="adminTabBtn active" data-admin-tab="dashboard">
+                <span class="adminTabIcon svgTabIcon icon-dashboard" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>今日の出勤状況</strong>
+                    <small>出勤人数や社員別の状態を確認</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="notice">
+                <span class="adminTabIcon svgTabIcon icon-notice" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>お知らせ投稿・確認</strong>
+                    <small>お知らせと確認済み社員を管理</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="maintenance">
+                <span class="adminTabIcon svgTabIcon icon-maintenance" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>メンテナンス設定</strong>
+                    <small>メンテナンスON/OFFと表示内容を管理</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="employees">
+                <span class="adminTabIcon svgTabIcon icon-users" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>社員情報・権限管理</strong>
+                    <small>社員の確認・権限変更・削除</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="history">
+                <span class="adminTabIcon svgTabIcon icon-history" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>勤務履歴の確認</strong>
+                    <small>社員ごとの履歴を月別・年別で確認</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="manual">
+                <span class="adminTabIcon svgTabIcon icon-plus" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>打刻忘れの追加</strong>
+                    <small>出勤・退勤の打刻漏れを追加</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="holiday">
+                <span class="adminTabIcon svgTabIcon icon-holiday" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>休み・休日登録</strong>
+                    <small>社員の休みを登録・管理</small>
+                </span>
+            </button>
+
+            <button class="adminTabBtn" data-admin-tab="report">
+                <span class="adminTabIcon svgTabIcon icon-report" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>月次レポート作成</strong>
+                    <small>勤務データをPDFで保存</small>
+                </span>
+            </button>
+        </div>
+
+        <div class="adminContent">
+
+            <section id="adminTabDashboard" class="adminTabPanel show">
+                <h3>今日の出勤状況</h3>
+                <p class="adminSectionHelp">
+                    今日の出勤人数、未退勤人数、残業警告人数、社員ごとの状態を確認できます。
+                </p>
+
+                <div id="adminDashboard" class="dashboardGrid"></div>
+
+                <div class="todayEmployeeStatusBox">
+                    <h4>社員別 今日の状況</h4>
+                    <p class="manualAttendanceHelp">
+                        今日の出勤状況を社員ごとに確認できます。10時を過ぎても出勤がない場合は休みとして表示します。
+                    </p>
+
+                    <div id="todayEmployeeStatusList"></div>
+                </div>
+            </section>
+
+            <section id="adminTabNotice" class="adminTabPanel">
+                <h3>お知らせ投稿・確認</h3>
+                <p class="adminSectionHelp">
+                    社員に表示するお知らせを投稿したり、確認済みの社員を確認できます。
+                </p>
+
+                <div id="noticeForm">
+                    <input type="text" id="noticeTitle" placeholder="お知らせタイトル">
+                    <textarea id="noticeBody" placeholder="お知らせ内容"></textarea>
+                    <button id="addNoticeBtn">お知らせを投稿</button>
+                </div>
+
+                <div id="adminNoticeList"></div>
+            </section>
+
+            <section id="adminTabMaintenance" class="adminTabPanel">
+                <h3>メンテナンス設定</h3>
+                <p class="adminSectionHelp">
+                    メンテナンス中は社員に専用画面を表示し、管理者のみ通常利用できます。
+                </p>
+
+                <div class="maintenanceAdminBox">
+                    <div class="maintenanceStatusLine">
+                        <strong>現在の状態</strong>
+                        <span id="maintenanceCurrentStatus" class="maintenanceStatusBadge off">OFF</span>
+                    </div>
+
+                    <label class="maintenanceSwitchRow">
+                        <input type="checkbox" id="maintenanceModeToggle">
+                        メンテナンスモードをONにする
+                    </label>
+
+                    <div class="maintenanceAdminGrid">
+                        <label>
+                            <span>メンテナンスタイトル</span>
+                            <input type="text" id="maintenanceTitleInput" placeholder="現在メンテナンス中です">
+                        </label>
+
+                        <label>
+                            <span>メンテナンス本文</span>
+                            <textarea id="maintenanceMessageInput" placeholder="現在、システムメンテナンスを実施しております。"></textarea>
+                        </label>
+
+                        <div>
+                            <span class="formLabelText">終了予定</span>
+                            <div class="maintenanceEndTypeBox">
+                                <label>
+                                    <input type="radio" name="maintenanceEndType" id="maintenanceEndDatetimeRadio" value="datetime">
+                                    日時を指定する
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="maintenanceEndType" id="maintenanceEndUnknownRadio" value="unknown">
+                                    未定
+                                </label>
+                            </div>
+                        </div>
+
+                        <label id="maintenanceEndAtField" class="maintenanceEndAtField">
+                            <span>終了予定日時</span>
+                            <input type="datetime-local" id="maintenanceEndAtInput">
+                        </label>
+                    </div>
+
+                    <div class="maintenanceAdminMeta">
+                        <div>実施者：<span id="maintenanceAdminUpdatedBy">-</span></div>
+                        <div>更新日時：<span id="maintenanceAdminUpdatedAt">-</span></div>
+                    </div>
+
+                    <button id="saveMaintenanceBtn" class="maintenanceSaveBtn">メンテナンス設定を保存</button>
+                </div>
+            </section>
+
+            <section id="adminTabEmployees" class="adminTabPanel">
+                <h3>社員情報・権限管理</h3>
+                <p class="adminSectionHelp">
+                    登録済み社員の確認、社員名変更、権限変更、社員情報の削除ができます。
+                </p>
+
+                <p class="warningText">
+                    注意：この画面で管理できるのはFirestore上の社員情報です。<br>
+                    Firebase Authenticationのログインアカウント本体の作成・削除はできません。<br>
+                    新しいログインアカウントはFirebase Console側で作成してください。
+                </p>
+
+                <div id="employeeManager">
+
+                    <div class="employeeManageSection">
+                        <div class="employeeSectionHeader">
+                            <span class="employeeSectionIcon employeeIconAdd" aria-hidden="true"></span>
+                            <div>
+                                <h4>新しい社員アカウントを作成</h4>
+                                <p>Authentication と users/{uid} を管理画面からまとめて作成します。</p>
+                            </div>
+                        </div>
+
+                        <div class="employeeCreateBox kingsAccountCreateBox">
+                            <label>
+                                <span>社員名</span>
+                                <input type="text" id="newAccountName" placeholder="例：山田 太郎">
+                            </label>
+
+                            <label>
+                                <span>メールアドレス</span>
+                                <input type="email" id="newAccountEmail" placeholder="staff@example.com">
+                            </label>
+
+                            <label>
+                                <span>初期パスワード</span>
+                                <input type="text" id="newAccountPassword" placeholder="6文字以上の初期パスワード">
+                            </label>
+
+                            <label>
+                                <span>権限</span>
+                                <select id="newAccountRole">
+                                    <option value="employee">社員</option>
+                                    <option value="admin">管理者</option>
+                                </select>
+                            </label>
+
+                            <button type="button" id="createAccountBtn" class="createAccountBtn">社員アカウントを作成</button>
+
+                            <p class="accountCreateHelp">
+                                作成に失敗した場合は、中途半端な Authentication アカウントを自動削除してロールバックします。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="employeeManageSection">
+                        <div class="employeeSectionHeader">
+                            <span class="employeeSectionIcon employeeIconList" aria-hidden="true"></span>
+                            <div>
+                                <h4>登録済み社員を選択</h4>
+                                <p>変更・削除したい社員を選択してください。</p>
+                            </div>
+                        </div>
+
+                        <select id="employeeSelect">
+                            <option value="">社員を選択してください</option>
+                        </select>
+                    </div>
+
+                    <div class="employeeManageSection accountIntegritySection">
+                        <div class="employeeSectionHeader">
+                            <span class="employeeSectionIcon employeeIconList" aria-hidden="true"></span>
+                            <div>
+                                <h4>users登録状態チェック</h4>
+                                <p>Firestore users の不足フィールドを確認・補完します。</p>
+                            </div>
+                        </div>
+
+                        <button type="button" id="checkAccountIntegrityBtn" class="accountCheckBtn">登録状態をチェック</button>
+                        <div id="accountIntegrityResult" class="accountIntegrityResult"></div>
+                    </div>
+
+                    <div class="employeeManageSection roleLogSection">
+                        <div class="employeeSectionHeader">
+                            <span class="employeeSectionIcon employeeIconAdmin" aria-hidden="true"></span>
+                            <div>
+                                <h4>権限変更ログ</h4>
+                                <p>誰がいつ誰の権限を変更したかを記録します。</p>
+                            </div>
+                        </div>
+
+                        <div id="roleChangeLogList" class="roleChangeLogList"></div>
+                    </div>
+
+                    <div class="employeeManageSection selectedEmployeeSection">
+                        <div class="employeeSectionHeader">
+                            <span class="employeeSectionIcon employeeIconCard" aria-hidden="true"></span>
+                            <div>
+                                <h4>選択中の社員情報</h4>
+                                <p>選択した社員の情報と操作メニューを表示します。</p>
+                            </div>
+                        </div>
+
+                        <div id="employeeList"></div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section id="adminTabHistory" class="adminTabPanel">
+                <h3>勤務履歴の確認</h3>
+                <p class="adminSectionHelp">
+                    社員ごとの勤務履歴を、月別または年別で確認できます。
+                </p>
+
+                <div class="historyFilterBox historyFilterCards adminHistoryFilterCards">
+                    <h4>表示条件</h4>
+                    <p class="manualAttendanceHelp">
+                        表示したい社員と期間を選択してください。
+                    </p>
+
+                    <div class="historyFilterCard">
+                        <div class="historyFilterCardTitle">
+                            <span class="filterSvgIcon filterIconUser" aria-hidden="true"></span>
+                            <span>① 社員を選択</span>
+                        </div>
+                        <select id="adminHistoryEmployeeSelect">
+                            <option value="">社員を選択してください</option>
+                        </select>
+                    </div>
+
+                    <div class="historyFilterCard">
+                        <div class="historyFilterCardTitle">
+                            <span class="filterSvgIcon filterIconRange" aria-hidden="true"></span>
+                            <span>② 表示方法</span>
+                        </div>
+                        <select id="adminHistoryRangeType">
+                            <option value="month">月別</option>
+                            <option value="year">年別</option>
+                        </select>
+                    </div>
+
+                    <div class="historyFilterCard">
+                        <div class="historyFilterCardTitle">
+                            <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                            <span>③ 期間を選択</span>
+                        </div>
+                        <input type="month" id="adminHistoryMonth">
+                        <input type="number" id="adminHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                    </div>
+                </div>
+
+                <div id="adminSummary" class="summaryGrid"></div>
+
+                <div class="chartBox">
+                    <h4>社員別 勤務時間グラフ</h4>
+                    <div id="adminChartPlaceholder" class="chartPlaceholder">
+                        <div class="chartPlaceholderIcon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 16v-4M12 16V8M16 16v-7"/></svg>
+                        </div>
+                        <strong>社員を選択すると勤務時間グラフを表示します</strong>
+                        <span>上の表示条件で社員を選択してください。</span>
+                    </div>
+                    <div class="chartScrollArea"><canvas id="adminWorkChart" width="360" height="220"></canvas></div>
+                </div>
+
+                <div id="adminHistory"></div>
+
+                <div id="adminPageButtons">
+                    <button id="adminPrevPageBtn">前へ</button>
+                    <button id="adminNextPageBtn">次へ</button>
+                </div>
+
+                <div class="deleteAllAttendanceBox">
+                    <h4>全勤怠履歴の削除</h4>
+                    <p>
+                        全社員の勤怠履歴と休み登録を削除します。<br>
+                        この操作は元に戻せません。
+                    </p>
+                    <button id="deleteAllBtn">全勤怠履歴を削除</button>
+                </div>
+            </section>
+
+            <section id="adminTabManual" class="adminTabPanel">
+                <h3>打刻忘れの追加</h3>
+                <p class="adminSectionHelp">
+                    打刻漏れがあった社員の出勤・退勤記録を、後から追加できます。
+                </p>
+
+                <div class="manualAttendanceBox adminManualBox">
+                    <h4>社員の勤怠記録を追加</h4>
+                    <p class="manualAttendanceHelp">
+                        社員を選択して、任意の日付で出勤・退勤記録を追加できます。
+                    </p>
+
+                    <div class="manualFormGrid employeeSelectGrid">
+                        <label>
+                            <span>① 社員を選択してください</span>
+                            <select id="adminManualEmployeeSelect">
+                                <option value="">社員を選択してください</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div id="adminManualAttendanceRows" class="multiEntryList"></div>
+
+                    <button type="button" id="addAdminManualAttendanceRowBtn" class="addRowBtn">
+                        ＋ 行を追加
+                    </button>
+
+                    <div class="manualPointBox">
+                        <strong>ポイント</strong><br>
+                        出勤だけ、退勤だけの追加もできます。<br>
+                        過去の記録修正や打刻忘れの補正に利用してください。
+                    </div>
+
+                    <button id="adminAddManualAttendanceBtn">登録</button>
+                </div>
+            </section>
+
+            <section id="adminTabHoliday" class="adminTabPanel">
+                <h3>休み・休日登録</h3>
+                <p class="adminSectionHelp">
+                    社員の休みを登録できます。休みの日は勤務時間・残業計算に含めません。
+                </p>
+
+                <div class="manualAttendanceBox adminManualBox">
+                    <h4>社員の休みを登録</h4>
+                    <p class="manualAttendanceHelp">
+                        選択した社員の休みを登録できます。登録した休みは履歴から削除できます。
+                    </p>
+
+                    <div class="manualFormGrid employeeSelectGrid">
+                        <label>
+                            <span>社員を選択してください</span>
+                            <select id="adminHolidayEmployeeSelect">
+                                <option value="">社員を選択してください</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div id="adminHolidayRows" class="multiEntryList"></div>
+
+                    <button type="button" id="addAdminHolidayRowBtn" class="addRowBtn">
+                        ＋ 行を追加
+                    </button>
+
+                    <button id="addAdminHolidayBtn">登録</button>
+                </div>
+            </section>
+
+            <section id="adminTabReport" class="adminTabPanel">
+                <h3>月次レポート作成</h3>
+                <p class="adminSectionHelp">
+                    勤務履歴管理で社員と月を選択してから、PDFレポートを作成できます。
+                </p>
+
+                <div class="manualAttendanceBox adminManualBox">
+                    <h4 class="reportTitleWithBadge">月次レポートPDF <span class="a4OptimizedBadge">A4最適化済</span></h4>
+                    <p class="manualAttendanceHelp">
+                        勤務一覧、総勤務時間、残業時間をPDFで保存できます。
+                    </p>
+
+                    <div id="monthlyReportPreview" class="monthlyReportPreview"></div>
+
+                    <button id="downloadAdminPdfBtn">社員の月次レポートPDFを作成</button>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+</div>
+

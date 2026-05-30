@@ -1,0 +1,132 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function myUserExists() {
+      return isLoggedIn() && exists(userPath(request.auth.uid));
+    }
+
+    function myUser() {
+      return get(userPath(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return myUserExists() && myUser().data.role == "admin";
+    }
+
+    function isValidRole(role) {
+      return role in ["admin", "employee"];
+    }
+
+    function isOwnerResource() {
+      return isLoggedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    function isSafeOwnUserUpdate(userId) {
+      return isLoggedIn()
+        && userId == request.auth.uid
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          "lastLoginAt",
+          "accountStatus",
+          "status",
+          "loginSessionId",
+          "loginDeviceName",
+          "loginDeviceUpdatedAt",
+          "inactiveAt",
+          "inactiveReason",
+          "updatedAt"
+        ]);
+    }
+
+    match /settings/{settingId} {
+      allow read: if isLoggedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isLoggedIn();
+
+      allow create: if (
+        isAdmin()
+        && isValidRole(request.resource.data.role)
+      ) || (
+        isLoggedIn()
+        && userId == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == "employee"
+      );
+
+      allow update: if (
+        isAdmin()
+        && (
+          !("role" in request.resource.data)
+          || isValidRole(request.resource.data.role)
+        )
+      ) || isSafeOwnUserUpdate(userId);
+
+      allow delete: if isAdmin();
+    }
+
+    match /attendance/{attendanceId} {
+      allow read: if isLoggedIn();
+
+      allow create: if isAdmin() || (
+        isLoggedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+      );
+
+      allow update, delete: if isAdmin();
+    }
+
+    match /holidays/{holidayId} {
+      allow read: if isLoggedIn();
+
+      allow create: if isAdmin() || (
+        isLoggedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+      );
+
+      allow update: if isAdmin();
+      allow delete: if isAdmin() || isOwnerResource();
+    }
+
+    match /notices/{noticeId} {
+      allow read: if isLoggedIn();
+      allow create: if isAdmin();
+
+      allow update: if isLoggedIn()
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(["confirmedUsers", "updatedAt"]);
+
+      allow delete: if isAdmin();
+    }
+
+    match /roleChangeLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+
+    match /accountLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}

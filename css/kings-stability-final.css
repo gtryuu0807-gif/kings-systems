@@ -1,0 +1,418 @@
+/* =========================================================
+   Kings Stability Final Patch
+   目的:
+   - JavaScriptは触らず、壊れていた表示層だけを安定化
+   - 白いカード残り・文字同化・メニュー重なり・ラジオ/チェック崩れを修正
+   - 派手すぎる発光を抑え、全体をダーク＋オレンジで統一
+   ========================================================= */
+:root{
+  --ks-bg:#050608;
+  --ks-bg2:#080d16;
+  --ks-panel:#0f172a;
+  --ks-panel2:#111827;
+  --ks-panel3:#070b14;
+  --ks-border:rgba(255,255,255,.13);
+  --ks-border-soft:rgba(255,255,255,.08);
+  --ks-orange:#ff8a1f;
+  --ks-orange2:#ffb15c;
+  --ks-text:#f8fafc;
+  --ks-text2:#e5e7eb;
+  --ks-muted:#a8b3c7;
+  --ks-blue:#60a5fa;
+  --ks-green:#22c55e;
+  --ks-red:#ef4444;
+}
+
+html,body{
+  background:var(--ks-bg) !important;
+  color:var(--ks-text) !important;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",Meiryo,"Segoe UI",sans-serif !important;
+}
+
+body:not(.splash-active){
+  background:
+    radial-gradient(circle at 50% -10%,rgba(255,138,31,.16),transparent 30%),
+    radial-gradient(circle at 100% 18%,rgba(255,138,31,.07),transparent 24%),
+    linear-gradient(145deg,#050608,#080d16 52%,#050608) !important;
+  background-attachment:fixed !important;
+}
+
+body::before{
+  opacity:.18 !important;
+  pointer-events:none !important;
+}
+
+.container{
+  background:linear-gradient(145deg,rgba(10,15,26,.96),rgba(4,7,13,.96)) !important;
+  border:1px solid rgba(255,138,31,.18) !important;
+  box-shadow:0 22px 60px rgba(0,0,0,.50),0 0 20px rgba(255,138,31,.05) !important;
+  overflow:visible !important;
+}
+
+.container::before{
+  opacity:.28 !important;
+}
+
+.appLogoTitle{
+  color:#fff !important;
+  text-shadow:0 0 14px rgba(255,138,31,.18) !important;
+  position:relative !important;
+  z-index:1 !important;
+}
+.appLogoSub{
+  color:var(--ks-orange2) !important;
+  opacity:.88 !important;
+  text-shadow:none !important;
+  position:relative !important;
+  z-index:1 !important;
+}
+
+h1,h2,h3,h4,strong{
+  color:var(--ks-text) !important;
+  text-shadow:none !important;
+}
+p,span,small,div,label{
+  text-shadow:none !important;
+}
+
+/* メニューを専用レイヤーに固定。下の文字・ロゴを透かさない。 */
+#headerMount{
+  position:relative !important;
+  z-index:2147483000 !important;
+}
+#topMenu{
+  display:none;
+  position:fixed !important;
+  top:max(16px,env(safe-area-inset-top)) !important;
+  right:16px !important;
+  left:auto !important;
+  z-index:2147483000 !important;
+  pointer-events:auto !important;
+  isolation:isolate !important;
+}
+#menuBtn{
+  width:54px !important;
+  height:54px !important;
+  min-width:54px !important;
+  min-height:54px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:18px !important;
+  background:#17100b !important;
+  color:var(--ks-orange2) !important;
+  border:1px solid rgba(255,138,31,.42) !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.55),0 0 16px rgba(255,138,31,.12) !important;
+  font-size:26px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+}
+#menuDropdown{
+  display:none;
+  position:absolute !important;
+  top:64px !important;
+  right:0 !important;
+  left:auto !important;
+  width:230px !important;
+  min-width:230px !important;
+  max-width:calc(100vw - 32px) !important;
+  padding:12px !important;
+  border-radius:22px !important;
+  background:#070b14 !important;
+  opacity:1 !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 30px 80px rgba(0,0,0,.86) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  overflow:hidden !important;
+  pointer-events:auto !important;
+}
+#topMenu.menu-open #menuDropdown{
+  display:block !important;
+}
+#menuDropdown button{
+  width:100% !important;
+  height:54px !important;
+  min-height:54px !important;
+  margin:0 0 10px 0 !important;
+  padding:0 14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:16px !important;
+  background:#111827 !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.13) !important;
+  box-shadow:none !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+}
+#menuDropdown button:last-child{ margin-bottom:0 !important; }
+#menuDropdown button:hover,#menuDropdown button:focus{
+  background:#1b120b !important;
+  color:var(--ks-orange2) !important;
+  border-color:rgba(255,138,31,.42) !important;
+  outline:none !important;
+}
+
+/* Welcomeはメニューと重ならない幅に制限 */
+#welcomeBox{
+  width:calc(100% - 88px) !important;
+  max-width:300px !important;
+  background:rgba(15,23,42,.92) !important;
+  border:1px solid rgba(255,138,31,.22) !important;
+  color:var(--ks-text) !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.36) !important;
+  z-index:10 !important;
+}
+.welcomeText{ color:var(--ks-muted) !important; }
+#welcomeName{ color:#fff !important; }
+.welcomeIcon,.mainTabIcon,.adminTabIcon,.employeeSectionIcon,.maintenanceIcon{
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  color:#111827 !important;
+  box-shadow:none !important;
+}
+
+/* 白い説明枠・カード残りをまとめてダーク化 */
+:is(
+  .adminSectionHelp,.adminScreenHelp,.mainScreenHelp,.mainSectionHelp,.manualAttendanceHelp,.warningText,
+  .adminGuideBox,.holidayAutoInfo,.holidaySimpleBox,.manualPointBox,.employeeEmptyBox,
+  .unclosedWarningSummary,.unclosedWarningDetail,.confirmedUserEmpty,.noticeEmpty,.todayEmployeeEmpty,
+  .noticeBody,.noticeBodyExpanded,.noticeMetaBox,.noticeConfirmArea,.adminNoticeConfirmBox,
+  .confirmedFullList,.confirmedUserItem,.confirmedPreviewItem,.confirmedMoreBadge,.confirmedUserSummary,
+  .maintenanceMessage,.maintenanceInfoBox,.maintenanceAdminMeta,.maintenanceStatusLine,.maintenanceEndTypeBox,
+  .dashboardCard,.todayEmployeeStatusBox,.todayEmployeeStatusItem,.employeeInfoBox,.employeeStatusBox,
+  .selectedEmployeeSection,.employeeManageSection,.historyFilterBox,.manualAttendanceBox,.adminManualBox,
+  .noticeCard,.adminNoticeCard,#noticeForm,.summaryCard,.statusCard,.historyItem,.adminItem,.attendanceEditBlock,.workTimeInfo
+){
+  background:linear-gradient(145deg,rgba(15,23,42,.96),rgba(5,9,17,.96)) !important;
+  color:var(--ks-text2) !important;
+  border:1px solid var(--ks-border-soft) !important;
+  box-shadow:0 12px 30px rgba(0,0,0,.28) !important;
+}
+
+:is(.adminSectionHelp,.mainSectionHelp,.manualAttendanceHelp,.warningText,.noticeMeta,.noticeMetaBox,.maintenanceAdminMeta,.maintenanceInfoBox span,.dashboardCard span,.todayEmployeeStatusBox p,.confirmedUserSummary,.confirmedUserItem span,.formLabelText,.employeeSectionHeader p,.subTitle){
+  color:var(--ks-muted) !important;
+}
+
+/* 通常テキストの読みやすさ */
+#mainScreen,#adminScreen,#maintenanceScreen,
+.historyMainText,.adminItem,.noticeTitle,.noticeBody,.employeeInfoBox,.maintenanceMessage{
+  color:var(--ks-text2) !important;
+}
+
+/* フォーム: 幅ズレ・白背景を解消 */
+input:not([type="checkbox"]):not([type="radio"]),textarea,select{
+  width:100% !important;
+  max-width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+  background:#070b14 !important;
+  color:var(--ks-text) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  border-radius:16px !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+input::placeholder,textarea::placeholder{ color:#8b98ad !important; opacity:1 !important; }
+input:not([type="checkbox"]):not([type="radio"]):focus,textarea:focus,select:focus{
+  border-color:rgba(255,138,31,.56) !important;
+  box-shadow:0 0 0 3px rgba(255,138,31,.13) !important;
+  outline:none !important;
+}
+
+/* チェック/ラジオが巨大な白枠にならないよう完全カスタム化 */
+input[type="checkbox"],input[type="radio"]{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  width:22px !important;
+  height:22px !important;
+  min-width:22px !important;
+  min-height:22px !important;
+  max-width:22px !important;
+  max-height:22px !important;
+  flex:0 0 22px !important;
+  margin:0 !important;
+  padding:0 !important;
+  background:#070b14 !important;
+  border:1px solid rgba(255,255,255,.45) !important;
+  box-shadow:none !important;
+  transform:none !important;
+  vertical-align:middle !important;
+}
+input[type="checkbox"]{ border-radius:6px !important; }
+input[type="radio"]{ border-radius:50% !important; }
+input[type="checkbox"]:checked,input[type="radio"]:checked{
+  background:var(--ks-orange) !important;
+  border-color:var(--ks-orange) !important;
+  box-shadow:0 0 0 3px rgba(255,138,31,.12) !important;
+}
+input[type="radio"]:checked{
+  background:radial-gradient(circle,#fff 0 28%,var(--ks-orange) 31% 100%) !important;
+}
+input[type="checkbox"]:checked::after{
+  content:"✓";
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  color:#111827;
+  font-size:15px;
+  font-weight:900;
+  line-height:1;
+}
+
+/* ボタン: 一貫した階層に統一 */
+button,#addNoticeBtn,#saveMaintenanceBtn,#loginBtn,#addManualAttendanceBtn,#adminAddManualAttendanceBtn,#addMyHolidayBtn,#addAdminHolidayBtn{
+  border:none !important;
+  color:#111827 !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  box-shadow:0 10px 22px rgba(255,138,31,.16) !important;
+  text-shadow:none !important;
+}
+button:disabled{
+  background:#1f2937 !important;
+  color:#6b7280 !important;
+  box-shadow:none !important;
+  opacity:1 !important;
+}
+#clockInBtn{ background:linear-gradient(135deg,#22c55e,#86efac) !important; color:#052e16 !important; }
+#clockOutBtn,.noticeBodyToggleBtn,.confirmedToggleBtn,.roleChangeBtn,.nameChangeBtn,#prevPageBtn,#nextPageBtn,#adminPrevPageBtn,#adminNextPageBtn{
+  color:var(--ks-text) !important;
+  background:#111827 !important;
+  border:1px solid var(--ks-border) !important;
+  box-shadow:none !important;
+}
+.deleteNoticeBtn,.deleteEmployeeBtn,.attendanceDeleteBtn,.holidayDeleteBtn,#deleteAllBtn{
+  background:linear-gradient(135deg,#7f1d1d,#ef4444) !important;
+  color:#fff !important;
+}
+
+/* メイン/管理メニュー */
+.mainTabBtn,.adminTabBtn{
+  background:rgba(15,23,42,.92) !important;
+  color:var(--ks-text) !important;
+  border:1px solid var(--ks-border-soft) !important;
+  box-shadow:none !important;
+}
+.mainTabBtn.active,.adminTabBtn.active{
+  border-color:rgba(255,138,31,.42) !important;
+  background:linear-gradient(145deg,rgba(31,20,12,.92),rgba(15,23,42,.92)) !important;
+}
+.mainTabText small,.adminTabText small{ color:var(--ks-muted) !important; }
+.mainTabText strong,.adminTabText strong{ color:var(--ks-orange2) !important; }
+
+/* 履歴の⚙は必ず右 */
+.historyItem,.adminItem.historyItem{ position:relative !important; padding-right:58px !important; }
+.historySettingBtn{
+  position:absolute !important;
+  top:14px !important;
+  right:14px !important;
+  left:auto !important;
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  min-height:38px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:12px !important;
+  background:#1b120b !important;
+  color:var(--ks-orange2) !important;
+  border:1px solid rgba(255,138,31,.35) !important;
+  box-shadow:none !important;
+  z-index:3 !important;
+}
+.historySetLine{
+  background:#0b1220 !important;
+  color:var(--ks-text2) !important;
+  border:1px solid rgba(255,138,31,.16) !important;
+}
+
+/* メンテナンス画面: レイアウト崩れ修正 */
+.maintenanceScreen{ padding:18px 0 28px !important; }
+.maintenanceCard,.maintenanceAdminBox{
+  width:100% !important;
+  max-width:100% !important;
+  margin:0 auto !important;
+  padding:20px !important;
+  border-radius:22px !important;
+  text-align:left !important;
+}
+.maintenanceCard .maintenanceIcon{ margin:0 auto 16px !important; }
+.maintenanceCard h2,.maintenanceCard .maintenanceSmallNote{ text-align:center !important; }
+.maintenanceStatusLine{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:14px !important;
+  border-radius:18px !important;
+}
+.maintenanceSwitchRow{
+  display:grid !important;
+  grid-template-columns:22px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:12px !important;
+  margin:16px 0 !important;
+  padding:14px !important;
+  border-radius:18px !important;
+  background:#0b1220 !important;
+  border:1px solid var(--ks-border-soft) !important;
+  color:var(--ks-text) !important;
+  line-height:1.45 !important;
+}
+.maintenanceEndTypeBox{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  padding:12px !important;
+  border-radius:18px !important;
+}
+.maintenanceEndTypeBox label{
+  display:grid !important;
+  grid-template-columns:22px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:10px !important;
+  min-height:54px !important;
+  margin:0 !important;
+  padding:10px !important;
+  border-radius:14px !important;
+  background:#070b14 !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  color:var(--ks-text2) !important;
+  line-height:1.35 !important;
+}
+.maintenanceStatusBadge.off{ background:rgba(34,197,94,.16) !important; color:#86efac !important; border:1px solid rgba(34,197,94,.25) !important; }
+.maintenanceStatusBadge.on{ background:rgba(239,68,68,.16) !important; color:#fca5a5 !important; border:1px solid rgba(239,68,68,.25) !important; }
+
+/* ステータス表示 */
+.statusBadge,.todayEmployeeBadge,.accountStatusBadge{
+  border:1px solid rgba(255,255,255,.10) !important;
+}
+.todayEmployeeBadge.statusWorking,.accountStatusBadge.active{ background:rgba(34,197,94,.15) !important; color:#86efac !important; }
+.todayEmployeeBadge.statusLeft{ background:rgba(96,165,250,.15) !important; color:#bfdbfe !important; }
+.todayEmployeeBadge.statusRest,.todayEmployeeBadge.statusNotYet{ background:rgba(255,138,31,.14) !important; color:var(--ks-orange2) !important; }
+.accountStatusBadge.inactive{ background:rgba(239,68,68,.15) !important; color:#fca5a5 !important; }
+
+/* モバイル調整 */
+@media(max-width:640px){
+  #topMenu{ top:max(14px,env(safe-area-inset-top)) !important; right:14px !important; }
+  #menuBtn{ width:52px !important; height:52px !important; min-width:52px !important; min-height:52px !important; }
+  #menuDropdown{ top:62px !important; width:220px !important; min-width:220px !important; }
+  .maintenanceEndTypeBox{ grid-template-columns:1fr !important; }
+  .maintenanceCard,.maintenanceAdminBox{ padding:18px !important; }
+}

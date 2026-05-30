@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kings</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body class="splash-active">
+
+<div id="splashScreen" class="kingsSplash" aria-label="起動画面">
+    <div class="splashGlow"></div>
+    <span class="splashParticle sp1"></span>
+    <span class="splashParticle sp2"></span>
+    <span class="splashParticle sp3"></span>
+    <span class="splashParticle sp4"></span>
+    <span class="splashParticle sp5"></span>
+    <span class="splashParticle sp6"></span>
+    <span class="splashParticle sp7"></span>
+    <span class="splashParticle sp8"></span>
+
+    <div class="splashInner">
+        <div class="splashLogo">Kings</div>
+        <div class="splashSub">Comprehensive Management System</div>
+        <div class="splashLoading">Loading...</div>
+        <div class="splashBar"><span></span></div>
+    </div>
+</div>
+
+<div id="loginTransitionOverlay" class="loginTransitionOverlay" aria-hidden="true">
+    <div class="loginTransitionInner">
+        <div class="loginTransitionLogo">Kings</div>
+        <div class="loginTransitionSub">Comprehensive Management System</div>
+        <div class="loginTransitionText">Signing in...</div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div id="headerMount"></div>
+
+    <h1 class="appLogoTitle">Kings</h1>
+    <p class="appLogoSub">Comprehensive Management System</p>
+
+    <div id="loginMount"></div>
+
+    <div id="appContent">
+        <div id="maintenanceMount"></div>
+        <div id="mainMount"></div>
+        <div id="adminMount"></div>
+    </div>
+
+</div>
+
+<script type="module" src="./js/bootstrap.js"></script>
+
+</body>
+</html>

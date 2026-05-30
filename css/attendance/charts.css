@@ -1,0 +1,29 @@
+.chartBox{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    margin:18px 0 24px;
+    padding:18px;
+    border-radius:20px;
+    background:white;
+    border:1px solid #dbeafe;
+    box-shadow:0 8px 24px rgba(37,99,235,0.08);
+    overflow:hidden;
+    animation:cardSlideIn 0.34s ease-out;
+}
+
+.chartBox h4{
+    margin:0 0 12px;
+    font-size:17px;
+    color:#1e3a8a;
+}
+
+.chartBox canvas{
+    width:100%;
+    max-width:100%;
+    height:auto;
+    display:block;
+    border-radius:14px;
+    background:#f8fafc;
+}
+

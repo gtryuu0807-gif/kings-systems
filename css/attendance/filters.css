@@ -1,0 +1,35 @@
+.historyFilterBox{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    margin:18px 0 22px;
+    padding:18px;
+    border-radius:20px;
+    background:linear-gradient(180deg,#f8fafc,#ffffff);
+    border:1px solid #dbeafe;
+    text-align:left;
+    box-shadow:0 8px 24px rgba(37,99,235,0.07);
+    animation:cardSlideIn 0.32s ease-out;
+}
+
+.historyFilterBox h4{
+    margin:0;
+    font-size:17px;
+    color:#1e3a8a;
+}
+
+.historyFilterBox select,
+.historyFilterBox input{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    height:48px;
+    margin-top:10px;
+    padding:0 12px;
+    border-radius:14px;
+    border:1px solid #cbd5e1;
+    background:white;
+    font-size:15px;
+    box-sizing:border-box;
+}
+

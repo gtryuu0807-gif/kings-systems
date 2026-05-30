@@ -1,0 +1,174 @@
+.warningText{
+    background:#fff1f2;
+    border:1px solid #fecdd3;
+    color:#991b1b;
+    padding:14px;
+    border-radius:16px;
+    font-size:14px;
+    line-height:1.7;
+    text-align:left;
+}
+
+.employeeManageSection{
+    margin-top:18px;
+    padding:16px;
+    border-radius:20px;
+    background:white;
+    border:1px solid #dbeafe;
+    box-shadow:0 8px 24px rgba(37,99,235,0.07);
+    text-align:left;
+    box-sizing:border-box;
+    animation:cardSlideIn 0.28s ease-out;
+}
+
+.employeeSectionHeader{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.employeeSectionIcon{
+    flex:0 0 auto;
+    width:40px;
+    height:40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    background:#dbeafe;
+    font-size:20px;
+}
+
+.employeeSectionHeader h4{
+    margin:0;
+    font-size:16px;
+    color:#1e3a8a;
+}
+
+.employeeSectionHeader p{
+    margin:4px 0 0;
+    font-size:13px;
+    color:#64748b;
+    line-height:1.6;
+}
+
+.selectedEmployeeSection{
+    background:linear-gradient(180deg,#eff6ff,#ffffff);
+}
+
+.employeeEmptyBox{
+    padding:16px;
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px dashed #cbd5e1;
+    color:#475569;
+    text-align:left;
+}
+
+.employeeEmptyBox strong{
+    display:block;
+    font-size:15px;
+    color:#334155;
+    margin-bottom:6px;
+}
+
+.employeeEmptyBox p{
+    margin:0;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.employeeSelectedCard{
+    padding:16px;
+    border-radius:18px;
+    background:white;
+    border:1px solid #bfdbfe;
+    box-shadow:0 8px 24px rgba(37,99,235,0.08);
+    animation:softPop 0.25s ease-out;
+}
+
+.employeeDetailBox{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.employeeDetailBox > div{
+    padding:10px 12px;
+    border-radius:14px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.employeeDetailBox span{
+    display:block;
+    font-size:12px;
+    color:#64748b;
+    margin-bottom:4px;
+}
+
+.employeeDetailBox strong{
+    font-size:14px;
+    color:#0f172a;
+    word-break:break-word;
+}
+
+.accountStatusBadge{
+    display:inline-flex;
+    align-items:center;
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:13px;
+}
+
+.accountStatusBadge.active{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.accountStatusBadge.inactive{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.incompleteCountText.hasIncomplete{
+    color:#b91c1c;
+}
+
+.employeeAccountSection{
+    margin-top:16px;
+    padding:14px;
+    border-radius:16px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.employeeAccountSection h5,
+.employeeActionSection h5,
+.employeeDangerSection h5{
+    margin:0 0 6px;
+    font-size:15px;
+    color:#1e3a8a;
+}
+
+.employeeAccountSection p,
+.employeeActionSection p,
+.employeeDangerSection p{
+    margin:0 0 12px;
+    font-size:13px;
+    color:#64748b;
+    line-height:1.6;
+}
+
+.accountInactiveBtn{
+    width:100%;
+    background:#f97316;
+    color:white;
+}
+
+.accountActivateBtn{
+    width:100%;
+    background:#16a34a;
+    color:white;
+}

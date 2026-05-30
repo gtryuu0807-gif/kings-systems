@@ -1,0 +1,45 @@
+@media (min-width:700px){
+    .adminMenu{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .dashboardGrid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .employeeDetailBox{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media (max-width:380px){
+    .adminTabBtn{
+        min-height:68px;
+        padding:10px;
+    }
+
+    .adminTabIcon,
+    .employeeSectionIcon{
+        width:34px;
+        height:34px;
+        font-size:18px;
+    }
+
+    .adminTabText strong{
+        font-size:14px;
+    }
+
+    .adminTabText small{
+        font-size:11px;
+    }
+
+    .employeeSelectedCard{
+        padding:14px;
+    }
+
+    .employeeAvatar{
+        width:42px;
+        height:42px;
+        font-size:20px;
+    }
+}

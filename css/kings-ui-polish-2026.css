@@ -1,0 +1,313 @@
+
+/* =========================================================
+   Kings UI Polish 2026-05
+   目的: 採用済みUI改善を安全に最終上書き
+   - 白背景残りの撤去
+   - SVGアイコン化
+   - 出勤/確認ボタン刷新
+   - 発光を全体へ薄く均一化
+   - 履歴・フォーム・メンテナンスの視認性改善
+   ========================================================= */
+:root{
+  --kp-bg:#050607;
+  --kp-deep:#070b14;
+  --kp-card:#0b1220;
+  --kp-card2:#101827;
+  --kp-line:rgba(255,255,255,.12);
+  --kp-line2:rgba(255,138,31,.20);
+  --kp-orange:#ff8a1f;
+  --kp-orange2:#ffb15c;
+  --kp-text:#f8fafc;
+  --kp-text2:#e5e7eb;
+  --kp-muted:#a8b3c7;
+}
+
+body:not(.splash-active){
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,138,31,.12),transparent 26%),
+    radial-gradient(circle at 12% 42%,rgba(255,138,31,.055),transparent 24%),
+    radial-gradient(circle at 92% 65%,rgba(255,138,31,.045),transparent 26%),
+    linear-gradient(145deg,#050607,#080d16 58%,#050607) !important;
+}
+
+.container,
+#mainScreen,
+#adminScreen,
+#maintenanceScreen,
+.mainHistoryContent,
+.adminContent,
+.adminLayout{
+  overflow:visible !important;
+}
+
+/* 旧UIの白いパネルを最終的に撤去 */
+:is(
+  .manualAttendanceBox,.adminManualBox,.multiEntryItem,.manualFormGrid,.multiEntryGrid,.singleDateGrid,
+  .historyFilterBox,.chartBox,.summaryCard,.dashboardCard,.todayEmployeeStatusBox,.employeeManageSection,
+  .selectedEmployeeSection,.employeeEmptyBox,.employeeInfoBox,.noticeCard,.adminNoticeCard,#noticeForm,
+  .noticeBody,.noticeMetaBox,.noticeConfirmArea,.adminNoticeConfirmBox,.confirmedFullList,
+  .maintenanceAdminBox,.maintenanceCard,.maintenanceStatusLine,.maintenanceEndTypeBox,
+  .mainScreenHelp,.mainSectionHelp,.adminScreenHelp,.adminSectionHelp,.manualAttendanceHelp,.manualPointBox,
+  .historyItem,.adminItem,.holidaySimpleBox,.holidayAutoInfo,.workTimeInfo,.attendanceEditBlock,
+  .deleteAllAttendanceBox,.warningText,.noticeEmpty,.todayEmployeeStatusItem,.statusCard
+){
+  background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(5,9,17,.94)) !important;
+  color:var(--kp-text2) !important;
+  border:1px solid var(--kp-line) !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.22) !important;
+}
+
+:is(.mainSectionHelp,.adminSectionHelp,.manualAttendanceHelp,.adminScreenHelp,.mainScreenHelp){
+  padding:14px 16px !important;
+  border-radius:18px !important;
+  line-height:1.75 !important;
+}
+
+/* 説明文だけに出ていた四角い線を消す */
+:is(.manualAttendanceHelp,.adminSectionHelp,.mainSectionHelp) *{
+  border-color:transparent !important;
+}
+
+/* フォーム内のラベル/カードが白く残る対策 */
+:is(.manualFormGrid,.multiEntryGrid,.singleDateGrid) label,
+:is(.maintenanceAdminGrid) label,
+:is(.employeeSelectGrid) label{
+  display:block !important;
+  background:transparent !important;
+  color:var(--kp-text2) !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+
+:is(.manualFormGrid,.multiEntryGrid,.singleDateGrid) label span,
+:is(.maintenanceAdminGrid) label span,
+.formLabelText{
+  display:block !important;
+  margin:0 0 8px !important;
+  color:var(--kp-muted) !important;
+  font-weight:800 !important;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select{
+  height:auto !important;
+  min-height:56px !important;
+  padding:14px 16px !important;
+  background:#050913 !important;
+  color:var(--kp-text) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  border-radius:16px !important;
+  box-shadow:inset 0 0 0 1px rgba(255,138,31,.02) !important;
+}
+textarea{ min-height:116px !important; }
+select{ appearance:auto !important; -webkit-appearance:menulist !important; }
+input::placeholder,textarea::placeholder{ color:#8d99ad !important; }
+
+/* ボタン共通の統一 */
+button{
+  font-family:inherit !important;
+  letter-spacing:.01em !important;
+}
+
+/* 出勤ボタン: 緑を廃止し、SVG付きオレンジへ */
+#clockInBtn.kingClockInBtn,
+#clockInBtn{
+  min-height:62px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  color:#111827 !important;
+  border:1px solid rgba(255,138,31,.5) !important;
+  box-shadow:0 16px 32px rgba(255,138,31,.18) !important;
+  font-weight:900 !important;
+}
+#clockInBtn .kingBtnIcon,
+#clockInBtn::before{
+  width:22px !important;
+  height:22px !important;
+  flex:0 0 22px !important;
+}
+#clockInBtn .kingBtnIcon svg{
+  width:22px;
+  height:22px;
+  display:block;
+  fill:none;
+  stroke:#111827;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+#clockInBtn:not(.kingClockInBtn)::before{
+  content:"";
+  display:inline-block;
+  background-color:#111827;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/><circle cx="12" cy="12" r="8" fill="none" stroke="black" stroke-width="2.4"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"/><circle cx="12" cy="12" r="8" fill="none" stroke="black" stroke-width="2.4"/></svg>') center/contain no-repeat;
+}
+#clockOutBtn{
+  min-height:58px !important;
+  background:#111827 !important;
+  color:var(--kp-text) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+}
+
+/* 確認ボタン: SVG風チェック付き状態表示 */
+.noticeConfirmBtn{
+  min-height:54px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:10px !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  color:#111827 !important;
+  border-radius:16px !important;
+  font-weight:900 !important;
+}
+.noticeConfirmBtn .noticeBtnIcon{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#111827;
+  color:#ffb15c;
+  font-weight:900;
+  line-height:1;
+}
+.noticeConfirmBtn.confirmed{
+  background:#1f2937 !important;
+  color:#d1d5db !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:none !important;
+}
+.noticeConfirmBtn.confirmed .noticeBtnIcon{
+  background:#374151;
+  color:#d1d5db;
+}
+
+/* SVGアイコン化: emoji文字は使わず、CSSマスクSVGで表示 */
+.svgTabIcon{
+  position:relative !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:transparent !important;
+  font-size:0 !important;
+  overflow:hidden !important;
+}
+.svgTabIcon::before{
+  content:"";
+  width:28px;
+  height:28px;
+  display:block;
+  background:#111827;
+  -webkit-mask:var(--svg-icon) center/contain no-repeat;
+  mask:var(--svg-icon) center/contain no-repeat;
+}
+.icon-dashboard{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="10" width="3" height="8" rx="1"/><rect x="10" y="6" width="3" height="12" rx="1"/><rect x="16" y="3" width="3" height="15" rx="1"/></svg>')}
+.icon-notice{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 10v4h3l7 4V6l-7 4H4z"/><path d="M16 9c1 .8 1 5 0 6"/></svg>')}
+.icon-maintenance{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 3l4 4-4 4-4-4 4-4zm10 10l4 4-4 4-4-4 4-4zM5 19L19 5"/></svg>')}
+.icon-users{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19c.7-4 11.3-4 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15 15c2.7-.7 5.5.5 6 4"/></svg>')}
+.icon-history{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 14h3M13 14h3M8 17h3"/></svg>')}
+.icon-plus{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="black" stroke-width="4" stroke-linecap="round"/></svg>')}
+.icon-holiday{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 12c2-5 14-5 16 0-3-1-5-1-8 0-3-1-5-1-8 0z"/><path d="M12 12v7M9 19h6"/></svg>')}
+.icon-report{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4M9 12h6M9 16h6M9 8h2"/></svg>')}
+
+/* 全体に薄くオレンジを分散 */
+:is(.card,.noticeCard,.adminNoticeCard,.historyItem,.manualAttendanceBox,.adminManualBox,.maintenanceAdminBox,.adminTabBtn,.mainTabBtn,.chartBox,.dashboardCard):hover{
+  border-color:rgba(255,138,31,.24) !important;
+}
+:is(.mainTabBtn.active,.adminTabBtn.active,.historyItem.workday,.noticeCard){
+  box-shadow:0 14px 34px rgba(0,0,0,.22),0 0 18px rgba(255,138,31,.035) !important;
+}
+
+/* 月次レポート A4バッジ */
+.reportTitleWithBadge{
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  flex-wrap:wrap !important;
+}
+.a4OptimizedBadge{
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:26px !important;
+  padding:5px 9px !important;
+  border-radius:999px !important;
+  background:rgba(255,138,31,.14) !important;
+  color:var(--kp-orange2) !important;
+  border:1px solid rgba(255,138,31,.28) !important;
+  font-size:12px !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+}
+
+/* 勤務履歴: 時間主体で見やすく */
+.historyItem .historyMainText > strong,
+.adminItem .historyMainText > strong{
+  display:inline-block !important;
+  margin-bottom:10px !important;
+  font-size:1.08em !important;
+}
+.historySetLines{
+  display:grid !important;
+  gap:10px !important;
+  margin-top:10px !important;
+}
+.historySetLine{
+  padding:12px 14px !important;
+  border-radius:15px !important;
+  font-weight:900 !important;
+  line-height:1.45 !important;
+  letter-spacing:.01em !important;
+  background:rgba(8,13,24,.92) !important;
+  border:1px solid rgba(255,138,31,.18) !important;
+  color:var(--kp-text) !important;
+}
+#history:empty::before,
+#adminHistory:empty::before{
+  content:"履歴がありません";
+  color:var(--kp-muted);
+}
+
+/* グラフ未選択時の黒い空白を案内表示に */
+.chartBox:has(canvas) .chartScrollArea:empty::before{
+  content:"📊 社員を選択すると勤務時間グラフを表示します";
+  display:grid;
+  place-items:center;
+  min-height:180px;
+  color:var(--kp-muted);
+}
+.chartScrollArea{
+  background:#050913 !important;
+  border:1px solid var(--kp-line) !important;
+  border-radius:18px !important;
+  padding:12px !important;
+}
+
+/* メンテナンス: ラジオ/チェックを読みやすく整列 */
+.maintenanceSwitchRow,
+.maintenanceEndTypeBox label{
+  background:#070b14 !important;
+  border:1px solid var(--kp-line) !important;
+}
+.maintenanceEndTypeBox{
+  gap:12px !important;
+  background:rgba(5,9,17,.86) !important;
+}
+
+/* スマホ表示の崩れを抑える */
+@media(max-width:640px){
+  .container{ padding-left:14px !important; padding-right:14px !important; }
+  #mainScreen,#adminScreen{ padding-left:0 !important; padding-right:0 !important; }
+  .historyFilterBox,.manualAttendanceBox,.adminManualBox,.chartBox,.noticeCard,.adminNoticeCard{ padding:16px !important; }
+  .summaryGrid{ grid-template-columns:1fr 1fr !important; gap:12px !important; }
+  .mainTabBtn,.adminTabBtn{ min-height:82px !important; }
+  .svgTabIcon{ width:52px !important; height:52px !important; min-width:52px !important; }
+  #clockInBtn,#clockOutBtn{ width:100% !important; }
+}

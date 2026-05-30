@@ -1,0 +1,109 @@
+#loginArea{
+    position:relative;
+    z-index:2;
+}
+
+.loginGuide{
+    margin:8px 0 18px;
+    color:#6b7280;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.passwordBox{
+    position:relative;
+    margin-top:16px;
+}
+
+.passwordBox input{
+    margin-top:0;
+    padding-right:82px;
+}
+
+#passwordToggleBtn{
+    position:absolute;
+    top:50%;
+    right:10px;
+    transform:translateY(-50%);
+    width:64px;
+    height:42px;
+    margin:0;
+    padding:0;
+    border-radius:12px;
+    background:#eef2ff;
+    color:#1e3a8a;
+    font-size:13px;
+    font-weight:700;
+    z-index:3;
+}
+
+.keepLoginLabel{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:14px;
+    font-size:14px;
+    font-weight:600;
+    color:#374151;
+    text-align:left;
+}
+
+.keepLoginLabel input{
+    width:18px;
+    height:18px;
+    margin:0;
+    padding:0;
+    accent-color:#2563eb;
+}
+
+#loginBtn{
+    position:relative;
+    overflow:hidden;
+    background:#2563eb;
+    color:white;
+}
+
+#loginBtn.loading{
+    background:linear-gradient(90deg,#2563eb,#7c3aed,#2563eb);
+    background-size:200% 100%;
+    animation:loginButtonMove 1.1s linear infinite;
+    color:white;
+}
+
+#loginBtn.loading span{
+    opacity:0;
+}
+
+#loginBtn.loading::after{
+    content:"ログイン中...";
+    color:white;
+    position:absolute;
+    left:0;
+    right:0;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.container.loginLoading{
+    animation:loginPulse 1.2s infinite ease-in-out;
+}
+
+#appContent.loginShow{
+    animation:appFadeIn 0.45s ease-out;
+}
+#loginArea.loginDisabled{
+    opacity:0.72;
+    pointer-events:none;
+}
+
+#loginArea.loginDisabled #loginBtn{
+    pointer-events:auto;
+}
+
+#email:disabled,
+#password:disabled,
+#keepLoginCheck:disabled,
+#passwordToggleBtn:disabled{
+    opacity:0.65;
+    cursor:not-allowed;
+}

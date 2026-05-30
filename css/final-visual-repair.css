@@ -1,0 +1,383 @@
+/* =========================================================
+   Final visual repair for Kings dark premium UI
+   - remove remaining white/light cards
+   - repair maintenance layout controls
+   - stabilize top menu layer and clickability
+   - keep readable contrast without excessive glow
+   ========================================================= */
+:root{
+  --repair-bg:#050608;
+  --repair-panel:#0b1220;
+  --repair-panel-2:#111827;
+  --repair-panel-3:#070b14;
+  --repair-border:rgba(255,255,255,.14);
+  --repair-border-soft:rgba(255,255,255,.09);
+  --repair-orange:#ff8a1f;
+  --repair-orange-soft:#ffb15c;
+  --repair-text:#f8fafc;
+  --repair-text-2:#e5e7eb;
+  --repair-muted:#a9b3c4;
+}
+
+/* Make every leftover light explanation/box dark. */
+.adminSectionHelp,
+.adminScreenHelp,
+.mainScreenHelp,
+.mainSectionHelp,
+.manualAttendanceHelp,
+.warningText,
+.confirmedUserEmpty,
+.noticeEmpty,
+.todayEmployeeEmpty,
+.adminGuideBox,
+.holidayAutoInfo,
+.holidaySimpleBox,
+.manualPointBox,
+.employeeEmptyBox,
+.unclosedWarningSummary,
+.unclosedWarningDetail,
+.adminNoticeConfirmBox,
+.noticeBodyExpanded,
+.confirmedFullList,
+.confirmedUserItem,
+.confirmedPreviewItem,
+.confirmedMoreBadge,
+.confirmedUserSummary,
+.noticeMetaBox,
+.noticeConfirmArea,
+.noticeBody,
+.maintenanceMessage,
+.maintenanceInfoBox,
+.maintenanceAdminMeta,
+.maintenanceStatusLine,
+.maintenanceEndTypeBox,
+.dashboardCard,
+.todayEmployeeStatusBox,
+.todayEmployeeStatusItem,
+.employeeInfoBox,
+.employeeStatusBox,
+.selectedEmployeeSection,
+.employeeManageSection,
+.historyFilterBox,
+.manualAttendanceBox,
+.adminManualBox,
+.noticeCard,
+.adminNoticeCard,
+#noticeForm{
+  background:linear-gradient(145deg,rgba(15,23,42,.96),rgba(4,8,17,.96)) !important;
+  color:var(--repair-text-2) !important;
+  border:1px solid var(--repair-border-soft) !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.28) !important;
+}
+
+/* Text contrast repair. */
+.adminSectionHelp,
+.adminScreenHelp,
+.mainScreenHelp,
+.mainSectionHelp,
+.manualAttendanceHelp,
+.warningText,
+.noticeMeta,
+.confirmedUserSummary,
+.confirmedUserEmpty,
+.noticeEmpty,
+.todayEmployeeEmpty,
+.maintenanceSmallNote,
+.maintenanceAdminMeta,
+.maintenanceInfoBox span,
+.maintenanceAdminGrid label span,
+.formLabelText,
+.dashboardCard span,
+.todayEmployeeStatusBox p,
+.noticeBody,
+.noticeBodyExpanded,
+.noticeMetaBox,
+.adminNoticeConfirmBox,
+.confirmedFullList,
+.confirmedUserItem,
+.confirmedUserItem strong,
+.confirmedUserItem span,
+.confirmedPreviewItem,
+.confirmedMoreBadge{
+  color:var(--repair-muted) !important;
+  text-shadow:none !important;
+}
+
+h2,h3,h4,
+.noticeTitleArea strong,
+.noticeTitle,
+.adminNoticeConfirmBox > strong,
+.todayEmployeeStatusBox h4,
+.todayEmployeeName,
+.dashboardCard strong,
+.maintenanceCard h2,
+.maintenanceStatusLine strong,
+.maintenanceSwitchRow,
+.maintenanceInfoBox strong,
+.employeeInfoBox strong,
+.employeeStatusBox strong{
+  color:var(--repair-text) !important;
+  text-shadow:none !important;
+}
+
+/* Status/badge contrast in dark theme. */
+.todayEmployeeBadge.statusWorking,
+.accountStatusBadge.active,
+.maintenanceStatusBadge.off{
+  background:rgba(34,197,94,.16) !important;
+  color:#86efac !important;
+  border:1px solid rgba(34,197,94,.22) !important;
+}
+.todayEmployeeBadge.statusLeft{
+  background:rgba(96,165,250,.16) !important;
+  color:#bfdbfe !important;
+  border:1px solid rgba(96,165,250,.22) !important;
+}
+.todayEmployeeBadge.statusRest,
+.todayEmployeeBadge.statusNotYet{
+  background:rgba(255,138,31,.13) !important;
+  color:var(--repair-orange-soft) !important;
+  border:1px solid rgba(255,138,31,.22) !important;
+}
+.maintenanceStatusBadge.on,
+.accountStatusBadge.inactive{
+  background:rgba(239,68,68,.16) !important;
+  color:#fca5a5 !important;
+  border:1px solid rgba(239,68,68,.22) !important;
+}
+
+/* Maintenance screen/admin repair. */
+.maintenanceScreen{
+  padding:18px 0 28px !important;
+}
+.maintenanceCard,
+.maintenanceAdminBox{
+  max-width:100% !important;
+  width:100% !important;
+  margin:0 auto !important;
+  padding:20px !important;
+  border-radius:22px !important;
+  background:linear-gradient(145deg,rgba(15,23,42,.98),rgba(4,8,17,.98)) !important;
+  border:1px solid rgba(255,138,31,.18) !important;
+  box-shadow:0 18px 42px rgba(0,0,0,.34),0 0 18px rgba(255,138,31,.06) !important;
+  text-align:left !important;
+}
+.maintenanceCard .maintenanceIcon{
+  margin:0 auto 16px !important;
+}
+.maintenanceCard h2,
+.maintenanceCard .maintenanceSmallNote{
+  text-align:center !important;
+}
+.maintenanceStatusLine{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:14px !important;
+  border-radius:18px !important;
+}
+.maintenanceSwitchRow{
+  display:grid !important;
+  grid-template-columns:26px 1fr !important;
+  align-items:center !important;
+  gap:12px !important;
+  margin:16px 0 !important;
+  padding:14px !important;
+  border-radius:18px !important;
+  background:rgba(2,6,23,.58) !important;
+  border:1px solid var(--repair-border-soft) !important;
+}
+.maintenanceEndTypeBox{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:10px !important;
+  padding:12px !important;
+  border-radius:18px !important;
+}
+.maintenanceEndTypeBox label{
+  display:grid !important;
+  grid-template-columns:24px 1fr !important;
+  align-items:center !important;
+  gap:10px !important;
+  min-height:54px !important;
+  padding:10px !important;
+  border-radius:14px !important;
+  background:rgba(2,6,23,.52) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  color:var(--repair-text-2) !important;
+  line-height:1.35 !important;
+}
+
+/* Native checkbox/radio must never become large white panels. */
+input[type="checkbox"],
+input[type="radio"]{
+  width:22px !important;
+  height:22px !important;
+  min-width:22px !important;
+  min-height:22px !important;
+  max-width:22px !important;
+  max-height:22px !important;
+  flex:0 0 22px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:50% !important;
+  accent-color:var(--repair-orange) !important;
+  background:#0b1220 !important;
+  border:1px solid rgba(255,255,255,.35) !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+input[type="checkbox"]{
+  border-radius:7px !important;
+}
+
+/* Inputs and textareas: consistent dark surface, no white leftovers. */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select{
+  background:#070b14 !important;
+  color:var(--repair-text) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,138,31,.02) !important;
+}
+input::placeholder,
+textarea::placeholder{
+  color:#8b98ad !important;
+  opacity:1 !important;
+}
+
+/* Button hierarchy: orange primary, dark secondary. */
+button,
+#addNoticeBtn,
+#saveMaintenanceBtn,
+#loginBtn,
+#addManualAttendanceBtn,
+#adminAddManualAttendanceBtn,
+#addHolidayBtn,
+#addAdminHolidayBtn{
+  color:#111827 !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  border:1px solid rgba(255,138,31,.32) !important;
+  text-shadow:none !important;
+}
+.noticeBodyToggleBtn,
+.confirmedToggleBtn,
+.roleChangeBtn,
+.nameChangeBtn,
+#clockOutBtn,
+#prevPageBtn,#nextPageBtn,#adminPrevPageBtn,#adminNextPageBtn{
+  color:var(--repair-text) !important;
+  background:rgba(255,255,255,.07) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+}
+
+/* Top menu: absolute to the app card, right aligned, fully opaque, always clickable. */
+#headerMount{
+  position:relative !important;
+  z-index:100000 !important;
+}
+#topMenu{
+  position:absolute !important;
+  top:24px !important;
+  right:24px !important;
+  left:auto !important;
+  z-index:2147483000 !important;
+  pointer-events:auto !important;
+  isolation:isolate !important;
+}
+#menuBtn{
+  width:56px !important;
+  height:56px !important;
+  min-width:56px !important;
+  min-height:56px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  border-radius:18px !important;
+  background:#1b120b !important;
+  color:var(--repair-orange-soft) !important;
+  border:1px solid rgba(255,138,31,.48) !important;
+  box-shadow:0 14px 30px rgba(0,0,0,.42),0 0 16px rgba(255,138,31,.15) !important;
+  font-size:28px !important;
+  line-height:1 !important;
+  padding:0 !important;
+  margin:0 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+}
+#menuDropdown{
+  position:absolute !important;
+  top:66px !important;
+  right:0 !important;
+  left:auto !important;
+  width:230px !important;
+  min-width:230px !important;
+  max-width:calc(100vw - 46px) !important;
+  padding:12px !important;
+  border-radius:22px !important;
+  background:#080d18 !important;
+  opacity:1 !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 28px 76px rgba(0,0,0,.82),0 0 22px rgba(255,138,31,.09) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  overflow:hidden !important;
+  pointer-events:auto !important;
+}
+#menuDropdown button{
+  height:54px !important;
+  min-height:54px !important;
+  margin:0 0 10px !important;
+  padding:0 14px !important;
+  border-radius:16px !important;
+  background:#151b2a !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  box-shadow:none !important;
+  font-size:16px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+  pointer-events:auto !important;
+}
+#menuDropdown button:last-child{margin-bottom:0 !important;}
+.appLogoTitle,.appLogoSub,#mainScreen,#adminScreen,#appContent{
+  position:relative !important;
+  z-index:1 !important;
+}
+
+/* Avoid harsh glow/visual noise. */
+.container::before{
+  opacity:.65 !important;
+}
+body::before{
+  opacity:.24 !important;
+}
+
+@media(max-width:640px){
+  #topMenu{
+    top:22px !important;
+    right:18px !important;
+  }
+  #menuBtn{
+    width:54px !important;
+    height:54px !important;
+    min-width:54px !important;
+    min-height:54px !important;
+  }
+  #menuDropdown{
+    top:64px !important;
+    right:0 !important;
+    width:220px !important;
+    min-width:220px !important;
+    max-width:calc(100vw - 36px) !important;
+  }
+  .maintenanceEndTypeBox{
+    grid-template-columns:1fr !important;
+  }
+  .maintenanceAdminBox,
+  .maintenanceCard{
+    padding:18px !important;
+  }
+}

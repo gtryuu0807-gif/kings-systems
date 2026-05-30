@@ -1,0 +1,49 @@
+@media (min-width:700px){
+    .mainHistoryMenu{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media (max-width:380px){
+    .mainHistoryMenu{
+        grid-template-columns:1fr;
+    }
+
+    .mainTabBtn{
+        min-height:68px;
+        padding:10px;
+    }
+
+    .mainTabIcon{
+        width:34px;
+        height:34px;
+        font-size:18px;
+    }
+
+    .mainTabText strong{
+        font-size:14px;
+    }
+
+    .mainTabText small{
+        font-size:11px;
+    }
+
+    .summaryGrid{
+        grid-template-columns:1fr;
+    }
+
+    .historyItem{
+        padding-right:48px;
+    }
+
+    .historySettingBtn{
+        width:32px;
+        height:32px;
+        font-size:14px;
+    }
+
+    .summaryCard strong{
+        font-size:16px;
+    }
+}
+

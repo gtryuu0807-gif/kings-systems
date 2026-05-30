@@ -1,0 +1,32 @@
+.adminManualBox{
+    background:linear-gradient(180deg,#eff6ff,#ffffff);
+}
+
+#adminManualEmployeeSelect,
+#adminHolidayEmployeeSelect,
+#adminHistoryEmployeeSelect{
+    margin-top:0;
+}
+
+.nameChangeBtn,
+.roleChangeBtn,
+.deleteEmployeeBtn{
+    height:46px;
+    margin-top:10px;
+    font-size:15px;
+}
+
+.nameChangeBtn{
+    background:#2563eb;
+    color:white;
+}
+
+.roleChangeBtn{
+    background:#7c3aed;
+    color:white;
+}
+
+.deleteEmployeeBtn{
+    background:#b91c1c;
+    color:white;
+}

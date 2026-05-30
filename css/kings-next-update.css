@@ -1,0 +1,148 @@
+/* =========================================================
+   Kings Next Update
+   - 履歴表示条件カード分割 / SVGアイコン
+   - グラフ未選択案内
+   - メニューアイコン差し替え
+   - 勤務履歴編集アイコン差し替え
+   - 履歴状態色統一 / 折りたたみ
+   - 現在状態カード / 月次レポートプレビュー
+   - ログイン成功演出
+   ========================================================= */
+:root{
+  --kings-bg:#050505;
+  --kings-card:#0b1324;
+  --kings-card-2:#08111f;
+  --kings-input:#050914;
+  --kings-border:rgba(255,255,255,.12);
+  --kings-orange:#ff8a1f;
+  --kings-orange-2:#ffb15c;
+  --kings-text:#f8fafc;
+  --kings-muted:#cbd5e1;
+  --kings-green:#22c55e;
+  --kings-gray:#94a3b8;
+  --kings-red:#ef4444;
+}
+
+/* ---------- 画面遷移演出 ---------- */
+.loginTransitionOverlay{
+  position:fixed;
+  inset:0;
+  z-index:999998;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(circle at center,rgba(255,138,31,.18),transparent 35%),#050505;
+  color:var(--kings-text);
+  text-align:center;
+}
+.loginTransitionOverlay.show{display:flex;animation:loginTransitionIn .42s ease forwards}
+.loginTransitionOverlay.hide{display:flex;animation:loginTransitionOut .52s ease forwards}
+.loginTransitionLogo{font-family:Georgia,"Times New Roman",serif;font-size:clamp(58px,15vw,110px);text-shadow:0 0 30px rgba(255,138,31,.45)}
+.loginTransitionSub{margin-top:10px;color:var(--kings-orange-2);letter-spacing:.16em;font-size:12px;text-transform:uppercase}
+.loginTransitionText{margin-top:24px;color:var(--kings-muted);letter-spacing:.12em;font-weight:900}
+.loginTransitionWelcome{margin-top:14px;padding:12px 18px;border-radius:18px;background:rgba(15,23,42,.84);border:1px solid rgba(255,138,31,.28);font-weight:900;color:#fff}
+@keyframes loginTransitionIn{from{opacity:0;transform:scale(1.02)}to{opacity:1;transform:scale(1)}}
+@keyframes loginTransitionOut{to{opacity:0;visibility:hidden;transform:scale(1.025)}}
+
+/* ---------- 表示条件カード ---------- */
+.historyFilterCards{
+  display:grid !important;
+  gap:12px !important;
+  background:rgba(15,23,42,.82) !important;
+  border:1px solid rgba(255,138,31,.24) !important;
+  box-shadow:0 18px 48px rgba(0,0,0,.24) !important;
+}
+.historyFilterCards h4{color:var(--kings-orange-2) !important}
+.historyFilterCard{
+  width:100%;
+  min-width:0;
+  padding:14px;
+  border-radius:18px;
+  background:rgba(2,6,23,.72);
+  border:1px solid rgba(255,255,255,.09);
+}
+.historyFilterCardTitle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  color:var(--kings-orange-2);
+  font-weight:900;
+}
+.filterSvgIcon{
+  width:26px;
+  height:26px;
+  border-radius:9px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,138,31,.12);
+  border:1px solid rgba(255,138,31,.24);
+  flex:0 0 26px;
+}
+.filterSvgIcon::before{
+  content:"";
+  width:17px;
+  height:17px;
+  display:block;
+  background:var(--kings-orange-2);
+  -webkit-mask:var(--filter-icon) center/contain no-repeat;
+  mask:var(--filter-icon) center/contain no-repeat;
+}
+.filterIconUser{--filter-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c2-5 14-5 16 0"/></svg>')}
+.filterIconRange{--filter-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="black" stroke-width="3" stroke-linecap="round"/></svg>')}
+.filterIconCalendar{--filter-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18" stroke="black" stroke-width="2.5" stroke-linecap="round"/></svg>')}
+.historyFilterCard select,
+.historyFilterCard input{margin-top:0 !important}
+
+/* ---------- メニューアイコン採用版 ---------- */
+.icon-maintenance{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L3.8 17.2a2 2 0 1 0 3 3l5.9-5.9a4 4 0 0 0 5-5l-2.4 2.4-3-3 2.4-2.4Z"/></svg>') !important}
+.icon-notice{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 14h3l8 4V6l-8 4H4v4Z"/><path d="M7 14l1.5 5" stroke="black" stroke-width="2"/><path d="M18 9a4 4 0 0 1 0 6" stroke="black" stroke-width="2" fill="none" stroke-linecap="round"/></svg>') !important}
+.icon-holiday{--svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M16 3v4M8 3v4M4 10h16" stroke="black" stroke-width="2"/><path d="m8 15 2.5 2.5L16 12" stroke="black" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>') !important}
+
+/* ---------- グラフ未選択案内 ---------- */
+.chartPlaceholder{display:none;margin:12px 0;padding:28px 16px;border-radius:22px;background:rgba(2,6,23,.72);border:1px solid rgba(255,255,255,.09);text-align:center;color:var(--kings-muted)}
+.chartPlaceholder.show{display:grid;place-items:center;gap:8px}
+.chartPlaceholderIcon{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;background:rgba(255,138,31,.12);border:1px solid rgba(255,138,31,.24);color:var(--kings-orange-2)}
+.chartPlaceholderIcon svg{width:36px;height:36px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.chartPlaceholder strong{color:#fff;font-size:16px}.chartPlaceholder span{color:var(--kings-muted);font-size:13px}
+
+/* ---------- 履歴カード状態色 ---------- */
+.historyItem.statusNormal{border-left:6px solid var(--kings-green) !important}
+.historyItem.statusNormal .statusBadge{background:rgba(34,197,94,.16) !important;color:#86efac !important;border:1px solid rgba(34,197,94,.34) !important}
+.historyItem.statusHoliday,.historyItem.statusAutoHoliday{border-left:6px solid var(--kings-gray) !important}
+.historyItem.statusHoliday .statusBadge,.historyItem.statusAutoHoliday .statusBadge{background:rgba(148,163,184,.17) !important;color:#cbd5e1 !important;border:1px solid rgba(148,163,184,.35) !important}
+.historyItem.statusIncomplete{border-left:6px solid var(--kings-red) !important}
+.historyItem.statusIncomplete .statusBadge{background:rgba(239,68,68,.16) !important;color:#fca5a5 !important;border:1px solid rgba(239,68,68,.42) !important}
+
+/* ---------- 履歴折りたたみ / 編集SVG ---------- */
+.historyCardHead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;line-height:1.5}
+.historyDateLine{margin-top:4px;color:var(--kings-muted);font-size:14px}
+.historyCompactSummary{margin-top:10px;padding:10px 12px;border-radius:14px;background:#050914;border:1px solid rgba(255,138,31,.18);color:#fff;font-weight:900}
+.historyDetailToggle{height:40px !important;margin-top:10px !important;border-radius:13px !important;background:rgba(255,138,31,.08) !important;color:var(--kings-orange-2) !important;border:1px solid rgba(255,138,31,.34) !important;font-size:14px !important}
+.historyDetailPanel{display:none;margin-top:10px}
+.historyItem.detailOpen .historyDetailPanel{display:block;animation:cardSlideIn .24s ease-out}
+.historySettingBtn svg{stroke:currentColor !important;fill:none !important;stroke-linecap:round !important;stroke-linejoin:round !important}
+
+/* ---------- 現在状態カード ---------- */
+.currentWorkStatusCard{margin:16px 0;padding:16px;border-radius:22px;background:rgba(15,23,42,.84);border:1px solid rgba(255,138,31,.22);display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;text-align:left;box-shadow:0 16px 38px rgba(0,0,0,.22)}
+.currentStatusIcon{width:58px;height:58px;border-radius:19px;display:grid;place-items:center;background:rgba(255,138,31,.12);border:1px solid rgba(255,138,31,.28);color:var(--kings-orange-2)}
+.currentStatusIcon svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.currentStatusText span{display:block;color:var(--kings-muted);font-weight:800;font-size:12px}.currentStatusText strong{display:block;font-size:22px;color:#fff}.currentStatusText small{display:block;color:var(--kings-muted);font-weight:700;margin-top:4px;line-height:1.5}
+.currentWorkStatusCard.working{border-color:rgba(34,197,94,.38)}.currentWorkStatusCard.working .currentStatusIcon{color:#86efac;border-color:rgba(34,197,94,.38);background:rgba(34,197,94,.12)}
+.currentWorkStatusCard.left .currentStatusIcon{color:#93c5fd;border-color:rgba(59,130,246,.34);background:rgba(59,130,246,.12)}
+
+/* ---------- 月次レポートプレビュー ---------- */
+.monthlyReportPreview{margin:14px 0;display:grid;gap:12px}
+.monthlyReportEmpty{padding:14px;border-radius:18px;background:rgba(2,6,23,.72);border:1px solid rgba(255,255,255,.09);color:var(--kings-muted);line-height:1.7}
+.monthlyReportPreviewHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px;border-radius:18px;background:#050914;border:1px solid rgba(255,255,255,.09)}
+.monthlyReportPreviewHead strong{display:block;color:#fff;font-size:18px}.monthlyReportPreviewHead span:not(.a4OptimizedBadge){display:block;color:var(--kings-muted);font-weight:800;margin-top:4px}
+.monthlyReportPreviewGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.monthlyReportPreviewGrid div{padding:12px;border-radius:16px;background:#050914;border:1px solid rgba(255,255,255,.09);text-align:center}.monthlyReportPreviewGrid span{display:block;color:#94a3b8;font-weight:800;font-size:12px}.monthlyReportPreviewGrid strong{display:block;color:#fff;margin-top:5px;font-size:18px}
+
+.emptyStateCard{padding:18px;border-radius:18px;background:rgba(2,6,23,.72);border:1px solid rgba(255,255,255,.09);color:var(--kings-muted);text-align:center;font-weight:800}
+
+@media(max-width:640px){
+  .monthlyReportPreviewGrid{grid-template-columns:1fr}
+  .currentWorkStatusCard{grid-template-columns:auto minmax(0,1fr);padding:14px}
+}

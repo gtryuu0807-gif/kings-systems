@@ -1,0 +1,56 @@
+.adminItem{
+    position:relative;
+    background:white;
+    padding:16px;
+    border-radius:18px;
+    margin-top:14px;
+    border:1px solid #bfdbfe;
+    text-align:left;
+    line-height:1.8;
+    box-shadow:0 6px 18px rgba(37,99,235,0.07);
+    animation:cardSlideIn 0.32s ease-out;
+}
+
+.adminItem.historyItem{
+    padding-right:54px;
+}
+
+.adminItem .historyEditArea{
+    background:#f8fafc;
+}
+
+.adminItem .attendanceEditBlock{
+    background:white;
+}
+
+.deleteAllAttendanceBox{
+    margin-top:24px;
+    padding:18px;
+    border-radius:20px;
+    background:#fff1f2;
+    border:1px solid #fecdd3;
+    text-align:left;
+    box-shadow:0 8px 24px rgba(185,28,28,0.08);
+}
+
+.deleteAllAttendanceBox h4{
+    margin:0;
+    font-size:17px;
+    color:#991b1b;
+}
+
+.deleteAllAttendanceBox p{
+    margin:8px 0 14px;
+    font-size:13px;
+    color:#7f1d1d;
+    line-height:1.7;
+}
+
+.deleteAllAttendanceBox button{
+    width:100%;
+    height:48px;
+    margin:0;
+    background:#b91c1c;
+    color:white;
+}
+

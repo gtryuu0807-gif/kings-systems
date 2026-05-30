@@ -1,0 +1,135 @@
+
+/* ===== Kings next update complete patch ===== */
+body.auto-auth-checking #loginArea{display:none !important}
+body.auto-auth-checking .container{background:#050505 !important}
+
+.loginTransitionOverlay.show{background:#050505 !important;display:flex !important;align-items:center !important;justify-content:center !important;z-index:999999 !important}
+.loginTransitionInner.kingsTransitionC{position:relative;text-align:center;min-width:min(360px,86vw);padding:32px 18px;animation:kingsTransitionCIn .5s ease both}
+.loginTransitionGlow{position:absolute;inset:50% auto auto 50%;width:320px;height:320px;transform:translate(-50%,-50%);border-radius:999px;background:radial-gradient(circle,rgba(255,138,31,.18),transparent 70%);pointer-events:none;animation:kingsTransitionGlow 1.6s ease-in-out infinite alternate}
+.loginTransitionLogo{position:relative;font-family:Georgia,"Times New Roman",serif;font-size:clamp(54px,15vw,82px);line-height:1;text-shadow:0 0 28px rgba(255,138,31,.44)}
+.loginTransitionSub{position:relative;margin-top:10px;color:#ffb15c;letter-spacing:.16em;text-transform:uppercase;font-size:11px}
+.loginTransitionText{position:relative;margin-top:28px;color:#cbd5e1;font-weight:900;letter-spacing:.08em}
+.loginTransitionWelcome{position:relative;margin:16px auto 0;padding:14px 16px;border-radius:20px;background:rgba(15,23,42,.88);border:1px solid rgba(255,138,31,.28);box-shadow:0 0 26px rgba(255,138,31,.12);font-weight:900}
+@keyframes kingsTransitionCIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes kingsTransitionGlow{from{opacity:.55;transform:translate(-50%,-50%) scale(.92)}to{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+
+/* employee management dark unification */
+.warningText,.employeeManageSection,.selectedEmployeeSection,.employeeSelectedCard,.employeeEmptyBox,.employeeDetailBox>div,.employeeAccountSection,.employeeActionSection,.employeeDangerSection,.employeeCreateBox,.accountIntegrityResult,.roleChangeLogList{background:rgba(15,23,42,.82) !important;border-color:rgba(255,138,31,.20) !important;color:#e5e7eb !important;box-shadow:0 16px 38px rgba(0,0,0,.22) !important}
+.employeeSectionHeader h4,.employeeAccountSection h5,.employeeActionSection h5,.employeeDangerSection h5{color:#ffb15c !important}.employeeSectionHeader p,.employeeEmptyBox p,.employeeAccountSection p,.employeeActionSection p,.employeeDangerSection p{color:#cbd5e1 !important}.employeeEmptyBox strong,.employeeDetailBox strong{color:#fff !important}.employeeDetailBox span{color:#94a3b8 !important}
+.employeeSectionIcon{background:rgba(255,138,31,.10) !important;border:1px solid rgba(255,138,31,.32) !important;color:#ffb15c !important;font-size:0 !important}.employeeSectionIcon::before{content:"";width:24px;height:24px;display:block;background:#ffb15c;-webkit-mask:var(--emp-icon) center/contain no-repeat;mask:var(--emp-icon) center/contain no-repeat}.employeeIconList{--emp-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="4" width="11" height="16" rx="2" fill="none" stroke="black" stroke-width="2.4"/><path d="M8 8h3M8 12h5M8 16h4" stroke="black" stroke-width="2.4" stroke-linecap="round"/><circle cx="17.5" cy="16.5" r="3" fill="none" stroke="black" stroke-width="2.4"/><path d="M20 19l2 2" stroke="black" stroke-width="2.4" stroke-linecap="round"/></svg>')}.employeeIconCard,.employeeIconAdd{--emp-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="black" stroke-width="2.4"/><path d="M9 5V3h6v2" stroke="black" stroke-width="2.4" stroke-linecap="round"/><circle cx="10" cy="12" r="2.4" fill="none" stroke="black" stroke-width="2.4"/><path d="M7 17c.7-2 5.3-2 6 0M15 11h3M15 15h2" stroke="black" stroke-width="2.4" stroke-linecap="round"/></svg>')}.employeeIconAdmin{--emp-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6l7-3Z" fill="none" stroke="black" stroke-width="2.4"/><path d="M12 7l1.2 2.4 2.6.4-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.4L12 7Z" fill="none" stroke="black" stroke-width="2.1"/></svg>')}
+.inlineSvgIcon{display:inline-block;width:20px;height:20px;vertical-align:-4px;margin-right:6px;background:#ffb15c;-webkit-mask:var(--inline-icon) center/contain no-repeat;mask:var(--inline-icon) center/contain no-repeat}.inlineEmployeeCard{--inline-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="black" stroke-width="2.4"/><circle cx="10" cy="12" r="2.4" fill="none" stroke="black" stroke-width="2.4"/><path d="M7 17c.7-2 5.3-2 6 0M15 11h3M15 15h2" stroke="black" stroke-width="2.4" stroke-linecap="round"/></svg>')}.inlineAdminBadge{--inline-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6l7-3Z" fill="none" stroke="black" stroke-width="2.4"/><path d="M12 7l1.2 2.4 2.6.4-1.9 1.8.5 2.6-2.4-1.3-2.4 1.3.5-2.6-1.9-1.8 2.6-.4L12 7Z" fill="none" stroke="black" stroke-width="2.1"/></svg>')}
+.employeeCreateBox{display:grid;gap:12px;padding:14px;border-radius:18px}.employeeCreateBox label span{display:block;margin-bottom:6px;color:#94a3b8;font-weight:800;font-size:13px}.employeeCreateBox input,.employeeCreateBox select{width:100%;height:46px;border-radius:14px;background:#050914!important;border:1px solid rgba(255,255,255,.12)!important;color:#fff!important;padding:0 12px}.createAccountBtn,.accountCheckBtn{width:100%;height:48px;border-radius:15px;background:linear-gradient(135deg,#ff7a00,#ffb15c)!important;color:#111827!important;font-weight:900}.accountCreateHelp{margin:0;color:#cbd5e1;font-size:13px;line-height:1.7}.accountIntegrityOk,.accountIntegrityWarn,.roleLogEmpty{padding:12px;border-radius:14px;background:#050914;border:1px solid rgba(255,255,255,.08);color:#cbd5e1}.accountIntegrityItem,.roleLogItem{margin-top:10px;padding:12px;border-radius:14px;background:#050914;border:1px solid rgba(255,255,255,.08)}.accountIntegrityItem b,.roleLogItem strong{display:block;color:#fff}.accountIntegrityItem span,.roleLogItem span{display:block;color:#cbd5e1;margin-top:4px;font-size:13px;line-height:1.6}.repairUserDocBtn{margin-top:10px;height:36px;border-radius:12px;background:rgba(255,138,31,.14)!important;color:#ffb15c!important;border:1px solid rgba(255,138,31,.32)!important}
+
+/* maintenance radio Kings UI */
+.maintenanceEndTypeBox{background:#050914!important;border-color:rgba(255,138,31,.18)!important}.maintenanceEndTypeBox label{color:#e5e7eb!important;gap:10px!important}.maintenanceEndTypeBox input[type="radio"]{appearance:none;-webkit-appearance:none;width:22px!important;height:22px!important;min-width:22px!important;margin:0!important;border-radius:999px;border:2px solid #ff8a1f;background:transparent;display:inline-grid;place-items:center;box-shadow:0 0 0 3px rgba(255,138,31,.06)}.maintenanceEndTypeBox input[type="radio"]::after{content:"";width:8px;height:8px;border-radius:999px;background:white;transform:scale(0);transition:.18s ease}.maintenanceEndTypeBox input[type="radio"]:checked{background:#ff8a1f}.maintenanceEndTypeBox input[type="radio"]:checked::after{transform:scale(1)}.maintenanceEndAtField[style*="none"]{display:none!important}
+
+/* notice confirmed duplicate cleanup */
+.adminNoticeConfirmBox .confirmedUserSummary:empty{display:none!important}.confirmedPreviewList{margin-top:8px}
+
+/* 2026-05-30: login/admin guard polish */
+#openAdminBtn[hidden],
+#openAdminBtn[aria-hidden="true"]{
+  display:none !important;
+}
+
+.loginTransitionOverlay.show{
+  background:radial-gradient(circle at 50% 28%,rgba(255,138,31,.16),transparent 34%),#050505 !important;
+}
+.loginTransitionInner.kingsTransitionFixedLogo{
+  position:relative;
+  width:min(420px,88vw);
+  min-height:360px;
+  padding:26px 18px;
+  text-align:center;
+  animation:kingsFixedLogoIntro .42s ease both;
+}
+.loginTransitionInner.kingsTransitionFixedLogo .loginTransitionLogo{
+  position:absolute;
+  left:0;
+  right:0;
+  top:128px;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(62px,18vw,92px);
+  line-height:1;
+  text-shadow:0 0 30px rgba(255,138,31,.48);
+  animation:kingsFixedLogoMove 1.25s cubic-bezier(.22,1,.36,1) forwards;
+}
+.loginTransitionInner.kingsTransitionFixedLogo .loginTransitionSub{
+  position:absolute;
+  left:0;
+  right:0;
+  top:220px;
+  margin:0;
+  color:#ffb15c;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-size:11px;
+  animation:kingsFixedSubMove 1.25s cubic-bezier(.22,1,.36,1) forwards;
+}
+.loginTransitionInner.kingsTransitionFixedLogo .loginTransitionText{
+  position:absolute;
+  left:0;
+  right:0;
+  top:272px;
+  margin:0;
+  color:#cbd5e1;
+  font-weight:900;
+  letter-spacing:.1em;
+  animation:kingsFixedFadeOut .9s ease forwards .45s;
+}
+.loginTransitionInner.kingsTransitionFixedLogo .loginTransitionWelcome{
+  position:absolute;
+  left:18px;
+  right:92px;
+  top:18px;
+  margin:0;
+  padding:14px 16px;
+  border-radius:20px;
+  background:rgba(15,23,42,.88);
+  border:1px solid rgba(255,138,31,.28);
+  box-shadow:0 0 26px rgba(255,138,31,.12);
+  font-weight:900;
+  opacity:0;
+  transform:translateY(12px);
+  animation:kingsFixedWelcomeIn .55s ease forwards .78s;
+}
+.loginTransitionInner.kingsTransitionFixedLogo .loginTransitionGlow{
+  position:absolute;
+  inset:50% auto auto 50%;
+  width:360px;
+  height:360px;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  background:radial-gradient(circle,rgba(255,138,31,.18),transparent 70%);
+  pointer-events:none;
+  animation:kingsFixedGlow 1.25s ease forwards;
+}
+.loginTransitionOverlay.hide{
+  animation:loginTransitionRevealMain .5s ease forwards !important;
+}
+
+@keyframes kingsFixedLogoIntro{
+  from{opacity:0;transform:scale(1.015)}
+  to{opacity:1;transform:scale(1)}
+}
+@keyframes kingsFixedLogoMove{
+  0%,35%{top:128px;font-size:clamp(62px,18vw,92px);opacity:1}
+  100%{top:18px;font-size:clamp(38px,11vw,48px);opacity:.96}
+}
+@keyframes kingsFixedSubMove{
+  0%,35%{top:220px;opacity:1}
+  100%{top:68px;opacity:.72}
+}
+@keyframes kingsFixedFadeOut{
+  to{opacity:0;transform:translateY(-8px)}
+}
+@keyframes kingsFixedWelcomeIn{
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes kingsFixedGlow{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.92)}
+  100%{opacity:.22;transform:translate(-50%,-50%) scale(1.55)}
+}
+@keyframes loginTransitionRevealMain{
+  to{opacity:0;visibility:hidden;transform:scale(1.01)}
+}
