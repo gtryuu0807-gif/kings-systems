@@ -85,8 +85,6 @@ async function checkLoginSession() {
 
             const message = "別の端末でログインされました。この端末のログイン状態は解除されました。"
             showWarning(message)
-            alert(message)
-
             await signOut(auth)
             location.reload()
         }

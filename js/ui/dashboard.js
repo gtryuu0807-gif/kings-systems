@@ -17,36 +17,45 @@ export function renderAdminDashboard() {
         return getTodayEmployeeStatus(user, todayRecords, todayHolidays)
     })
 
-    const attendanceCount = employeeStatuses.filter((item) => {
-        return item.status === "working" || item.status === "left"
-    }).length
-
-    const notClockedOutCount = employeeStatuses.filter((item) => {
-        return item.status === "working"
-    }).length
-
-    const overtimeWarningCount = employeeStatuses.filter((item) => {
-        return item.isOvertimeWarning
-    }).length
+    const totalEmployees = state.allUsers.length
+    const workingCount = employeeStatuses.filter((item) => item.status === "working").length
+    const leftCount = employeeStatuses.filter((item) => item.status === "left").length
+    const restCount = employeeStatuses.filter((item) => item.status === "rest").length
+    const notYetCount = employeeStatuses.filter((item) => item.status === "notYet").length
 
     dom.adminDashboard.innerHTML = `
-    <div class="dashboardCard">
-        <span>今日の出勤人数</span>
-        <strong>${attendanceCount}人</strong>
-    </div>
-
-    <div class="dashboardCard">
-        <span>未退勤人数</span>
-        <strong>${notClockedOutCount}人</strong>
-    </div>
-
-    <div class="dashboardCard">
-        <span>残業警告人数</span>
-        <strong>${overtimeWarningCount}人</strong>
-    </div>
+    <div class="dashboardCard employeeTotal"><span>社員数</span><strong>${totalEmployees}人</strong></div>
+    <div class="dashboardCard statusWorking"><span>出勤中</span><strong>${workingCount}人</strong></div>
+    <div class="dashboardCard statusLeft"><span>退勤済み</span><strong>${leftCount}人</strong></div>
+    <div class="dashboardCard statusRest"><span>休み</span><strong>${restCount}人</strong></div>
+    <div class="dashboardCard statusNotYet"><span>未出勤</span><strong>${notYetCount}人</strong></div>
     `
 
     renderTodayEmployeeStatusList(employeeStatuses)
+    renderAdminLatestNoticeCard()
+}
+
+function renderAdminLatestNoticeCard() {
+    const target = document.getElementById("adminLatestNoticeCard")
+    if (!target) return
+
+    const latest = state.allNotices?.[0]
+
+    if (!latest) {
+        target.innerHTML = `
+            <h4>最新お知らせ</h4>
+            <div class="adminLatestNoticeCard empty">お知らせはありません</div>
+        `
+        return
+    }
+
+    target.innerHTML = `
+        <h4>最新お知らせ</h4>
+        <div class="adminLatestNoticeCard">
+            <strong>${escapeHtml(latest.title || "無題のお知らせ")}</strong>
+            <span>${escapeHtml(formatDate(latest.createdAt))}</span>
+        </div>
+    `
 }
 
 function renderTodayEmployeeStatusList(employeeStatuses) {
@@ -117,26 +126,27 @@ function getTodayEmployeeStatus(user, todayRecords, todayHolidays) {
         Date.now() - getTimeValue(latestClockIn.time) > 8 * 60 * 60 * 1000
 
     if (userHoliday) {
-        return createStatus(user, "休み", "statusRest", false)
+        return createStatus(user, "休み", "statusRest", false, "rest")
     }
 
     if (isWorking) {
-        return createStatus(user, "出勤中", "statusWorking", isOvertimeWarning)
+        return createStatus(user, "出勤中", "statusWorking", isOvertimeWarning, "working")
     }
 
     if (hasClockIn && hasClockOut) {
-        return createStatus(user, "退勤済み", "statusLeft", false)
+        return createStatus(user, "退勤済み", "statusLeft", false, "left")
     }
 
     if (shouldAutoRestToday()) {
-        return createStatus(user, "休み", "statusRest", false)
+        return createStatus(user, "休み", "statusRest", false, "rest")
     }
 
-    return createStatus(user, "未出勤", "statusNotYet", false)
+    return createStatus(user, "未出勤", "statusNotYet", false, "notYet")
 }
 
-function createStatus(user, label, className, isOvertimeWarning) {
+function createStatus(user, label, className, isOvertimeWarning, status = "notYet") {
     return {
+        status,
         name: user.name || user.email || "名前未設定",
         email: user.email || "",
         label,

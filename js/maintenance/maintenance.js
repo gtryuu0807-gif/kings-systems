@@ -253,6 +253,8 @@ export function applyMaintenanceDisplay() {
 
         if (dom.mainScreen) dom.mainScreen.style.display = "none"
         if (dom.adminScreen) dom.adminScreen.style.display = "none"
+        if (dom.welcomeBox) dom.welcomeBox.style.display = "none"
+        if (dom.topMenu) dom.topMenu.style.display = "none"
         if (dom.openAdminBtn) dom.openAdminBtn.style.display = "none"
 
         return
@@ -261,7 +263,9 @@ export function applyMaintenanceDisplay() {
     dom.maintenanceScreen.classList.remove("show")
 
     if (state.currentUserRole === "admin") {
-        if (dom.openAdminBtn) dom.openAdminBtn.style.display = "block"
+        if (dom.welcomeBox) dom.welcomeBox.style.display = "flex"
+        if (dom.topMenu) dom.topMenu.style.display = "block"
+        if (dom.openAdminBtn) dom.openAdminBtn.style.display = "flex"
         return
     }
 

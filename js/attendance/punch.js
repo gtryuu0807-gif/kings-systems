@@ -49,8 +49,8 @@ export async function punch(type) {
             return record.type === "出勤"
         }).length
 
-        if (todayClockInCount >= 2) {
-            showWarning("本日の出勤・退勤は最大2セットまでです")
+        if (todayClockInCount >= 3) {
+            showWarning("本日の出勤・退勤は最大3セットまでです")
             updateWorkButtons()
             return
         }

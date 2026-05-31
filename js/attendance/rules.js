@@ -21,13 +21,11 @@ export function canDeleteRecord(targetRecord) {
 
     if (targetSetIndex === -1) return true
 
-    const secondSet = sets[1]
+    const laterSetExists = sets
+        .slice(targetSetIndex + 1)
+        .some((set) => set.clockIn || set.clockOut)
 
-    const secondSetExists =
-        secondSet &&
-        (secondSet.clockIn || secondSet.clockOut)
-
-    if (targetSetIndex === 0 && secondSetExists) {
+    if (laterSetExists) {
         return false
     }
 
@@ -41,10 +39,10 @@ export function validateAttendanceSets(records) {
         return set.clockIn || set.clockOut
     })
 
-    if (filledSets.length > 2) {
+    if (filledSets.length > 3) {
         return {
             ok: false,
-            message: "1日の出勤・退勤は最大2セットまでです"
+            message: "1日の出勤・退勤は最大3セットまでです"
         }
     }
 
@@ -83,6 +81,11 @@ export function createSetsByTypeOrder(records) {
             setNumber: 2,
             clockIn: null,
             clockOut: null
+        },
+        {
+            setNumber: 3,
+            clockIn: null,
+            clockOut: null
         }
     ]
 
@@ -98,11 +101,11 @@ export function createSetsByTypeOrder(records) {
         return record.type === "退勤"
     })
 
-    clockIns.slice(0, 2).forEach((record, index) => {
+    clockIns.slice(0, 3).forEach((record, index) => {
         sets[index].clockIn = record
     })
 
-    clockOuts.slice(0, 2).forEach((record, index) => {
+    clockOuts.slice(0, 3).forEach((record, index) => {
         sets[index].clockOut = record
     })
 

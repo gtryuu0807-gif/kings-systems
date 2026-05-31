@@ -1,0 +1,181 @@
+/* =========================================================
+   Kings Recovery Final
+   目的:
+   - C案の実DOM遷移を残しながら、過去アップデートのKings UIを復元
+   - SVGアイコン方針の復元
+   - オレンジ過多を抑え、黒/濃紺/ガンメタ主体へ戻す
+   - ログイン/メイン/管理画面の崩れを最終補正
+   Firestore Rules更新なし
+   ========================================================= */
+:root{
+  --kr-bg:#05070b;
+  --kr-panel:#101827;
+  --kr-panel-2:#0d1422;
+  --kr-panel-3:#151f31;
+  --kr-border:rgba(255,255,255,.095);
+  --kr-border-strong:rgba(255,255,255,.14);
+  --kr-text:#f8fafc;
+  --kr-muted:#aeb9ca;
+  --kr-orange:#d98932;
+  --kr-orange-soft:#e8a85e;
+  --kr-orange-dim:rgba(217,137,50,.12);
+  --kr-orange-line:rgba(217,137,50,.22);
+  --kr-blue:#5d7fa8;
+  --kr-green:#4d9a73;
+  --kr-danger:#c86464;
+}
+
+html,body{
+  background:var(--kr-bg) !important;
+}
+body::before{
+  background:
+    radial-gradient(circle at 50% 18%, rgba(217,137,50,.065), transparent 34%),
+    radial-gradient(circle at 90% 4%, rgba(93,127,168,.10), transparent 30%),
+    linear-gradient(180deg,#05070b 0%,#07101d 48%,#05070b 100%) !important;
+}
+.container{
+  background:
+    radial-gradient(circle at 50% 19%, rgba(217,137,50,.055), transparent 34%),
+    linear-gradient(180deg,#05070b 0%,#08111f 54%,#05070b 100%) !important;
+}
+
+/* オレンジはアクセントだけ。カード全面発光を抑制 */
+:is(.card,.noticeCard,.adminNoticeCard,.historyItem,.manualAttendanceBox,.adminManualBox,.maintenanceAdminBox,.adminTabBtn,.mainTabBtn,.chartBox,.dashboardCard,.employeeSelectedCard,.employeeManageSection,.currentWorkStatusCard,#noticeList){
+  background:linear-gradient(180deg,rgba(21,31,49,.94),rgba(13,20,34,.96)) !important;
+  border-color:var(--kr-border) !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.28) !important;
+}
+:is(.card,.noticeCard,.adminNoticeCard,.historyItem,.manualAttendanceBox,.adminManualBox,.maintenanceAdminBox,.adminTabBtn,.mainTabBtn,.chartBox,.dashboardCard,.employeeSelectedCard,.employeeManageSection,.currentWorkStatusCard,#noticeList):hover{
+  border-color:var(--kr-border-strong) !important;
+  box-shadow:0 14px 30px rgba(0,0,0,.32) !important;
+}
+
+.appLogoTitle,.appLogoSub,.appLogoSvg{ filter:drop-shadow(0 0 18px rgba(217,137,50,.18)) !important; }
+.appLogoSub{ color:var(--kr-orange-soft) !important; opacity:.46 !important; }
+
+/* 実DOM遷移後のヘッダー崩れ補正 */
+body.kings-c-main-ready #welcomeBox{
+  background:linear-gradient(180deg,rgba(19,29,46,.96),rgba(12,18,31,.98)) !important;
+  border-color:var(--kr-border) !important;
+}
+body.kings-c-main-ready .welcomeText{ color:var(--kr-orange-soft) !important; opacity:.86 !important; }
+body.kings-c-main-ready #menuBtn{
+  background:linear-gradient(180deg,rgba(19,29,46,.96),rgba(12,18,31,.98)) !important;
+  border-color:var(--kr-border) !important;
+  color:var(--kr-orange-soft) !important;
+}
+
+/* ボタンは派手すぎるオレンジから、落ち着いたアクセントへ */
+button,#clockInBtn.kingActionBtn,#clockInBtn,.kingActionBtn,.maintenanceSaveBtn,#addNoticeBtn,#addManualAttendanceBtn,#addMyHolidayBtn,#adminAddManualAttendanceBtn,#adminAddHolidayBtn,#createAccountBtn{
+  box-shadow:0 10px 22px rgba(0,0,0,.26) !important;
+}
+#clockInBtn.kingActionBtn,#clockInBtn{
+  background:linear-gradient(135deg,#c97925,#e0a15a) !important;
+  color:#101010 !important;
+}
+#clockOutBtn{
+  background:linear-gradient(135deg,#27364d,#465d7d) !important;
+  color:#f8fafc !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+}
+
+/* 状態バッジは状態色を優先し、オレンジ固定にしない */
+.accountStatusBadge.active,.statusBadge.active,.workStatusBadge.active{ background:rgba(77,154,115,.14) !important; color:#8fe0b5 !important; border-color:rgba(77,154,115,.28) !important; }
+.accountStatusBadge.inactive,.statusBadge.inactive{ background:rgba(200,100,100,.14) !important; color:#f2a4a4 !important; border-color:rgba(200,100,100,.28) !important; }
+
+/* SVGアイコン共通復元 */
+.inlineSvgIcon,.svgMiniIcon,.adminRoleSvgIcon,.welcomeRoleSvgIcon{
+  display:inline-block !important;
+  width:1.12em !important;
+  height:1.12em !important;
+  min-width:1.12em !important;
+  vertical-align:-.16em !important;
+  background:currentColor !important;
+  -webkit-mask:var(--svg-icon) center/contain no-repeat !important;
+  mask:var(--svg-icon) center/contain no-repeat !important;
+}
+.inlineAdminBadge,.adminRoleSvgIcon,.welcomeRoleSvgIcon{
+  --svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 19h16l1-10-5.2 3.2L12 5l-3.8 7.2L3 9l1 10Z"/><path d="M5 21h14" stroke="black" stroke-width="2" stroke-linecap="round"/></svg>');
+  color:var(--kr-orange-soft) !important;
+}
+.inlineEmployeeCard{
+  --svg-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="10" cy="11" r="2.3" fill="black"/><path d="M6.5 17c.7-3.2 6.3-3.2 7 0" fill="black"/><path d="M15 10h3M15 14h3" stroke="black" stroke-width="1.8" stroke-linecap="round"/></svg>');
+  color:#9fb3cf !important;
+}
+
+/* 旧emojiが入っても見た目を崩さない小型ラッパー */
+.roleNameWithIcon,.welcomeNameWithIcon{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:.36em !important;
+  min-width:0 !important;
+}
+
+/* 管理タブ・メインタブのSVGを落ち着いた色に */
+.svgTabIcon::before{ background:#111827 !important; }
+.adminTabBtn .svgTabIcon,.mainTabBtn .svgTabIcon{
+  background:rgba(255,255,255,.08) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+}
+.adminTabBtn.active .svgTabIcon,.mainTabBtn.active .svgTabIcon{
+  background:rgba(217,137,50,.16) !important;
+  border-color:rgba(217,137,50,.24) !important;
+}
+.adminTabBtn.active .svgTabIcon::before,.mainTabBtn.active .svgTabIcon::before{ background:#f1c38a !important; }
+
+/* 管理画面: 余白とカード幅を安定化 */
+#adminScreen{ padding-bottom:34px !important; }
+.adminLayout{ gap:14px !important; }
+.adminContent,.adminMenu{ min-width:0 !important; }
+.adminTabPanel{ overflow:hidden !important; }
+.employeeSelectedCard,.employeeManageSection{ border-radius:22px !important; }
+.employeeDetailBox > div{ min-width:0 !important; }
+.employeeDetailBox strong{ overflow-wrap:anywhere !important; }
+
+/* メイン画面: iPhoneで縦詰まり・横崩れを防ぐ */
+#mainScreen,#adminScreen,#loginArea{ width:100% !important; max-width:100% !important; box-sizing:border-box !important; }
+#currentWorkStatusCard,#noticeList,.mainHistoryContent,.adminContent{ overflow-wrap:anywhere !important; }
+.mainTabBtn,.adminTabBtn{ min-height:68px !important; }
+.mainTabText,.adminTabText{ min-width:0 !important; }
+.mainTabText strong,.adminTabText strong{ line-height:1.25 !important; }
+.mainTabText small,.adminTabText small{ color:var(--kr-muted) !important; }
+
+/* ログイン画面も強すぎるオレンジを抑える */
+#loginArea input,#loginArea select,#loginArea textarea,input,select,textarea{
+  background:rgba(9,15,26,.86) !important;
+  border-color:rgba(255,255,255,.12) !important;
+  color:var(--kr-text) !important;
+}
+#loginArea input:focus,input:focus,select:focus,textarea:focus{
+  border-color:rgba(217,137,50,.34) !important;
+  box-shadow:0 0 0 3px rgba(217,137,50,.095) !important;
+}
+
+/* 遷移オーバーレイも発光を控えめに */
+.kingsCStage,.loginTransitionInner.kingsCStage{
+  background:
+    radial-gradient(circle at 82% 8%,rgba(93,127,168,.10),transparent 30%),
+    #05070b !important;
+}
+.kingsCStage::before,.loginTransitionInner.kingsCStage::before{
+  background:radial-gradient(circle at center,rgba(217,137,50,.105),transparent 42%) !important;
+}
+.kingsCLogo,.loginTransitionLogo{ text-shadow:0 0 26px rgba(217,137,50,.30) !important; }
+.kingsCSub,.loginTransitionSub,.loginTransitionCardLabel,.kingsCGhostWelcome span,.loginTransitionWelcome span{ color:var(--kr-orange-soft) !important; }
+.kingsCGhostBtn,.loginTransitionPunchButton{
+  background:linear-gradient(135deg,#c97925,#e0a15a) !important;
+  color:#101010 !important;
+}
+.kingsCGhostMenu,.loginTransitionMenu,.kingsCGhostWelcome,.loginTransitionWelcome,.kingsCGhostBox,.loginTransitionStatusCard,.loginTransitionNoticeCard{
+  background:linear-gradient(180deg,rgba(19,29,46,.96),rgba(12,18,31,.98)) !important;
+  border-color:var(--kr-border) !important;
+}
+
+@media(max-width:480px){
+  .container{ padding-left:18px !important; padding-right:18px !important; }
+  body.kings-c-main-ready #welcomeBox{ left:18px !important; right:78px !important; }
+  body.kings-c-main-ready #topMenu{ right:18px !important; }
+  .adminLayout{ display:block !important; }
+  .adminMenu{ margin-bottom:14px !important; }
+}

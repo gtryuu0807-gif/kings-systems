@@ -1,0 +1,39 @@
+/* 管理者画面の重複メニュー解消
+   管理者専用メニューは右上の Kings Menu Overlay に集約し、
+   管理者画面本体には選択中の管理内容だけを表示する。 */
+
+#adminScreen .adminMenu {
+    display: none !important;
+}
+
+#adminScreen .adminLayout {
+    display: block !important;
+    grid-template-columns: none !important;
+}
+
+#adminScreen .adminContent {
+    width: 100% !important;
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+#adminScreen .adminScreenHelp {
+    max-width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    opacity: 0.86;
+}
+
+#adminScreen .adminTabPanel {
+    width: 100%;
+}
+
+/* 管理者画面表示中はメニューOverlay側の管理者メニューを主導線にする */
+body.kt-screen-admin .kingsMenuSection[data-menu-section="admin"] {
+    display: block;
+}
+
+body.kt-screen-admin .kingsMenuSection[data-menu-section="main"] {
+    display: none;
+}

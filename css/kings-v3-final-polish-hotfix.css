@@ -1,0 +1,227 @@
+/* Kings v3 final polish hotfix 2026-05-31
+   Fixes: richer S-02 boot motion, duplicated password eye, menu routing clarity. */
+
+:root{
+  --kfinal-bg:#05070b;
+  --kfinal-card:rgba(7,12,22,.82);
+  --kfinal-line:rgba(214,130,56,.34);
+  --kfinal-line-strong:rgba(226,151,71,.52);
+  --kfinal-gold:#f6d18a;
+  --kfinal-text:#f7f3ea;
+  --kfinal-muted:#b9c0cd;
+}
+
+/* ---------- S-02: make the boot motion feel premium again ---------- */
+body.kt-booting,
+body.kt-boot-run{
+  overflow:hidden !important;
+}
+body.kt-booting #appBrand,
+body.kt-boot-run #appBrand{
+  position:fixed !important;
+  left:50% !important;
+  z-index:80 !important;
+  pointer-events:none !important;
+  will-change:top, transform, opacity, filter !important;
+}
+body.kt-booting #appBrand{
+  top:43vh !important;
+  width:min(72vw, 390px) !important;
+  min-height:180px !important;
+  transform:translate(-50%,-50%) scale(1.18) !important;
+  opacity:0 !important;
+  animation:kingsBootAppear .92s cubic-bezier(.2,.8,.2,1) forwards !important;
+}
+body.kt-boot-run #appBrand{
+  animation:kingsBootToLogin 2.85s cubic-bezier(.16,1,.24,1) forwards !important;
+}
+body.kt-booting #appBrand .appLogoSvg,
+body.kt-boot-run #appBrand .appLogoSvg{
+  width:min(72vw,390px) !important;
+  max-width:none !important;
+  filter:drop-shadow(0 0 26px rgba(255,236,177,.46)) drop-shadow(0 0 54px rgba(213,120,45,.18)) !important;
+}
+body.kt-booting #appBrand .appLogoSub,
+body.kt-boot-run #appBrand .appLogoSub{
+  display:block !important;
+  width:max-content !important;
+  max-width:92vw !important;
+  margin:16px auto 0 !important;
+  letter-spacing:.36em !important;
+  font-size:clamp(11px,2.2vw,15px) !important;
+  color:rgba(245,201,137,.88) !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+}
+body.kt-booting #loginArea,
+body.kt-boot-run #loginArea{
+  opacity:0 !important;
+  transform:translateY(28px) scale(.97) !important;
+}
+body.kt-boot-run #loginArea{
+  animation:kingsLoginReveal 2.85s cubic-bezier(.16,1,.24,1) forwards !important;
+}
+
+@keyframes kingsBootAppear{
+  0%{opacity:0; transform:translate(-50%,-50%) scale(.88); filter:blur(8px)}
+  100%{opacity:1; transform:translate(-50%,-50%) scale(1.18); filter:blur(0)}
+}
+@keyframes kingsBootToLogin{
+  0%{top:43vh; width:min(72vw,390px); min-height:180px; transform:translate(-50%,-50%) scale(1.18); opacity:1; filter:blur(0)}
+  44%{top:43vh; width:min(72vw,390px); min-height:180px; transform:translate(-50%,-50%) scale(1.18); opacity:1; filter:blur(0)}
+  100%{top:128px; width:min(66vw,300px); min-height:106px; transform:translate(-50%,0) scale(1); opacity:1; filter:blur(0)}
+}
+@keyframes kingsLoginReveal{
+  0%,62%{opacity:0; transform:translateY(30px) scale(.965)}
+  100%{opacity:1; transform:translateY(0) scale(1)}
+}
+
+/* Final login/header size after boot */
+body.kt-login-ready #appBrand,
+body:not(.kt-booting):not(.kt-boot-run) #appBrand.appBrand{
+  position:relative !important;
+  top:auto !important;
+  left:auto !important;
+  transform:none !important;
+  width:100% !important;
+  min-height:112px !important;
+  margin:10px auto 14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  overflow:visible !important;
+}
+body.kt-login-ready #appBrand .appLogoSvg,
+body:not(.kt-booting):not(.kt-boot-run) #appBrand .appLogoSvg{
+  width:clamp(190px,52vw,310px) !important;
+  max-width:82vw !important;
+}
+body.kt-login-ready #appBrand .appLogoSub,
+body:not(.kt-booting):not(.kt-boot-run) #appBrand .appLogoSub{
+  white-space:nowrap !important;
+  overflow:visible !important;
+  max-width:96vw !important;
+  letter-spacing:.29em !important;
+}
+
+/* ---------- A-05: one clean password eye, one toggle action ---------- */
+#loginArea .passwordBox{
+  position:relative !important;
+  display:block !important;
+}
+#loginArea .passwordBox input{
+  padding-right:72px !important;
+}
+#loginArea #passwordToggleBtn,
+#passwordToggleBtn.passwordToggleIcon{
+  position:absolute !important;
+  right:12px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  width:52px !important;
+  min-width:52px !important;
+  height:52px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:0 !important;
+  font-size:0 !important;
+  line-height:0 !important;
+  color:transparent !important;
+  overflow:hidden !important;
+  border-radius:16px !important;
+  border:1px solid rgba(226,151,71,.34) !important;
+  background:rgba(13,20,34,.82) !important;
+  box-shadow:none !important;
+}
+#loginArea #passwordToggleBtn span,
+#loginArea #passwordToggleBtn span::before,
+#loginArea #passwordToggleBtn span::after{
+  display:none !important;
+  content:none !important;
+}
+#loginArea #passwordToggleBtn::after{
+  content:"" !important;
+  width:24px !important;
+  height:24px !important;
+  display:block !important;
+  background:var(--kfinal-gold) !important;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M12 5C6.2 5 2.5 9.3 1.5 12c1 2.7 4.7 7 10.5 7s9.5-4.3 10.5-7C21.5 9.3 17.8 5 12 5Zm0 11.2A4.2 4.2 0 1 1 12 7.8a4.2 4.2 0 0 1 0 8.4Zm0-2.1a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z"/></svg>') center/contain no-repeat !important;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M12 5C6.2 5 2.5 9.3 1.5 12c1 2.7 4.7 7 10.5 7s9.5-4.3 10.5-7C21.5 9.3 17.8 5 12 5Zm0 11.2A4.2 4.2 0 1 1 12 7.8a4.2 4.2 0 0 1 0 8.4Zm0-2.1a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z"/></svg>') center/contain no-repeat !important;
+}
+#loginArea #passwordToggleBtn::before{content:none !important;display:none !important;}
+
+#loginArea .keepLoginLabel input{
+  width:22px !important;
+  height:22px !important;
+  min-width:22px !important;
+  border-radius:7px !important;
+}
+
+/* ---------- B-04: menu clarity and usable targets ---------- */
+body > #menuDropdown.kingsMenuOverlay,
+#menuDropdown.kingsMenuOverlay{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483600 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:24px !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  background:rgba(0,0,0,.72) !important;
+  backdrop-filter:blur(12px) !important;
+  -webkit-backdrop-filter:blur(12px) !important;
+}
+body > #menuDropdown.kingsMenuOverlay[aria-hidden="false"],
+#menuDropdown.kingsMenuOverlay[aria-hidden="false"],
+#menuDropdown.kingsMenuOverlay.show,
+#menuDropdown.kingsMenuOverlay.open{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+.kingsMenuPanel{
+  width:min(92vw,440px) !important;
+  max-height:min(78vh,690px) !important;
+  overflow:auto !important;
+  padding:24px !important;
+  border-radius:28px !important;
+  border:1px solid rgba(226,151,71,.42) !important;
+  background:linear-gradient(180deg,rgba(13,19,31,.96),rgba(6,9,15,.96)) !important;
+  transform:translateY(12px) scale(.96) !important;
+  opacity:0 !important;
+  transition:opacity .22s ease, transform .26s cubic-bezier(.16,1,.24,1) !important;
+}
+#menuDropdown[aria-hidden="false"] .kingsMenuPanel,
+#menuDropdown.show .kingsMenuPanel,
+#menuDropdown.open .kingsMenuPanel{
+  transform:translateY(0) scale(1) !important;
+  opacity:1 !important;
+}
+.kingsMenuItem{
+  width:100% !important;
+  min-height:58px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:16px !important;
+  margin:10px 0 !important;
+  padding:14px 18px !important;
+  border-radius:18px !important;
+  border:1px solid rgba(226,151,71,.22) !important;
+  background:rgba(255,255,255,.035) !important;
+  color:var(--kfinal-text) !important;
+  font-weight:900 !important;
+  text-align:left !important;
+  pointer-events:auto !important;
+}
+.kingsMenuItem:active{transform:scale(.985)}
+.kingsMenuItem.danger{border-color:rgba(240,88,88,.38)!important;color:#ffd9d9!important;background:rgba(80,12,20,.18)!important;}
+
+@media (min-width:1024px){
+  body.kt-login-ready #loginMount{max-width:520px !important;}
+  body.kt-login-ready #appBrand .appLogoSvg{width:260px !important;}
+}

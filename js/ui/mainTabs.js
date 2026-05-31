@@ -47,6 +47,7 @@ function getPanelByTabName(tabName) {
     if (tabName === "manual") return dom.mainTabManual
     if (tabName === "holiday") return dom.mainTabHoliday
     if (tabName === "report") return dom.mainTabReport
+    if (tabName === "settings") return dom.mainTabSettings
 
     return dom.mainTabHistory
 }

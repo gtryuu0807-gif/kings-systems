@@ -133,3 +133,167 @@ body.auto-auth-checking .container{background:#050505 !important}
 @keyframes loginTransitionRevealMain{
   to{opacity:0;visibility:hidden;transform:scale(1.01)}
 }
+
+/* 2026-05-30: Complete Kings logo fixed C transition */
+.loginTransitionOverlay.show{
+  overflow:hidden !important;
+}
+.loginTransitionInner.kingsTransitionCompleteC{
+  width:min(430px,92vw) !important;
+  height:min(680px,92vh) !important;
+  min-height:560px !important;
+  max-height:720px !important;
+  padding:0 !important;
+  border-radius:34px;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    radial-gradient(circle at 18% 90%,rgba(255,138,31,.07),transparent 26%),
+    #050505;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+  overflow:hidden;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionLogo{
+  top:48% !important;
+  transform:translateY(-50%);
+  font-size:clamp(64px,19vw,94px) !important;
+  animation:kingsCompleteCLogo 1.85s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionSub{
+  top:calc(48% + 58px) !important;
+  animation:kingsCompleteCSub 1.85s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionText{
+  top:calc(48% + 110px) !important;
+  animation:kingsCompleteCFadeOut .62s ease forwards .58s !important;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionWelcome{
+  left:24px !important;
+  right:94px !important;
+  top:96px !important;
+  min-height:64px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  gap:2px;
+  opacity:0;
+  transform:translateY(18px);
+  animation:kingsCompleteCPanelIn .55s ease forwards 1.02s !important;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionWelcome span{
+  display:block;
+  color:#ffb15c;
+  font-size:12px;
+  letter-spacing:.08em;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionWelcome strong{
+  display:block;
+  font-size:18px;
+  color:#fff;
+}
+.loginTransitionMenu{
+  position:absolute;
+  right:24px;
+  top:96px;
+  width:58px;
+  height:64px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  color:#ffb15c;
+  font-size:24px;
+  font-weight:900;
+  background:rgba(255,138,31,.10);
+  border:1px solid rgba(255,138,31,.30);
+  box-shadow:0 0 22px rgba(255,138,31,.08);
+  opacity:0;
+  transform:translateY(18px) scale(.96);
+  animation:kingsCompleteCPanelIn .55s ease forwards 1.10s;
+}
+.loginTransitionStatusCard,
+.loginTransitionNoticeCard{
+  position:absolute;
+  left:24px;
+  right:24px;
+  padding:16px;
+  border-radius:24px;
+  background:rgba(15,23,42,.84);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 16px 38px rgba(0,0,0,.22);
+  text-align:left;
+  opacity:0;
+  transform:translateY(20px);
+}
+.loginTransitionStatusCard{
+  top:186px;
+  animation:kingsCompleteCPanelIn .55s ease forwards 1.22s;
+}
+.loginTransitionPunchButton{
+  position:absolute;
+  left:24px;
+  right:24px;
+  top:302px;
+  height:54px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c);
+  color:#111827;
+  font-size:18px;
+  font-weight:900;
+  box-shadow:0 18px 34px rgba(255,138,31,.16);
+  opacity:0;
+  transform:translateY(20px);
+  animation:kingsCompleteCPanelIn .55s ease forwards 1.34s;
+}
+.loginTransitionNoticeCard{
+  top:384px;
+  animation:kingsCompleteCPanelIn .55s ease forwards 1.46s;
+}
+.loginTransitionCardLabel{
+  color:#ffb15c;
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.loginTransitionCardText{
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.6;
+}
+.loginTransitionInner.kingsTransitionCompleteC .loginTransitionGlow{
+  width:420px !important;
+  height:420px !important;
+  animation:kingsCompleteCGlow 1.85s ease forwards !important;
+}
+.loginTransitionOverlay.hide .loginTransitionInner.kingsTransitionCompleteC{
+  animation:kingsCompleteCReveal .46s ease forwards !important;
+}
+@keyframes kingsCompleteCLogo{
+  0%,34%{top:48%;font-size:clamp(64px,19vw,94px);opacity:1;transform:translateY(-50%)}
+  100%{top:28px;font-size:clamp(38px,11vw,48px);opacity:.98;transform:translateY(0)}
+}
+@keyframes kingsCompleteCSub{
+  0%,34%{top:calc(48% + 58px);opacity:1}
+  100%{top:78px;opacity:.72}
+}
+@keyframes kingsCompleteCFadeOut{
+  to{opacity:0;transform:translateY(-8px)}
+}
+@keyframes kingsCompleteCPanelIn{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes kingsCompleteCGlow{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.90)}
+  100%{opacity:.22;transform:translate(-50%,-50%) scale(1.55)}
+}
+@keyframes kingsCompleteCReveal{
+  to{opacity:0;transform:scale(1.008);filter:blur(2px)}
+}
+@media(max-height:640px){
+  .loginTransitionInner.kingsTransitionCompleteC{height:94vh !important;min-height:520px !important}
+  .loginTransitionStatusCard{top:176px}
+  .loginTransitionPunchButton{top:286px}
+  .loginTransitionNoticeCard{top:360px}
+}

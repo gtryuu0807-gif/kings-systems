@@ -4,7 +4,13 @@
 
     <div id="incompleteAttendanceAlert" class="incompleteAttendanceAlert"></div>
 
+    <section class="mainNoticeSection" aria-label="お知らせ">
+        <div id="noticeList"></div>
+    </section>
+
     <div id="currentWorkStatusCard" class="currentWorkStatusCard"></div>
+
+    <div id="additionalWorkCard" class="additionalWorkCard" hidden></div>
 
     <button id="clockInBtn" class="kingActionBtn kingClockInBtn">
         <span class="kingBtnIcon" aria-hidden="true">
@@ -13,9 +19,6 @@
         <span>出勤する</span>
     </button>
     <button id="clockOutBtn">退勤</button>
-
-    <h2>お知らせ</h2>
-    <div id="noticeList"></div>
 
     <h2>自分の勤怠管理</h2>
     <p class="mainScreenHelp">
@@ -44,6 +47,14 @@
             <span class="mainTabText">
                 <strong>休み登録</strong>
                 <small>勤務しない日を休みとして登録</small>
+            </span>
+        </button>
+
+        <button class="mainTabBtn mainSettingsTabBtn" data-main-tab="settings" hidden>
+            <span class="mainTabIcon svgTabIcon icon-settings" aria-hidden="true"></span>
+            <span class="mainTabText">
+                <strong>設定</strong>
+                <small>個人設定を管理</small>
             </span>
         </button>
     </div>
@@ -114,7 +125,7 @@
                 <div class="manualPointBox">
                     <strong>ポイント</strong><br>
                     出勤だけ、退勤だけの追加もできます。<br>
-                    同じ日の出勤・退勤は最大2セットまでです。
+                    同じ日の出勤・退勤は最大3セットまでです。
                 </div>
 
                 <button id="addManualAttendanceBtn">登録</button>
@@ -143,7 +154,20 @@
             </div>
         </section>
 
+        <section id="mainTabSettings" class="mainTabPanel">
+            <h3>設定</h3>
+            <p class="mainSectionHelp">個人設定画面は現在準備中です。</p>
+            <div class="premiumSettingsPlaceholder">
+                <div class="settingsPlaceholderIcon"><span class="menuItemSvg icon-settings" aria-hidden="true"></span></div>
+                <strong>設定機能は今後追加予定です</strong>
+                <p>ログイン状態や表示設定など、社員・管理者共通の個人設定をここに追加予定です。</p>
+            </div>
+        </section>
+
     </div>
 
+
+
+        
 </div>
 

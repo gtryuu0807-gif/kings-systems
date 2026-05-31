@@ -1,0 +1,77 @@
+:root{
+  --kings-bg:#05070d;
+  --kings-bg2:#08111f;
+  --kings-card:rgba(7,11,18,.82);
+  --kings-card2:rgba(12,18,29,.72);
+  --kings-line:rgba(219,126,48,.48);
+  --kings-line-strong:rgba(237,151,66,.72);
+  --kings-text:#f7f3ec;
+  --kings-muted:rgba(247,243,236,.66);
+  --kings-orange:#d87828;
+  --kings-gold:#e7b461;
+  --kings-green:#42d47a;
+  --kings-blue:#58a6ff;
+  --kings-gray:#8a94a5;
+  --kings-danger:#ff6b6b;
+}
+
+*{box-sizing:border-box}
+body{
+  background:radial-gradient(circle at 50% 0%,rgba(216,120,40,.13),transparent 28%),linear-gradient(145deg,#030407,#06111f 48%,#030407)!important;
+  color:var(--kings-text)!important;
+}
+.container{
+  width:min(100%,1220px)!important;
+  max-width:1220px!important;
+  min-height:100dvh;
+  margin:0 auto!important;
+  padding:calc(env(safe-area-inset-top) + 14px) clamp(14px,2vw,28px) 32px!important;
+}
+#appBrand.appBrand{
+  position:relative!important;
+  z-index:8!important;
+  width:min(100%,560px)!important;
+  min-height:112px!important;
+  margin:0 auto 16px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1px solid rgba(219,126,48,.28)!important;
+  border-radius:28px!important;
+  background:linear-gradient(180deg,rgba(12,18,29,.58),rgba(5,7,13,.34))!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.05)!important;
+  overflow:hidden;
+}
+#appBrand.appBrand::after{content:"";position:absolute;inset:auto 18% 0;height:1px;background:linear-gradient(90deg,transparent,var(--kings-line-strong),transparent)}
+.appLogoSvg{width:min(220px,58vw)!important;height:auto!important;filter:drop-shadow(0 0 14px rgba(231,180,97,.22))!important}
+.appLogoSub{margin:3px 0 0!important;font-size:10px!important;letter-spacing:.22em!important;color:rgba(247,243,236,.72)!important;text-align:center!important}
+#headerMount{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 auto 14px;max-width:980px}
+#welcomeBox{display:flex;align-items:center;gap:12px!important;min-height:66px;padding:12px 16px!important;border:1px solid var(--kings-line)!important;border-radius:20px!important;background:var(--kings-card)!important;box-shadow:0 12px 34px rgba(0,0,0,.25)!important;color:var(--kings-text)!important;flex:1;max-width:560px}
+.welcomeText{font-size:12px!important;color:var(--kings-muted)!important;letter-spacing:.08em!important;text-transform:uppercase}
+#welcomeName{font-weight:800!important;color:var(--kings-text)!important}
+.welcomeIcon,.inlineSvgIcon{color:var(--kings-gold)!important}
+#topMenu{position:relative!important;display:none;z-index:80!important}
+.kingsMenuButton,#menuBtn{width:54px!important;height:54px!important;border-radius:18px!important;border:1px solid var(--kings-line)!important;background:rgba(7,11,18,.9)!important;color:var(--kings-text)!important;font-size:0!important;display:grid!important;place-items:center!important;box-shadow:0 12px 34px rgba(0,0,0,.24)!important}
+.menuSvgIcon,.menuItemSvg{display:inline-block;width:22px;height:22px;color:currentColor;position:relative;flex:0 0 auto}
+.menuSvgIcon::before{content:"";display:block;width:22px;height:14px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;box-shadow:0 6px 0 currentColor;border-radius:2px;opacity:.95}
+.kingsMenuOverlay{position:fixed!important;inset:0!important;z-index:2000!important;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(0,0,0,.48);backdrop-filter:blur(10px)}
+.kingsMenuBackdrop{position:absolute;inset:0}.kingsMenuPanel{position:relative;width:min(420px,calc(100vw - 34px));border:1px solid var(--kings-line-strong);border-radius:28px;background:linear-gradient(180deg,rgba(14,20,32,.96),rgba(5,7,13,.96));box-shadow:0 26px 80px rgba(0,0,0,.55);padding:18px}.kingsMenuHeader{display:flex;align-items:center;justify-content:space-between;padding:4px 4px 14px;border-bottom:1px solid rgba(219,126,48,.18);margin-bottom:12px}.kingsMenuHeader strong{font-size:18px;letter-spacing:.08em}.kingsMenuClose{width:38px;height:38px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--kings-text);font-size:24px}.kingsMenuItem{width:100%;display:flex!important;align-items:center;gap:12px;margin:8px 0;padding:14px 16px;border-radius:18px;border:1px solid rgba(219,126,48,.22);background:rgba(255,255,255,.035);color:var(--kings-text);font-weight:800;text-align:left}.kingsMenuItem.danger{color:#ffd7d7;border-color:rgba(255,107,107,.28)}
+.icon-home::before{content:"⌂"}.icon-admin::before{content:"♔"}.icon-holiday::before{content:"✓"}.icon-report::before{content:"▥"}.icon-maintenance::before{content:"⌘"}.icon-logout::before{content:"⇥"}.icon-notice::before{content:"!"}.icon-send::before{content:"➤"}.icon-trash::before{content:"⌫"}.icon-pdf::before{content:"PDF";font-size:10px;font-weight:900}.menuItemSvg::before{display:grid;place-items:center;width:22px;height:22px;border:1px solid rgba(231,180,97,.45);border-radius:8px;color:var(--kings-gold);font-size:14px;line-height:1}
+
+#loginMount{max-width:520px;margin:0 auto}.kingsLoginCard,#loginArea{border:1px solid var(--kings-line)!important;border-radius:28px!important;background:var(--kings-card)!important;box-shadow:0 22px 70px rgba(0,0,0,.38)!important;padding:22px!important}.loginGuide{text-align:center;color:var(--kings-muted);margin:0 0 18px}.loginField{display:block;margin:0 0 14px}.loginField>span{display:block;margin:0 0 7px;font-size:12px;color:var(--kings-muted);font-weight:700}#loginArea input[type="email"],#loginArea input[type="password"],#loginArea input[type="text"]{width:100%;height:52px;border-radius:16px!important;border:1px solid rgba(219,126,48,.28)!important;background:rgba(0,0,0,.28)!important;color:var(--kings-text)!important;padding:0 14px!important}.passwordBox{position:relative!important;display:block!important}.passwordBox input{padding-right:58px!important}.passwordBox #passwordToggleBtn{position:absolute!important;right:8px;top:50%;transform:translateY(-50%);height:38px;min-width:44px;border-radius:13px;border:1px solid rgba(219,126,48,.22);background:rgba(255,255,255,.04);color:var(--kings-text);font-size:15px!important;padding:0!important}.keepLoginLabel{display:flex!important;align-items:center;gap:8px!important;font-size:13px!important;color:var(--kings-muted)!important;margin:10px 0 16px!important}.keepLoginLabel input{width:18px!important;height:18px!important;accent-color:var(--kings-orange)}.kingsLoginButton,#loginBtn{width:100%;height:54px;border-radius:18px!important;border:1px solid var(--kings-line-strong)!important;background:linear-gradient(180deg,rgba(216,120,40,.86),rgba(128,64,24,.78))!important;color:#fff!important;font-weight:900!important;box-shadow:0 14px 40px rgba(216,120,40,.18)!important}.loginDisabled #loginBtn{opacity:.8} 
+
+#appContent{max-width:1180px;margin:0 auto}.mainNoticeSection{margin:0 0 14px!important}.noticeCard,.adminNoticeCard,.currentWorkStatusCard,.additionalWorkCard,.summaryCard,.dashboardCard,.manualAttendanceBox,.historyFilterBox,.chartBox,.todayEmployeeStatusBox,.employeeManageSection,.maintenanceAdminBox,.adminContent,.adminMenu{border:1px solid var(--kings-line)!important;border-radius:22px!important;background:var(--kings-card)!important;box-shadow:0 16px 46px rgba(0,0,0,.25)!important}.noticeCard,.adminNoticeCard{padding:16px!important}.noticeHeader{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.noticeTitleArea{display:flex;align-items:center;gap:10px}.noticeNewBadge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:999px;border:1px solid rgba(216,120,40,.55);color:var(--kings-gold);font-size:10px;font-weight:900;margin-right:6px}.latestNoticeSummary,.noticeMiniItem{width:100%;border:1px solid rgba(219,126,48,.16);background:rgba(255,255,255,.03);color:var(--kings-text);border-radius:16px;padding:12px;text-align:left;display:grid;gap:4px}.latestNoticeSummary span,.noticeMiniItem span,.latestNoticeSummary em{color:var(--kings-muted);font-style:normal;font-size:12px}.latestNoticeDetail{margin-top:12px;padding-top:12px;border-top:1px solid rgba(219,126,48,.16)}.noticeListToggleBtn,.noticeBodyToggleBtn{margin-top:10px;border:1px solid rgba(219,126,48,.24);background:rgba(216,120,40,.08);color:var(--kings-gold);border-radius:14px;padding:9px 12px;font-weight:800}.noticeAllList{display:grid;gap:8px;margin-top:10px}.noticeStateBadge{font-size:11px;font-weight:900;border-radius:999px;padding:5px 8px;border:1px solid rgba(255,255,255,.14);color:var(--kings-muted)}.noticeStateBadge.active{color:var(--kings-green)}.noticeStateBadge.reserved{color:var(--kings-gold)}.noticeStateBadge.ended{color:var(--kings-gray)}.noticeDateGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.premiumSectionTitle{display:flex;gap:10px;align-items:center;margin-bottom:12px}.noticeManagerCreateCard{padding:16px;border:1px solid var(--kings-line);border-radius:22px;background:var(--kings-card);margin-bottom:16px}
+
+#mainScreen{display:grid;gap:14px}.subTitle{display:none}.currentWorkStatusCard{padding:16px!important}.currentStatusTop{display:flex;align-items:center;gap:12px}.currentStatusIcon{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.05);color:var(--kings-gray)}.currentStatusIcon svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2}.currentStatusTitle span{display:block;color:var(--kings-muted);font-size:12px}.currentStatusTitle strong{font-size:26px}.currentWorkStatusCard.working .currentStatusIcon,.currentWorkStatusCard.working .currentStatusTitle strong{color:var(--kings-green)}.currentWorkStatusCard.left .currentStatusIcon,.currentWorkStatusCard.left .currentStatusTitle strong{color:var(--kings-blue)}.currentWorkStatusCard.holiday .currentStatusIcon,.currentWorkStatusCard.holiday .currentStatusTitle strong{color:var(--kings-orange)}.currentStatusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.currentStatusGrid div{padding:10px;border-radius:14px;background:rgba(255,255,255,.035)}.currentStatusGrid span{display:block;font-size:11px;color:var(--kings-muted)}.currentStatusGrid strong{font-size:16px}.additionalWorkCard{padding:14px!important;display:flex;align-items:center;gap:12px}.additionalWorkCard[hidden]{display:none!important}.additionalWorkIcon{width:42px;height:42px;border-radius:14px;background:rgba(216,120,40,.12);color:var(--kings-gold);display:grid;place-items:center}.additionalWorkIcon svg{width:24px}.additionalWorkCard strong{display:block}.additionalWorkCard span{display:block;color:var(--kings-muted);font-size:12px;margin-top:3px}.kingActionBtn,#clockOutBtn,.workBtnPrimary{border-radius:20px!important;border:1px solid var(--kings-line-strong)!important;background:linear-gradient(180deg,rgba(216,120,40,.82),rgba(102,53,23,.78))!important;color:white!important;min-height:58px!important;font-weight:900!important}.workBtnDisabled,.workBtnCompleted,#clockOutBtn:disabled{background:rgba(255,255,255,.045)!important;color:rgba(247,243,236,.45)!important;border-color:rgba(219,126,48,.16)!important}
+
+#adminScreen h2{font-size:24px;letter-spacing:.04em}.dashboardGrid{display:grid!important;grid-template-columns:repeat(5,minmax(132px,1fr));gap:12px;overflow-x:auto;padding-bottom:4px}.dashboardCard{padding:16px!important;min-width:132px}.dashboardCard span{display:block;color:var(--kings-muted);font-size:12px}.dashboardCard strong{display:block;font-size:25px;margin-top:6px}.todayEmployeeStatusItem{border:1px solid rgba(219,126,48,.14)!important;background:rgba(255,255,255,.03)!important;border-radius:16px!important}.employeeManageSection select#employeeSelect{min-height:50px}.selectedEmployeeSection #employeeList{display:grid;gap:12px}.adminLayout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px}.adminMenu{height:max-content;padding:12px}.adminTabBtn{border:1px solid rgba(219,126,48,.16)!important;background:rgba(255,255,255,.03)!important;border-radius:18px!important}.adminTabBtn.active{border-color:var(--kings-line-strong)!important;background:rgba(216,120,40,.08)!important}.adminContent{padding:18px!important;min-width:0}.reportTitleWithBadge{display:flex;align-items:center;gap:10px}.chartScrollArea{overflow-x:auto}.monthlyReportPreview{border:1px solid rgba(219,126,48,.16);border-radius:18px;background:rgba(255,255,255,.03)}
+
+#toastArea{position:fixed!important;left:50%!important;right:auto!important;bottom:calc(env(safe-area-inset-bottom) + 18px)!important;top:auto!important;transform:translateX(-50%)!important;width:min(420px,calc(100vw - 28px))!important;z-index:3000!important;display:grid!important;gap:10px!important;pointer-events:none!important}.toast{border:1px solid var(--kings-line)!important;border-radius:18px!important;background:rgba(7,11,18,.94)!important;box-shadow:0 18px 50px rgba(0,0,0,.45)!important;color:var(--kings-text)!important}.toastIcon{border:1px solid rgba(219,126,48,.38)!important;background:rgba(216,120,40,.1)!important;color:var(--kings-gold)!important}
+
+@media (min-width:1024px){
+  #mainScreen{grid-template-columns:minmax(0,1fr) 420px;align-items:start;grid-template-areas:"notice notice" "status side" "action side" "help side" "tabs tabs" "content content"}.mainNoticeSection{grid-area:notice}.currentWorkStatusCard{grid-area:status}.additionalWorkCard{grid-area:action}#clockInBtn{grid-area:action;margin-top:98px!important}#clockOutBtn{grid-area:action;margin-top:170px!important}#mainScreen>h2{grid-area:help}.mainScreenHelp{grid-area:side}.mainHistoryMenu{grid-area:tabs}.mainHistoryContent{grid-area:content}.currentStatusGrid{grid-template-columns:repeat(3,1fr)}
+  #loginMount{max-width:520px}.appBrand{margin-bottom:20px!important}
+}
+@media (max-width:1023px){.adminLayout{grid-template-columns:1fr}.dashboardGrid{grid-template-columns:repeat(5,140px)}.container{max-width:680px!important}.noticeDateGrid{grid-template-columns:1fr}}
+@media (max-width:520px){#headerMount{align-items:stretch}#welcomeBox{min-width:0;padding:10px 12px!important}.currentStatusGrid{grid-template-columns:1fr}.appBrand{min-height:104px!important}.adminContent{padding:14px!important}.kingsMenuPanel{border-radius:24px}.dashboardGrid{grid-template-columns:repeat(5,132px)}}

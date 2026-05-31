@@ -31,6 +31,8 @@ export async function addNotice() {
 
     const title = dom.noticeTitle.value.trim()
     const body = dom.noticeBody.value.trim()
+    const startAt = dom.noticeStartAt?.value || ""
+    const endAt = dom.noticeEndAt?.value || ""
 
     if (!title) {
         showWarning("お知らせタイトルを入力してください")
@@ -64,6 +66,8 @@ export async function addNotice() {
             authorEmail,
             createdAt: now,
             updatedAt: now,
+            startAt,
+            endAt,
             confirmedUsers: []
         })
 
@@ -75,11 +79,15 @@ export async function addNotice() {
             authorEmail,
             createdAt: now,
             updatedAt: now,
+            startAt,
+            endAt,
             confirmedUsers: []
         })
 
         dom.noticeTitle.value = ""
         dom.noticeBody.value = ""
+        if (dom.noticeStartAt) dom.noticeStartAt.value = ""
+        if (dom.noticeEndAt) dom.noticeEndAt.value = ""
 
         renderNotices()
         renderAdminNoticeList()

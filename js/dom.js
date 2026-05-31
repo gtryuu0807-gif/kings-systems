@@ -13,6 +13,7 @@ export const dom = {
     topMenu: document.getElementById("topMenu"),
     menuBtn: document.getElementById("menuBtn"),
     menuDropdown: document.getElementById("menuDropdown"),
+    menuCloseBtn: document.getElementById("menuCloseBtn"),
     openMainBtn: document.getElementById("openMainBtn"),
     openAdminBtn: document.getElementById("openAdminBtn"),
     menuLogoutBtn: document.getElementById("menuLogoutBtn"),
@@ -33,6 +34,7 @@ export const dom = {
     mainTabManual: document.getElementById("mainTabManual"),
     mainTabHoliday: document.getElementById("mainTabHoliday"),
     mainTabReport: document.getElementById("mainTabReport"),
+    mainTabSettings: document.getElementById("mainTabSettings"),
 
     adminTabButtons: document.querySelectorAll(".adminTabBtn"),
     adminTabPanels: document.querySelectorAll(".adminTabPanel"),
@@ -48,9 +50,12 @@ export const dom = {
     clockInBtn: document.getElementById("clockInBtn"),
     clockOutBtn: document.getElementById("clockOutBtn"),
     currentWorkStatusCard: document.getElementById("currentWorkStatusCard"),
+    additionalWorkCard: document.getElementById("additionalWorkCard"),
 
     noticeTitle: document.getElementById("noticeTitle"),
     noticeBody: document.getElementById("noticeBody"),
+    noticeStartAt: document.getElementById("noticeStartAt"),
+    noticeEndAt: document.getElementById("noticeEndAt"),
     addNoticeBtn: document.getElementById("addNoticeBtn"),
     noticeList: document.getElementById("noticeList"),
     adminNoticeList: document.getElementById("adminNoticeList"),

@@ -1,0 +1,24 @@
+{
+  "version": "kings-v3-95-final-2026-05-31",
+  "phoneMaxWidth": 430,
+  "edge": 22,
+  "durations": {
+    "boot": 2350,
+    "loginToMain": 2350,
+    "screenSwitch": 480,
+    "settle": 80
+  },
+  "motion": {
+    "logoStartTop": 190,
+    "logoFinalTop": 28,
+    "logoStartWidth": 280,
+    "logoFinalWidth": 210,
+    "cardStartY": 18,
+    "cardStartScale": 0.985
+  },
+  "policy": {
+    "usesRealElementsOnly": true,
+    "fakeButtons": false,
+    "fakeCards": false
+  }
+}

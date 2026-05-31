@@ -177,8 +177,8 @@ export async function createManualAttendanceSets({
             sameDayRecords.filter((record) => record.type === "退勤").length +
             newSameDayRecords.filter((record) => record.type === "退勤").length
 
-        if (clockInCount > 2 || clockOutCount > 2) {
-            showWarning(`${formatDateLabel(dateValue)} の出勤・退勤は最大2セットまでです`)
+        if (clockInCount > 3 || clockOutCount > 3) {
+            showWarning(`${formatDateLabel(dateValue)} の出勤・退勤は最大3セットまでです`)
             return false
         }
 

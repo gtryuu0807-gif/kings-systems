@@ -1,0 +1,72 @@
+/* Kings login stability hotfix: keep the login form usable even when transition classes remain. */
+body.kt-login-ready #loginMount,
+body.kt-boot-run #loginMount,
+body.kt-booting #loginMount,
+#loginMount {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+body.kt-login-ready #loginArea,
+body.kt-boot-run #loginArea,
+#loginArea.kingsLoginCard,
+#loginArea {
+  display: block !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 21 !important;
+}
+
+#loginArea *,
+#loginArea input,
+#loginArea button,
+#loginArea label,
+#loginArea .passwordBox,
+#loginArea .keepLoginLabel,
+#loginArea #loginBtn,
+#loginArea #passwordToggleBtn {
+  pointer-events: auto !important;
+}
+
+#loginBtn.kingsLoginButton,
+#loginBtn {
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+  user-select: none !important;
+}
+
+#loginBtn:disabled {
+  pointer-events: none !important;
+}
+
+#loginArea.loginDisabled {
+  pointer-events: auto !important;
+}
+
+#loginArea.loginDisabled input,
+#loginArea.loginDisabled #passwordToggleBtn,
+#loginArea.loginDisabled .keepLoginLabel {
+  pointer-events: none !important;
+}
+
+#loginArea.loginDisabled #loginBtn {
+  pointer-events: none !important;
+}
+
+/* Prevent hidden app/menu layers from sitting on top of the login form. */
+body.kt-login-ready #appContent,
+body.kt-login-ready #topMenu,
+body.kt-login-ready #menuDropdown,
+body.kt-boot-run #appContent,
+body.kt-boot-run #topMenu,
+body.kt-boot-run #menuDropdown {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+body.kt-login-ready #headerMount,
+body.kt-boot-run #headerMount {
+  pointer-events: none !important;
+}

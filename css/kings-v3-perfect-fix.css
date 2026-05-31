@@ -1,0 +1,276 @@
+
+/* Kings v3 Perfect Fix - final override layer
+   Purpose: correct logo/header flow, login layout, premium border, responsive desktop, and menu overlay. */
+:root{
+  --kp-bg:#05070d;
+  --kp-bg2:#07101d;
+  --kp-card:rgba(6,10,17,.78);
+  --kp-card-strong:rgba(9,14,24,.90);
+  --kp-line:rgba(216,120,40,.42);
+  --kp-line-soft:rgba(216,120,40,.22);
+  --kp-line-strong:rgba(231,151,70,.62);
+  --kp-text:#f7f3ec;
+  --kp-muted:rgba(247,243,236,.68);
+  --kp-orange:#d87828;
+  --kp-gold:#e8c780;
+  --kp-blue:#5d8fc9;
+  --kp-green:#46ce70;
+}
+html,body{min-height:100%;background:var(--kp-bg)!important;color:var(--kp-text)!important;}
+body{
+  background:
+    radial-gradient(circle at 50% -4%,rgba(216,120,40,.12),transparent 32%),
+    radial-gradient(circle at 12% 18%,rgba(53,101,164,.08),transparent 28%),
+    linear-gradient(145deg,#030407 0%,#07101d 48%,#030407 100%)!important;
+  overflow-x:hidden!important;
+}
+.container{
+  width:min(100%,1280px)!important;
+  max-width:1280px!important;
+  min-height:100dvh!important;
+  margin:0 auto!important;
+  padding:calc(env(safe-area-inset-top) + 18px) clamp(16px,3vw,36px) calc(env(safe-area-inset-bottom) + 36px)!important;
+  border:1px solid rgba(216,120,40,.20)!important;
+  border-radius:clamp(0px,4vw,34px)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,.006))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+/* --- S-01: real logo dedicated area, not a floating cropped card --- */
+#appBrand.appBrand,
+body.kt-login-ready #appBrand,
+body.kt-main-ready #appBrand,
+body.kt-screen-main #appBrand,
+body.kt-screen-admin #appBrand,
+body.kt-maintenance-ready #appBrand{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  right:auto!important;
+  transform:none!important;
+  z-index:30!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:min(100%,560px)!important;
+  max-width:560px!important;
+  min-height:128px!important;
+  height:auto!important;
+  margin:0 auto 18px!important;
+  padding:16px 20px 12px!important;
+  overflow:visible!important;
+  border:none!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  opacity:1!important;
+  filter:none!important;
+  will-change:auto!important;
+}
+#appBrand.appBrand::after,
+body.kt-login-ready #appBrand::after,
+body.kt-main-ready #appBrand::after{
+  content:""!important;
+  position:absolute!important;
+  left:18%!important;right:18%!important;bottom:4px!important;height:1px!important;
+  background:linear-gradient(90deg,transparent,rgba(216,120,40,.38),transparent)!important;
+}
+#appBrand .appLogoSvg,
+#appBrand.appBrand .appLogoSvg,
+body.kt-login-ready #appBrand .appLogoSvg,
+body.kt-main-ready #appBrand .appLogoSvg{
+  display:block!important;
+  width:min(285px,74vw)!important;
+  max-width:100%!important;
+  height:auto!important;
+  margin:0 auto!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 0 14px rgba(232,199,128,.18))!important;
+}
+#appBrand .appLogoSub,
+#appBrand.appBrand .appLogoSub,
+body.kt-login-ready #appBrand .appLogoSub,
+body.kt-main-ready #appBrand .appLogoSub{
+  display:block!important;
+  max-width:100%!important;
+  margin:4px auto 0!important;
+  color:rgba(232,199,128,.78)!important;
+  font-size:10px!important;
+  line-height:1.2!important;
+  letter-spacing:.19em!important;
+  font-weight:800!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+}
+/* Keep only transition phases absolute; final states above are flow layout. */
+body.kt-booting #appBrand,
+body.kt-boot-run #appBrand,
+body.kt-real-main-start #appBrand,
+body.kt-real-main-run #appBrand{
+  position:absolute!important;
+  left:50%!important;
+  transform:translateX(-50%)!important;
+  border:none!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+body.kt-booting #appBrand,
+body.kt-real-main-start #appBrand{
+  top:32dvh!important;
+  width:min(310px,78vw)!important;
+  min-height:auto!important;
+  padding:0!important;
+}
+body.kt-boot-run #appBrand,
+body.kt-real-main-run #appBrand{
+  top:calc(env(safe-area-inset-top) + 22px)!important;
+  width:min(285px,74vw)!important;
+  min-height:auto!important;
+  padding:0!important;
+}
+/* --- A-05: login layout --- */
+#loginMount{width:min(100%,560px)!important;max-width:560px!important;margin:0 auto!important;position:relative!important;z-index:20!important;}
+#loginArea,
+.kingsLoginCard,
+body.kt-login-ready #loginArea{
+  display:block!important;
+  width:100%!important;
+  max-width:560px!important;
+  margin:0 auto!important;
+  padding:24px clamp(18px,5vw,34px)!important;
+  border:1px solid var(--kp-line)!important;
+  border-radius:28px!important;
+  background:linear-gradient(180deg,rgba(9,14,24,.88),rgba(4,7,13,.78))!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  transform:none!important;
+  overflow:visible!important;
+}
+body.kt-booting #loginArea{opacity:0!important;transform:translateY(24px) scale(.97)!important;}
+body.kt-boot-run #loginArea{opacity:1!important;transform:none!important;}
+.loginGuide{margin:0 0 20px!important;text-align:center!important;font-weight:900!important;font-size:clamp(16px,3.8vw,20px)!important;color:rgba(247,243,236,.82)!important;letter-spacing:.02em!important;}
+.loginField{display:block!important;margin:0 0 16px!important;}
+.loginField>span{display:block!important;margin:0 0 8px!important;color:rgba(247,243,236,.70)!important;font-size:14px!important;font-weight:800!important;}
+#loginArea input[type="email"],
+#loginArea input[type="password"],
+#loginArea input[type="text"]{
+  width:100%!important;height:56px!important;min-height:56px!important;
+  margin:0!important;padding:0 18px!important;
+  border-radius:18px!important;
+  border:1px solid rgba(216,120,40,.28)!important;
+  background:rgba(0,0,0,.30)!important;
+  color:var(--kp-text)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  font-size:16px!important;font-weight:700!important;
+}
+.passwordBox{position:relative!important;display:block!important;width:100%!important;margin:0!important;}
+.passwordBox input{padding-right:58px!important;}
+#passwordToggleBtn,
+.passwordBox #passwordToggleBtn{
+  position:absolute!important;
+  top:50%!important;right:8px!important;transform:translateY(-50%)!important;
+  width:42px!important;height:42px!important;min-width:42px!important;
+  padding:0!important;margin:0!important;
+  border-radius:14px!important;
+  border:1px solid rgba(216,120,40,.26)!important;
+  background:rgba(255,255,255,.045)!important;
+  color:var(--kp-gold)!important;
+  box-shadow:none!important;
+  font-size:0!important;line-height:1!important;
+  display:grid!important;place-items:center!important;
+}
+#passwordToggleBtn::before{content:"";width:20px;height:20px;display:block;background:currentColor;mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5C5 5 2 12 2 12s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>') center/contain no-repeat;-webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5C5 5 2 12 2 12s3 7 10 7 10-7 10-7-3-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/></svg>') center/contain no-repeat;}
+.keepLoginLabel{
+  display:flex!important;align-items:center!important;gap:10px!important;
+  width:max-content!important;max-width:100%!important;
+  margin:12px 0 22px!important;
+  color:rgba(247,243,236,.72)!important;font-size:14px!important;font-weight:800!important;
+}
+.keepLoginLabel input{
+  appearance:none!important;-webkit-appearance:none!important;
+  width:22px!important;height:22px!important;min-width:22px!important;
+  border-radius:7px!important;
+  border:1px solid rgba(216,120,40,.35)!important;
+  background:rgba(255,255,255,.035)!important;
+  display:grid!important;place-items:center!important;
+}
+.keepLoginLabel input:checked{background:linear-gradient(180deg,rgba(216,120,40,.95),rgba(155,83,32,.92))!important;border-color:rgba(232,199,128,.65)!important;}
+.keepLoginLabel input:checked::after{content:"";width:11px;height:7px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px);}
+#loginBtn,.kingsLoginButton{
+  width:100%!important;height:58px!important;min-height:58px!important;
+  border-radius:20px!important;
+  border:1px solid rgba(232,199,128,.42)!important;
+  background:linear-gradient(180deg,rgba(161,86,33,.92),rgba(99,48,18,.88))!important;
+  color:#fff!important;
+  font-size:18px!important;font-weight:900!important;letter-spacing:.05em!important;
+  box-shadow:0 16px 44px rgba(216,120,40,.14),inset 0 1px 0 rgba(255,255,255,.12)!important;
+}
+#loginArea.loginDisabled #loginBtn{opacity:.84!important;}
+#loginArea.loginDisabled #loginBtn span{display:inline-flex;align-items:center;gap:10px;}
+/* --- Header and content order for main/admin --- */
+#headerMount{
+  width:min(100%,760px)!important;max-width:760px!important;
+  display:flex!important;align-items:stretch!important;justify-content:space-between!important;gap:12px!important;
+  margin:0 auto 16px!important;position:relative!important;z-index:60!important;
+}
+body.kt-login-ready #headerMount{display:none!important;}
+#welcomeBox{
+  position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+  flex:1 1 auto!important;min-width:0!important;min-height:68px!important;height:auto!important;
+  margin:0!important;padding:12px 16px!important;
+  border:1px solid var(--kp-line)!important;border-radius:22px!important;
+  background:linear-gradient(180deg,rgba(9,14,24,.88),rgba(5,8,14,.76))!important;
+  box-shadow:0 14px 40px rgba(0,0,0,.26),inset 0 1px 0 rgba(255,255,255,.04)!important;
+}
+.welcomeIcon{display:grid!important;width:34px!important;height:34px!important;place-items:center!important;color:var(--kp-gold)!important;}
+.welcomeText{color:var(--kp-gold)!important;font-size:12px!important;font-weight:900!important;letter-spacing:.10em!important;}
+#welcomeName{color:var(--kp-text)!important;font-size:clamp(17px,4vw,22px)!important;font-weight:900!important;}
+#topMenu{position:relative!important;top:auto!important;right:auto!important;left:auto!important;width:68px!important;height:auto!important;display:block!important;z-index:80!important;}
+body.kt-login-ready #topMenu{display:none!important;}
+#menuBtn,.kingsMenuButton{width:68px!important;height:68px!important;border-radius:22px!important;}
+/* --- B-04 overlay: fixed centered, not dropdown --- */
+#menuDropdown.kingsMenuOverlay{position:fixed!important;inset:0!important;display:none!important;align-items:center!important;justify-content:center!important;background:rgba(0,0,0,.58)!important;backdrop-filter:blur(12px)!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:22px!important;z-index:4000!important;}
+#menuDropdown.kingsMenuOverlay.show,#menuDropdown.kingsMenuOverlay.open,#menuDropdown.kingsMenuOverlay[aria-hidden="false"]{display:flex!important;}
+.kingsMenuPanel{width:min(430px,calc(100vw - 32px))!important;border:1px solid var(--kp-line)!important;border-radius:28px!important;background:linear-gradient(180deg,rgba(10,15,25,.96),rgba(4,7,13,.96))!important;box-shadow:0 30px 90px rgba(0,0,0,.62)!important;}
+/* Premium border/cards */
+.noticeCard,.adminNoticeCard,.currentWorkStatusCard,.additionalWorkCard,.summaryCard,.dashboardCard,.manualAttendanceBox,.historyFilterBox,.chartBox,.todayEmployeeStatusBox,.employeeManageSection,.maintenanceAdminBox,.adminContent,.adminMenu,.mainHistoryMenu,.mainHistoryContent,#noticeList{
+  border:1px solid var(--kp-line)!important;
+  background:linear-gradient(180deg,rgba(9,14,24,.78),rgba(4,7,13,.72))!important;
+  box-shadow:0 16px 44px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#appContent{padding-top:0!important;display:block!important;}
+body.kt-login-ready #appContent{display:none!important;}
+#mainScreen{gap:14px!important;}
+#noticeList{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;margin:0 0 14px!important;}
+.mainNoticeSection{order:1;}
+.currentWorkStatusCard{order:2;}
+.additionalWorkCard{order:3;}
+#clockInBtn{order:4;}
+#clockOutBtn{order:5;}
+#mainScreen>h2{order:6;}
+.mainScreenHelp{order:7;}
+.mainHistoryMenu{order:8;}.mainHistoryContent{order:9;}
+/* Desktop: stop phone-only tall layout */
+@media (min-width:1024px){
+  .container{padding-left:48px!important;padding-right:48px!important;}
+  #appBrand.appBrand,body.kt-main-ready #appBrand,body.kt-screen-main #appBrand,body.kt-screen-admin #appBrand{width:min(100%,640px)!important;max-width:640px!important;min-height:118px!important;}
+  #appBrand .appLogoSvg{width:300px!important;}
+  #headerMount{max-width:1120px!important;}
+  #mainScreen{display:grid!important;grid-template-columns:minmax(0,1fr) 420px!important;grid-template-areas:"notice status" "notice action" "history side" "content content"!important;gap:18px!important;align-items:start!important;}
+  .mainNoticeSection{grid-area:notice!important;}.currentWorkStatusCard{grid-area:status!important;}.additionalWorkCard{grid-area:action!important;}#clockInBtn,#clockOutBtn{grid-area:action!important;margin-top:0!important;}.mainHistoryMenu{grid-area:history!important}.mainHistoryContent{grid-area:content!important}.mainScreenHelp{grid-area:side!important}
+  .adminLayout{grid-template-columns:300px minmax(0,1fr)!important;gap:20px!important;}
+  .dashboardGrid{grid-template-columns:repeat(5,minmax(130px,1fr))!important;overflow:visible!important;}
+  #loginMount{max-width:560px!important;}
+}
+@media (max-width:767px){
+  .container{width:100%!important;max-width:100%!important;border-left:0!important;border-right:0!important;border-radius:0!important;padding-left:18px!important;padding-right:18px!important;}
+  #appBrand.appBrand,body.kt-login-ready #appBrand,body.kt-main-ready #appBrand{min-height:116px!important;margin-bottom:12px!important;}
+  #appBrand .appLogoSvg{width:min(250px,78vw)!important;}
+  #appBrand .appLogoSub{font-size:9px!important;letter-spacing:.15em!important;}
+  #loginArea{padding:22px 18px!important;border-radius:26px!important;}
+  #headerMount{width:100%!important;}
+  #welcomeBox{min-height:64px!important;padding:11px 13px!important;}
+  #topMenu{width:64px!important;}#menuBtn{width:64px!important;height:64px!important;}
+}

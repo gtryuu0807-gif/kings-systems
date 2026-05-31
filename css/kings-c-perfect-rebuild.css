@@ -1,0 +1,287 @@
+/* =========================================================
+   Kings C案 完全再構築版
+   - 旧splash / 旧loginTransitionを上書きして無効化
+   - 同一ロゴが中央から上部固定位置へ移動して見える専用演出
+   ========================================================= */
+:root{
+  --kc-bg:#050505;
+  --kc-card:#121b2d;
+  --kc-orange:#ff8a1f;
+  --kc-orange2:#ffb15c;
+  --kc-text:#ffffff;
+  --kc-muted:#cbd5e1;
+}
+
+body.kings-c-booting{
+  margin:0 !important;
+  overflow:hidden !important;
+  background:var(--kc-bg) !important;
+}
+body.kings-c-booting .container{
+  opacity:0 !important;
+  transform:scale(.96) !important;
+  pointer-events:none !important;
+}
+body.app-ready .container{
+  opacity:1;
+  transform:scale(1);
+  transition:opacity .42s ease, transform .42s ease;
+}
+
+.kingsSplash,
+#splashScreen{
+  display:none !important;
+}
+
+.kingsCOverlay{
+  position:fixed;
+  inset:0;
+  z-index:2147483647;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  background:var(--kc-bg);
+  color:#fff;
+  overflow:hidden;
+  opacity:1;
+  pointer-events:auto;
+}
+.kingsCOverlay::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 50% 44%,rgba(255,138,31,.18),transparent 40%),
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    #050505;
+  opacity:1;
+}
+.kingsCOverlay.hide{
+  animation:kcOverlayHide .52s ease forwards;
+}
+.kingsCOverlay.login{
+  display:none;
+}
+.kingsCOverlay.login.show{
+  display:flex !important;
+}
+.kingsCOverlay.login.hide{
+  display:flex !important;
+  animation:kcOverlayHide .52s ease forwards !important;
+}
+
+.kingsCStage,
+.loginTransitionInner.kingsCStage{
+  position:relative !important;
+  width:min(430px,100vw) !important;
+  min-height:100svh !important;
+  height:100svh !important;
+  overflow:hidden !important;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    #050505 !important;
+  transform:none !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  text-align:center !important;
+}
+.kingsCGlow,
+.loginTransitionGlow{
+  position:absolute !important;
+  inset:0 !important;
+  width:auto !important;
+  height:auto !important;
+  border-radius:0 !important;
+  background:radial-gradient(circle at center,rgba(255,138,31,.18),transparent 40%) !important;
+  animation:kcGlow 2.65s linear forwards !important;
+  pointer-events:none;
+}
+.kingsCLogo,
+.loginTransitionLogo{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:210px !important;
+  margin:0 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:72px !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  color:#fff !important;
+  text-align:center !important;
+  text-shadow:0 0 30px rgba(255,138,31,.48) !important;
+  transform:none !important;
+  animation:kcLogo 2.65s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.kingsCSub,
+.loginTransitionSub{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:295px !important;
+  margin:0 !important;
+  color:#ffb15c !important;
+  font-size:10px !important;
+  letter-spacing:.18em !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  animation:kcSub 2.65s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.kingsCLoading,
+.loginTransitionText{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:338px !important;
+  margin:0 !important;
+  color:#cbd5e1 !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  letter-spacing:.1em !important;
+  text-align:center !important;
+  animation:kcLoadingOut 2.65s ease forwards !important;
+}
+.kingsCGhostTop{
+  position:absolute;
+  left:24px;
+  right:24px;
+  top:95px;
+  display:flex;
+  gap:10px;
+  opacity:0;
+  transform:scale(.96);
+  animation:kcUi 2.65s ease forwards;
+}
+.kingsCGhostWelcome,
+.loginTransitionWelcome{
+  flex:1;
+  min-height:64px;
+  background:#121b2d !important;
+  border-radius:18px !important;
+  padding:12px !important;
+  border:1px solid rgba(255,138,31,.20) !important;
+  box-shadow:none !important;
+  color:#fff !important;
+  text-align:left !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  gap:2px !important;
+  margin:0 !important;
+}
+.kingsCGhostWelcome span,
+.loginTransitionWelcome span{color:#ffb15c !important;font-size:12px !important;font-weight:800 !important;letter-spacing:.08em !important;display:block !important}
+.kingsCGhostWelcome strong,
+.loginTransitionWelcome strong{color:#fff !important;font-size:17px !important;display:block !important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kingsCGhostMenu,
+.loginTransitionMenu{
+  width:52px !important;
+  height:64px !important;
+  border-radius:16px !important;
+  background:#121b2d !important;
+  border:1px solid rgba(255,138,31,.20) !important;
+  display:grid !important;
+  place-items:center !important;
+  color:#ffb15c !important;
+  font-size:24px !important;
+  font-weight:900 !important;
+  box-shadow:none !important;
+  margin:0 !important;
+}
+.kingsCGhostBox,
+.loginTransitionStatusCard,
+.loginTransitionNoticeCard{
+  position:absolute !important;
+  left:24px !important;
+  right:24px !important;
+  background:#121b2d !important;
+  border-radius:20px !important;
+  padding:14px !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:none !important;
+  color:#cbd5e1 !important;
+  text-align:left !important;
+  opacity:0;
+  transform:scale(.96);
+  animation:kcUi 2.65s ease forwards;
+}
+.kingsCGhostStatus,
+.loginTransitionStatusCard{top:170px !important}
+.kingsCGhostNotice,
+.loginTransitionNoticeCard{top:360px !important}
+.kingsCGhostBtn,
+.loginTransitionPunchButton{
+  position:absolute !important;
+  left:24px !important;
+  right:24px !important;
+  top:280px !important;
+  height:54px !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  display:grid !important;
+  place-items:center !important;
+  color:#111 !important;
+  font-weight:900 !important;
+  font-size:18px !important;
+  box-shadow:none !important;
+  opacity:0;
+  transform:scale(.96);
+  animation:kcUi 2.65s ease forwards;
+}
+.loginTransitionCardLabel{color:#ffb15c !important;font-size:13px !important;font-weight:900 !important;margin-bottom:6px !important}
+.loginTransitionCardText{color:#cbd5e1 !important;font-size:14px !important;line-height:1.6 !important}
+
+/* login transition DOM positioning */
+.loginTransitionInner.kingsCStage .loginTransitionWelcome{
+  position:absolute !important;
+  left:24px !important;
+  right:86px !important;
+  top:95px !important;
+  opacity:0;
+  transform:scale(.96);
+  animation:kcUi 2.65s ease forwards !important;
+}
+.loginTransitionInner.kingsCStage .loginTransitionMenu{
+  position:absolute !important;
+  right:24px !important;
+  top:95px !important;
+  opacity:0;
+  transform:scale(.96);
+  animation:kcUi 2.65s ease forwards !important;
+}
+
+@keyframes kcLogo{
+  0%,35%{top:210px;font-size:72px}
+  60%,100%{top:22px;font-size:42px}
+}
+@keyframes kcSub{
+  0%,35%{top:295px;opacity:1}
+  60%,100%{top:68px;opacity:.4}
+}
+@keyframes kcUi{
+  0%,55%{opacity:0;transform:scale(.96)}
+  80%,100%{opacity:1;transform:scale(1)}
+}
+@keyframes kcGlow{
+  0%,40%{opacity:1}
+  70%,100%{opacity:.2}
+}
+@keyframes kcLoadingOut{
+  0%,38%{opacity:1;transform:translateY(0)}
+  52%,100%{opacity:0;transform:translateY(-8px)}
+}
+@keyframes kcOverlayHide{
+  to{opacity:0;visibility:hidden;pointer-events:none}
+}
+
+@media(max-height:620px){
+  .kingsCLogo,.loginTransitionLogo{top:190px !important;font-size:64px !important}
+  .kingsCSub,.loginTransitionSub{top:268px !important}
+  .kingsCLoading,.loginTransitionText{top:310px !important}
+  @keyframes kcLogo{0%,35%{top:190px;font-size:64px}60%,100%{top:18px;font-size:38px}}
+  @keyframes kcSub{0%,35%{top:268px;opacity:1}60%,100%{top:60px;opacity:.4}}
+  .kingsCGhostTop{top:86px}.kingsCGhostStatus,.loginTransitionStatusCard{top:158px !important}.kingsCGhostBtn,.loginTransitionPunchButton{top:256px !important}.kingsCGhostNotice,.loginTransitionNoticeCard{top:330px !important}
+  .loginTransitionInner.kingsCStage .loginTransitionWelcome,.loginTransitionInner.kingsCStage .loginTransitionMenu{top:86px !important}
+}

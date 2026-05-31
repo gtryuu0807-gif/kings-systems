@@ -113,7 +113,7 @@ async function updateAttendanceTimeCore(recordId, newDateTimeValue) {
     })
 
     if (!canSaveBySetSlot(record, newTime, record.id, tempRecords)) {
-        showWarning("同じ日の出勤・退勤は最大2セットまでです")
+        showWarning("同じ日の出勤・退勤は最大3セットまでです")
         return
     }
 
@@ -228,7 +228,7 @@ export async function createAttendanceRecord(type, newDateTimeValue, targetUser 
     }
 
     if (!canSaveBySetSlot(tempRecord, newTime, null, [...state.allRecords, tempRecord])) {
-        showWarning("同じ日の出勤・退勤は最大2セットまでです")
+        showWarning("同じ日の出勤・退勤は最大3セットまでです")
         return
     }
 

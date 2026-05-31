@@ -1,22 +1,140 @@
 let toastArea = null
+let notificationPaused = false
+let flushTimer = null
+let lastMessageKey = ""
+let lastMessageAt = 0
+const queue = []
+const MAX_VISIBLE_TOASTS = 2
+const DEDUPE_MS = 4500
+
+const typeMeta = {
+    success: { icon: "✓", label: "完了" },
+    error: { icon: "!", label: "エラー" },
+    warning: { icon: "!", label: "確認" },
+    info: { icon: "i", label: "通知" }
+}
 
 function createToastArea() {
     if (toastArea) return toastArea
 
     toastArea = document.createElement("div")
     toastArea.id = "toastArea"
+    toastArea.setAttribute("aria-live", "polite")
+    toastArea.setAttribute("aria-atomic", "false")
 
     document.body.appendChild(toastArea)
 
     return toastArea
 }
 
-export function showToast(message, type = "info") {
+function isTransitionActive() {
+    return Boolean(
+        notificationPaused ||
+        document.body.classList.contains("kt-booting") ||
+        document.body.classList.contains("kt-transitioning") ||
+        document.body.classList.contains("kt-real-main-start") ||
+        document.body.classList.contains("kt-screen-switching") ||
+        document.body.classList.contains("kings-c-transitioning") ||
+        document.body.classList.contains("auto-auth-checking")
+    )
+}
+
+function shouldDedupe(message, type) {
+    const now = Date.now()
+    const key = `${type}:${String(message || "")}`
+
+    if (key === lastMessageKey && now - lastMessageAt < DEDUPE_MS) {
+        return true
+    }
+
+    lastMessageKey = key
+    lastMessageAt = now
+    return false
+}
+
+function normalizeMessage(message) {
+    return String(message || "").trim() || "通知があります"
+}
+
+export function pauseNotifications() {
+    notificationPaused = true
+}
+
+export function resumeNotifications(delay = 180) {
+    notificationPaused = false
+    window.clearTimeout(flushTimer)
+    flushTimer = window.setTimeout(flushNotifications, delay)
+}
+
+export function showToast(message, type = "info", options = {}) {
+    const normalizedType = typeMeta[type] ? type : "info"
+    const text = normalizeMessage(message)
+
+    if (shouldDedupe(text, normalizedType)) return
+
+    const payload = {
+        message: text,
+        type: normalizedType,
+        duration: options.duration || getDuration(normalizedType, text),
+        important: Boolean(options.important || normalizedType === "error")
+    }
+
+    if (isTransitionActive() && !payload.important) {
+        queueToast(payload)
+        return
+    }
+
+    renderToast(payload)
+}
+
+function queueToast(payload) {
+    const exists = queue.some((item) => item.message === payload.message && item.type === payload.type)
+    if (!exists) queue.push(payload)
+
+    if (queue.length > 4) queue.shift()
+    scheduleFlush()
+}
+
+function scheduleFlush() {
+    window.clearTimeout(flushTimer)
+    flushTimer = window.setTimeout(flushNotifications, 420)
+}
+
+function flushNotifications() {
+    if (isTransitionActive()) {
+        scheduleFlush()
+        return
+    }
+
+    const next = queue.splice(0, 1)[0]
+    if (!next) return
+
+    renderToast(next)
+
+    if (queue.length) {
+        window.clearTimeout(flushTimer)
+        flushTimer = window.setTimeout(flushNotifications, 520)
+    }
+}
+
+function renderToast(payload) {
     const area = createToastArea()
 
+    while (area.children.length >= MAX_VISIBLE_TOASTS) {
+        area.firstElementChild?.remove()
+    }
+
+    const meta = typeMeta[payload.type] || typeMeta.info
     const toast = document.createElement("div")
-    toast.className = `toast ${type}`
-    toast.textContent = message
+    toast.className = `toast ${payload.type}`
+    toast.setAttribute("role", payload.type === "error" ? "alert" : "status")
+    toast.innerHTML = `
+        <span class="toastIcon" aria-hidden="true">${meta.icon}</span>
+        <span class="toastBody">
+            <span class="toastLabel">${meta.label}</span>
+            <span class="toastMessage">${escapeHtml(payload.message)}</span>
+        </span>
+    `
 
     area.appendChild(toast)
 
@@ -24,14 +142,20 @@ export function showToast(message, type = "info") {
         toast.classList.add("show")
     })
 
-    setTimeout(() => {
+    window.setTimeout(() => {
         toast.classList.add("hide")
 
-        setTimeout(() => {
+        window.setTimeout(() => {
             toast.remove()
-        }, 250)
+        }, 280)
 
-    }, 3200)
+    }, payload.duration)
+}
+
+function getDuration(type, message) {
+    if (type === "error") return 5200
+    if (type === "warning") return 4200
+    return message.length > 32 ? 3800 : 2800
 }
 
 export function showSuccess(message) {
@@ -39,7 +163,7 @@ export function showSuccess(message) {
 }
 
 export function showError(message, code = "") {
-    showToast(formatErrorMessage(message, code), "error")
+    showToast(formatErrorMessage(message, code), "error", { important: true })
 }
 
 function formatErrorMessage(message, code = "") {
@@ -86,4 +210,13 @@ export function showErrors(messages) {
     messages.forEach((message) => {
         showError(message)
     })
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;")
 }

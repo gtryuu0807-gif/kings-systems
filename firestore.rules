@@ -27,6 +27,11 @@ service cloud.firestore {
       return role in ["admin", "employee"];
     }
 
+    function isBootstrapAdminEmail() {
+      return isLoggedIn()
+        && request.auth.token.email == "staff1@test.com";
+    }
+
     function isOwnerResource() {
       return isLoggedIn() && resource.data.uid == request.auth.uid;
     }
@@ -68,6 +73,12 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.role == "employee"
+      ) || (
+        isBootstrapAdminEmail()
+        && userId == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == "admin"
       );
 
       allow update: if (

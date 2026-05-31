@@ -1,0 +1,510 @@
+/* =========================================================
+   Kings C案 広範囲再構築版
+   目的:
+   1. 見本C案の最終フレームと本物のアプリ画面の位置を一致させる
+   2. ロゴを「消して別ロゴ表示」ではなく同一レイヤーの移動として見せる
+   3. 旧splash / 旧loginTransition / 旧header位置指定を最終上書きする
+   Firestore Rules更新なし
+   ========================================================= */
+:root{
+  --kc-phone:430px;
+  --kc-edge:24px;
+  --kc-bg:#050505;
+  --kc-card:#121b2d;
+  --kc-card-border:rgba(255,138,31,.20);
+  --kc-soft-border:rgba(255,255,255,.08);
+  --kc-orange:#ff8a1f;
+  --kc-orange-2:#ffb15c;
+  --kc-muted:#cbd5e1;
+}
+
+html,body{
+  background:#050505 !important;
+  min-height:100%;
+}
+body{
+  margin:0 !important;
+  color:#fff !important;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  background:
+    radial-gradient(circle at 50% 44%,rgba(255,138,31,.12),transparent 42%),
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    #050505;
+}
+
+/* アプリ本体をC案のphoneと同じ幅・背景に寄せる */
+.container{
+  width:min(var(--kc-phone),100vw) !important;
+  max-width:var(--kc-phone) !important;
+  min-height:100svh !important;
+  margin:0 auto !important;
+  padding:0 var(--kc-edge) 34px !important;
+  border-radius:0 !important;
+  background:
+    radial-gradient(circle at 50% 44%,rgba(255,138,31,.10),transparent 42%),
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    #050505 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+  box-sizing:border-box !important;
+  animation:none !important;
+}
+.container::before,.container::after{display:none !important}
+
+/* 起動中は本物画面を裏で準備し、見せない */
+body.kings-c-booting{
+  overflow:hidden !important;
+}
+body.kings-c-booting .container{
+  opacity:0 !important;
+  transform:scale(.96) !important;
+  pointer-events:none !important;
+}
+body.app-ready .container{
+  opacity:1 !important;
+  transform:scale(1) !important;
+  transition:opacity .42s ease,transform .42s ease !important;
+}
+
+/* 旧スプラッシュ完全停止 */
+.kingsSplash,#splashScreen,.splashGlow,.splashInner{display:none !important}
+body.splash-active .container{opacity:1 !important;filter:none !important;transform:none !important}
+
+/* ロゴ最終位置: C案の top:22 / sub top:68 を本体にも適用 */
+.appLogoTitle{
+  position:fixed !important;
+  top:22px !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:1200 !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:42px !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  color:#fff !important;
+  text-align:center !important;
+  text-shadow:0 0 30px rgba(255,138,31,.34) !important;
+  pointer-events:none !important;
+}
+.appLogoSub{
+  position:fixed !important;
+  top:68px !important;
+  left:0 !important;
+  right:0 !important;
+  z-index:1200 !important;
+  margin:0 !important;
+  padding:0 !important;
+  color:var(--kc-orange-2) !important;
+  opacity:.4 !important;
+  font-size:10px !important;
+  letter-spacing:.18em !important;
+  line-height:1.25 !important;
+  text-align:center !important;
+  text-transform:uppercase !important;
+  pointer-events:none !important;
+}
+
+/* ログイン画面はロゴ下へ。C案メイン演出との競合を防ぐ */
+#loginMount{
+  padding-top:112px !important;
+}
+#loginArea{
+  margin:0 auto !important;
+  max-width:100% !important;
+  padding:18px 0 0 !important;
+}
+.loginGuide{
+  color:var(--kc-muted) !important;
+  text-align:center !important;
+}
+
+/* ログイン後の本物ヘッダーをC案のtop行と一致 */
+body.kings-c-main-ready #headerMount{
+  position:fixed !important;
+  top:95px !important;
+  left:50% !important;
+  width:min(var(--kc-phone),100vw) !important;
+  transform:translateX(-50%) !important;
+  z-index:1300 !important;
+  height:64px !important;
+  pointer-events:none !important;
+}
+body.kings-c-main-ready #welcomeBox{
+  display:flex !important;
+  position:absolute !important;
+  top:0 !important;
+  left:var(--kc-edge) !important;
+  right:86px !important;
+  width:auto !important;
+  max-width:none !important;
+  min-height:64px !important;
+  height:64px !important;
+  margin:0 !important;
+  padding:12px !important;
+  border-radius:18px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-card-border) !important;
+  box-shadow:none !important;
+  color:#fff !important;
+  box-sizing:border-box !important;
+  pointer-events:auto !important;
+  animation:none !important;
+}
+body.kings-c-main-ready .welcomeIcon{
+  display:none !important;
+}
+body.kings-c-main-ready .welcomeText{
+  color:var(--kc-orange-2) !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  letter-spacing:.08em !important;
+  margin:0 0 2px !important;
+}
+body.kings-c-main-ready #welcomeName{
+  color:#fff !important;
+  font-size:17px !important;
+  font-weight:900 !important;
+  line-height:1.2 !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+body.kings-c-main-ready #topMenu{
+  display:block !important;
+  position:absolute !important;
+  top:0 !important;
+  right:var(--kc-edge) !important;
+  left:auto !important;
+  width:52px !important;
+  height:64px !important;
+  margin:0 !important;
+  z-index:1301 !important;
+  pointer-events:auto !important;
+}
+body.kings-c-main-ready #menuBtn{
+  width:52px !important;
+  height:64px !important;
+  min-width:52px !important;
+  min-height:64px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:16px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-card-border) !important;
+  color:var(--kc-orange-2) !important;
+  display:grid !important;
+  place-items:center !important;
+  box-shadow:none !important;
+  font-size:24px !important;
+  line-height:1 !important;
+}
+body.kings-c-main-ready #menuDropdown{
+  top:74px !important;
+  right:0 !important;
+}
+
+/* C案のカード配置と本物メイン配置を近づける */
+body.kings-c-main-ready #appContent{
+  padding-top:155px !important;
+}
+body.kings-c-main-ready #mainScreen{
+  display:block;
+  margin-top:0 !important;
+  padding-top:0 !important;
+  animation:none !important;
+}
+body.kings-c-main-ready #mainScreen > .subTitle,
+body.kings-c-main-ready #mainScreen > h2:first-of-type + div + h2{
+  display:none !important;
+}
+body.kings-c-main-ready #incompleteAttendanceAlert:empty{display:none !important}
+body.kings-c-main-ready #currentWorkStatusCard{
+  min-height:64px !important;
+  margin:15px 0 20px !important;
+  padding:14px !important;
+  border-radius:20px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-soft-border) !important;
+  color:var(--kc-muted) !important;
+  box-shadow:none !important;
+}
+body.kings-c-main-ready #clockInBtn.kingActionBtn,
+body.kings-c-main-ready #clockInBtn{
+  width:100% !important;
+  height:54px !important;
+  margin:0 0 20px !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  color:#111 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  font-weight:900 !important;
+  font-size:18px !important;
+}
+body.kings-c-main-ready #clockOutBtn{
+  width:100% !important;
+  margin:0 0 18px !important;
+}
+body.kings-c-main-ready #mainScreen > h2:first-of-type{
+  margin:0 0 10px !important;
+  padding:14px !important;
+  border-radius:20px 20px 0 0 !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-soft-border) !important;
+  border-bottom:0 !important;
+  color:#fff !important;
+  font-size:18px !important;
+}
+body.kings-c-main-ready #noticeList{
+  min-height:58px !important;
+  margin:0 0 24px !important;
+  padding:14px !important;
+  border-radius:0 0 20px 20px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-soft-border) !important;
+  color:var(--kc-muted) !important;
+  box-shadow:none !important;
+}
+
+/* 起動・ログイン共通C案オーバーレイ */
+.kingsCOverlay,
+#loginTransitionOverlay{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147483647 !important;
+  display:flex !important;
+  justify-content:center !important;
+  align-items:stretch !important;
+  background:#050505 !important;
+  color:#fff !important;
+  overflow:hidden !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+}
+#loginTransitionOverlay:not(.show):not(.hide){display:none !important}
+.kingsCOverlay.hide,
+#loginTransitionOverlay.hide{
+  animation:kcTotalOverlayHide .52s ease forwards !important;
+}
+.kingsCStage,
+.loginTransitionInner.kingsCStage{
+  position:relative !important;
+  width:min(var(--kc-phone),100vw) !important;
+  min-height:100svh !important;
+  height:100svh !important;
+  margin:0 auto !important;
+  overflow:hidden !important;
+  background:
+    radial-gradient(circle at 82% 8%,rgba(255,138,31,.15),transparent 30%),
+    #050505 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  text-align:center !important;
+  transform:none !important;
+}
+.kingsCStage::before,
+.loginTransitionInner.kingsCStage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center,rgba(255,138,31,.18),transparent 40%);
+  animation:kcTotalGlow 2.65s linear forwards;
+  pointer-events:none;
+}
+.kingsCGlow,.loginTransitionGlow{display:none !important}
+.kingsCLogo,.loginTransitionLogo{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:210px !important;
+  margin:0 !important;
+  padding:0 !important;
+  font-family:Georgia,"Times New Roman",serif !important;
+  font-size:72px !important;
+  font-weight:500 !important;
+  line-height:1 !important;
+  color:#fff !important;
+  text-align:center !important;
+  text-shadow:0 0 30px rgba(255,138,31,.48) !important;
+  animation:kcTotalLogo 2.65s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.kingsCSub,.loginTransitionSub{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:295px !important;
+  margin:0 !important;
+  color:var(--kc-orange-2) !important;
+  font-size:10px !important;
+  letter-spacing:.18em !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  animation:kcTotalSub 2.65s cubic-bezier(.22,1,.36,1) forwards !important;
+}
+.kingsCLoading,.loginTransitionText{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  top:338px !important;
+  margin:0 !important;
+  color:var(--kc-muted) !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  letter-spacing:.1em !important;
+  text-align:center !important;
+  animation:kcTotalLoading 2.65s ease forwards !important;
+}
+.kingsCGhostTop,
+.loginTransitionTop{
+  position:absolute !important;
+  left:var(--kc-edge) !important;
+  right:var(--kc-edge) !important;
+  top:95px !important;
+  display:flex !important;
+  gap:10px !important;
+  opacity:0 !important;
+  transform:scale(.96) !important;
+  animation:kcTotalUi 2.65s ease forwards !important;
+}
+.loginTransitionInner.kingsCStage .loginTransitionWelcome,
+.kingsCGhostWelcome{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  height:64px !important;
+  min-height:64px !important;
+  margin:0 !important;
+  padding:12px !important;
+  border-radius:18px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-card-border) !important;
+  color:#fff !important;
+  box-shadow:none !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  text-align:left !important;
+  box-sizing:border-box !important;
+}
+.loginTransitionInner.kingsCStage .loginTransitionMenu,
+.kingsCGhostMenu{
+  flex:0 0 52px !important;
+  width:52px !important;
+  height:64px !important;
+  margin:0 !important;
+  border-radius:16px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-card-border) !important;
+  color:var(--kc-orange-2) !important;
+  display:grid !important;
+  place-items:center !important;
+  font-size:24px !important;
+  font-weight:900 !important;
+  box-shadow:none !important;
+  box-sizing:border-box !important;
+}
+.kingsCGhostWelcome span,.loginTransitionWelcome span{
+  color:var(--kc-orange-2) !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  letter-spacing:.08em !important;
+}
+.kingsCGhostWelcome strong,.loginTransitionWelcome strong{
+  color:#fff !important;
+  font-size:17px !important;
+  font-weight:900 !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+.kingsCGhostBox,
+.loginTransitionStatusCard,
+.loginTransitionNoticeCard{
+  position:absolute !important;
+  left:var(--kc-edge) !important;
+  right:var(--kc-edge) !important;
+  margin:0 !important;
+  padding:14px !important;
+  min-height:64px !important;
+  border-radius:20px !important;
+  background:var(--kc-card) !important;
+  border:1px solid var(--kc-soft-border) !important;
+  color:var(--kc-muted) !important;
+  box-shadow:none !important;
+  text-align:left !important;
+  opacity:0 !important;
+  transform:scale(.96) !important;
+  animation:kcTotalUi 2.65s ease forwards !important;
+  box-sizing:border-box !important;
+}
+.kingsCGhostStatus,.loginTransitionStatusCard{top:170px !important}
+.kingsCGhostNotice,.loginTransitionNoticeCard{top:360px !important}
+.kingsCGhostBtn,.loginTransitionPunchButton{
+  position:absolute !important;
+  left:var(--kc-edge) !important;
+  right:var(--kc-edge) !important;
+  top:280px !important;
+  height:54px !important;
+  margin:0 !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#ff7a00,#ffb15c) !important;
+  color:#111 !important;
+  display:grid !important;
+  place-items:center !important;
+  font-weight:900 !important;
+  font-size:18px !important;
+  box-shadow:none !important;
+  opacity:0 !important;
+  transform:scale(.96) !important;
+  animation:kcTotalUi 2.65s ease forwards !important;
+}
+.loginTransitionCardLabel{color:var(--kc-orange-2) !important;font-size:13px !important;font-weight:900 !important;margin-bottom:6px !important}
+.loginTransitionCardText{color:var(--kc-muted) !important;font-size:14px !important;line-height:1.6 !important}
+
+@keyframes kcTotalLogo{
+  0%,35%{top:210px;font-size:72px}
+  60%,100%{top:22px;font-size:42px}
+}
+@keyframes kcTotalSub{
+  0%,35%{top:295px;opacity:1}
+  60%,100%{top:68px;opacity:.4}
+}
+@keyframes kcTotalUi{
+  0%,55%{opacity:0;transform:scale(.96)}
+  80%,100%{opacity:1;transform:scale(1)}
+}
+@keyframes kcTotalGlow{
+  0%,40%{opacity:1}
+  70%,100%{opacity:.2}
+}
+@keyframes kcTotalLoading{
+  0%,38%{opacity:1;transform:translateY(0)}
+  52%,100%{opacity:0;transform:translateY(-8px)}
+}
+@keyframes kcTotalOverlayHide{
+  to{opacity:0;visibility:hidden;pointer-events:none}
+}
+
+@media(max-height:620px){
+  .kingsCLogo,.loginTransitionLogo{top:190px !important;font-size:64px !important}
+  .kingsCSub,.loginTransitionSub{top:268px !important}
+  .kingsCLoading,.loginTransitionText{top:310px !important}
+  @keyframes kcTotalLogo{0%,35%{top:190px;font-size:64px}60%,100%{top:18px;font-size:38px}}
+  @keyframes kcTotalSub{0%,35%{top:268px;opacity:1}60%,100%{top:60px;opacity:.4}}
+  .appLogoTitle{top:18px !important;font-size:38px !important}
+  .appLogoSub{top:60px !important}
+  .kingsCGhostTop,.loginTransitionTop,body.kings-c-main-ready #headerMount{top:86px !important}
+  .kingsCGhostStatus,.loginTransitionStatusCard{top:158px !important}
+  .kingsCGhostBtn,.loginTransitionPunchButton{top:256px !important}
+  .kingsCGhostNotice,.loginTransitionNoticeCard{top:330px !important}
+  body.kings-c-main-ready #appContent{padding-top:143px !important}
+}

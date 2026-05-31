@@ -1,0 +1,152 @@
+/* Kings v3 tone + menu route final fix
+   - reduce excessive warm/orange cast around the main header
+   - keep Premium Border thin and calm
+   - ensure menu overlay items are tappable on iPhone Safari */
+:root{
+  --kings-premium-line:rgba(219,126,48,.22);
+  --kings-premium-line-soft:rgba(219,126,48,.14);
+  --kings-premium-gold:#e7b56d;
+}
+
+body.kt-main-ready,
+body.kt-screen-main,
+body.kt-screen-admin{
+  background:
+    radial-gradient(circle at 50% -12%, rgba(231,181,109,.045), transparent 28%),
+    linear-gradient(145deg,#030407 0%,#06101b 54%,#020407 100%) !important;
+}
+
+body.kt-main-ready .container,
+body.kt-screen-main .container,
+body.kt-screen-admin .container{
+  background:transparent !important;
+}
+
+body.kt-main-ready #appBrand::before,
+body.kt-screen-main #appBrand::before,
+body.kt-screen-admin #appBrand::before{
+  opacity:.26 !important;
+  background:radial-gradient(circle, rgba(231,181,109,.07), transparent 62%) !important;
+}
+
+body.kt-main-ready #appBrand,
+body.kt-screen-main #appBrand,
+body.kt-screen-admin #appBrand{
+  filter:none !important;
+  text-shadow:none !important;
+  margin-top:8px !important;
+  margin-bottom:18px !important;
+}
+
+body.kt-main-ready #appBrand .appLogoSvg,
+body.kt-screen-main #appBrand .appLogoSvg,
+body.kt-screen-admin #appBrand .appLogoSvg{
+  filter:drop-shadow(0 0 12px rgba(255,247,220,.28)) drop-shadow(0 0 24px rgba(231,181,109,.10)) !important;
+}
+
+body.kt-main-ready #appBrand .appLogoSub,
+body.kt-screen-main #appBrand .appLogoSub,
+body.kt-screen-admin #appBrand .appLogoSub{
+  color:rgba(231,181,109,.62) !important;
+  opacity:.72 !important;
+}
+
+/* Welcome should stay premium, not orange-heavy. */
+body.kt-main-ready #welcomeBox,
+body.kt-screen-main #welcomeBox,
+body.kt-screen-admin #welcomeBox,
+#welcomeBox{
+  background:linear-gradient(145deg,rgba(8,14,25,.88),rgba(4,8,14,.76)) !important;
+  border:1px solid var(--kings-premium-line) !important;
+  box-shadow:0 16px 42px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+#welcomeBox .welcomeIcon{
+  background:rgba(255,255,255,.035) !important;
+  border:1px solid var(--kings-premium-line-soft) !important;
+  border-radius:16px !important;
+  color:var(--kings-premium-gold) !important;
+  box-shadow:none !important;
+}
+#welcomeBox .inlineSvgIcon,
+#welcomeBox .inlineSvgIcon::before{
+  color:var(--kings-premium-gold) !important;
+  background:var(--kings-premium-gold) !important;
+}
+#welcomeBox .welcomeText{
+  color:rgba(231,181,109,.78) !important;
+  letter-spacing:.14em !important;
+}
+
+/* Calm down large top cards; keep orange only as a fine edge. */
+.mainNoticeSection .noticeCard,
+#noticeList .noticeCard,
+.currentWorkStatusCard,
+.additionalWorkCard,
+.kingsMenuButton,
+#menuBtn{
+  border-color:var(--kings-premium-line) !important;
+  box-shadow:0 16px 42px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+/* Menu overlay should receive touch/click above every app layer. */
+#menuDropdown.kingsMenuOverlay{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:2147482500 !important;
+  pointer-events:none !important;
+}
+#menuDropdown.kingsMenuOverlay.show,
+#menuDropdown.kingsMenuOverlay.open,
+#topMenu.menu-open #menuDropdown.kingsMenuOverlay{
+  display:flex !important;
+  pointer-events:auto !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuBackdrop{
+  z-index:1 !important;
+  pointer-events:auto !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuPanel{
+  z-index:2 !important;
+  pointer-events:auto !important;
+  background:linear-gradient(180deg,rgba(9,14,24,.96),rgba(4,7,13,.97)) !important;
+  border:1px solid var(--kings-premium-line) !important;
+  box-shadow:0 32px 86px rgba(0,0,0,.66), inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuItem,
+#menuDropdown.kingsMenuOverlay .kingsMenuClose{
+  position:relative !important;
+  z-index:3 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  -webkit-user-select:none !important;
+  user-select:none !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuItem{
+  border-color:var(--kings-premium-line) !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.018)) !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuItem:active{
+  transform:translateY(1px) scale(.992) !important;
+}
+
+@media (max-width:520px){
+  body.kt-main-ready #appBrand,
+  body.kt-screen-main #appBrand,
+  body.kt-screen-admin #appBrand{
+    min-height:88px !important;
+    margin-top:4px !important;
+    margin-bottom:14px !important;
+  }
+  body.kt-main-ready #appBrand .appLogoSvg,
+  body.kt-screen-main #appBrand .appLogoSvg,
+  body.kt-screen-admin #appBrand .appLogoSvg{
+    width:min(210px,58vw) !important;
+  }
+  body.kt-main-ready #appBrand .appLogoSub,
+  body.kt-screen-main #appBrand .appLogoSub,
+  body.kt-screen-admin #appBrand .appLogoSub{
+    font-size:9px !important;
+    letter-spacing:.20em !important;
+  }
+}

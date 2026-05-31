@@ -1,0 +1,76 @@
+/* A-04 final: main notice shows only the latest summary by default. */
+#noticeList .latestNoticeDetail[hidden],
+#noticeList .noticeAllList[hidden],
+#noticeList [hidden] {
+  display: none !important;
+}
+
+#noticeList .noticeAllList {
+  display: grid !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+}
+
+#noticeList .latestNoticeCard {
+  overflow: hidden !important;
+}
+
+#noticeList .latestNoticeSummary {
+  min-height: 0 !important;
+}
+
+#noticeList .noticeListToggleBtn {
+  width: 100% !important;
+  margin-top: 10px !important;
+  padding: 9px 12px !important;
+}
+
+#noticeList .noticeMiniItem {
+  min-height: 0 !important;
+}
+
+/* Menu role separation and placeholder settings panel */
+.kingsMenuSection { display: block; }
+.kingsMenuSectionTitle {
+    margin: 10px 4px 8px;
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.58);
+    text-transform: uppercase;
+}
+.premiumSettingsPlaceholder {
+    margin-top: 14px;
+    padding: 18px;
+    border: 1px solid rgba(255, 140, 40, .28);
+    border-radius: 18px;
+    background: rgba(8, 10, 14, .72);
+    color: rgba(255,255,255,.9);
+    text-align: center;
+}
+.settingsPlaceholderIcon {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 10px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(255, 140, 40, .10);
+    border: 1px solid rgba(255, 140, 40, .24);
+}
+.premiumSettingsPlaceholder p {
+    margin: 8px 0 0;
+    color: rgba(255,255,255,.68);
+    line-height: 1.65;
+}
+
+
+/* Settings placeholder route fix */
+#mainTabSettings.show {
+    display: block !important;
+}
+#mainTabSettings .premiumSettingsPlaceholder {
+    display: block !important;
+}
+.mainSettingsTabBtn {
+    display: none !important;
+}

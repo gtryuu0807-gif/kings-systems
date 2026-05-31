@@ -1,0 +1,190 @@
+/* Kings Menu Overlay final repair - 2026-05-31
+   Fixes: overlay not opening, clipping by transformed parents, weak z-index, old dropdown CSS conflicts. */
+
+html.kings-menu-lock,
+body.kings-menu-lock{
+  overflow:hidden !important;
+  touch-action:none !important;
+}
+
+#topMenu{
+  position:relative !important;
+  z-index:9000 !important;
+  pointer-events:auto !important;
+}
+
+#menuBtn,
+.kingsMenuButton{
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+  cursor:pointer !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+
+/* The menu is moved to <body> by JS, so it cannot be clipped by header/container transforms. */
+body > #menuDropdown.kingsMenuOverlay,
+#menuDropdown.kingsMenuOverlay{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  max-width:none !important;
+  min-width:0 !important;
+  top:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  left:0 !important;
+  margin:0 !important;
+  padding:max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom)) !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:rgba(0,0,0,.66) !important;
+  backdrop-filter:blur(14px) !important;
+  -webkit-backdrop-filter:blur(14px) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+  z-index:2147483000 !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  transform:none !important;
+  transition:opacity .22s ease, visibility .22s ease !important;
+}
+
+body > #menuDropdown.kingsMenuOverlay.show,
+body > #menuDropdown.kingsMenuOverlay.open,
+body > #menuDropdown.kingsMenuOverlay[aria-hidden="false"],
+#menuDropdown.kingsMenuOverlay.show,
+#menuDropdown.kingsMenuOverlay.open,
+#menuDropdown.kingsMenuOverlay[aria-hidden="false"]{
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:auto !important;
+}
+
+#menuDropdown .kingsMenuBackdrop{
+  position:absolute !important;
+  inset:0 !important;
+  display:block !important;
+  background:transparent !important;
+  z-index:0 !important;
+  pointer-events:auto !important;
+}
+
+#menuDropdown .kingsMenuPanel{
+  position:relative !important;
+  z-index:1 !important;
+  width:min(430px, calc(100vw - 34px)) !important;
+  max-height:calc(100dvh - 42px - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important;
+  overflow:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  padding:18px !important;
+  border-radius:28px !important;
+  border:1px solid rgba(255,146,59,.36) !important;
+  background:linear-gradient(180deg,rgba(10,15,25,.98),rgba(4,7,13,.98)) !important;
+  box-shadow:0 30px 90px rgba(0,0,0,.72), inset 0 1px 0 rgba(255,255,255,.055) !important;
+  transform:translateY(12px) scale(.97) !important;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1) !important;
+  pointer-events:auto !important;
+}
+
+#menuDropdown[aria-hidden="false"] .kingsMenuPanel,
+#menuDropdown.show .kingsMenuPanel,
+#menuDropdown.open .kingsMenuPanel{
+  transform:translateY(0) scale(1) !important;
+}
+
+#menuDropdown .kingsMenuHeader{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:12px !important;
+  padding:2px 2px 14px !important;
+  margin:0 0 12px !important;
+  border-bottom:1px solid rgba(255,146,59,.18) !important;
+}
+
+#menuDropdown .kingsMenuHeader strong{
+  color:#fff4df !important;
+  font-size:18px !important;
+  font-weight:900 !important;
+  letter-spacing:.06em !important;
+}
+
+#menuDropdown .kingsMenuClose{
+  flex:0 0 auto !important;
+  width:40px !important;
+  height:40px !important;
+  min-width:40px !important;
+  min-height:40px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:14px !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  background:rgba(255,255,255,.05) !important;
+  color:#fff !important;
+  font-size:26px !important;
+  line-height:1 !important;
+  display:grid !important;
+  place-items:center !important;
+  box-shadow:none !important;
+}
+
+#menuDropdown .kingsMenuItem{
+  width:100% !important;
+  min-height:56px !important;
+  height:auto !important;
+  margin:8px 0 !important;
+  padding:14px 16px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:12px !important;
+  border-radius:18px !important;
+  border:1px solid rgba(255,146,59,.22) !important;
+  background:rgba(255,255,255,.035) !important;
+  color:#f7f3eb !important;
+  box-shadow:none !important;
+  font-size:15px !important;
+  font-weight:850 !important;
+  text-align:left !important;
+  line-height:1.25 !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  touch-action:manipulation !important;
+}
+
+#menuDropdown .kingsMenuItem:hover,
+#menuDropdown .kingsMenuItem:focus-visible{
+  background:rgba(255,146,59,.10) !important;
+  border-color:rgba(255,146,59,.42) !important;
+  color:#ffcf92 !important;
+  outline:none !important;
+}
+
+#menuDropdown .kingsMenuItem.danger{
+  color:#ffd6d6 !important;
+  border-color:rgba(255,91,91,.32) !important;
+  background:rgba(255,54,54,.055) !important;
+}
+
+#menuDropdown .menuItemSvg{
+  width:23px !important;
+  height:23px !important;
+  flex:0 0 23px !important;
+  color:#ffb15c !important;
+}
+
+#menuDropdown .adminOnly[hidden],
+#menuDropdown [hidden]{
+  display:none !important;
+}
+
+@media (min-width:1024px){
+  #menuDropdown .kingsMenuPanel{
+    width:min(480px, calc(100vw - 80px)) !important;
+  }
+}

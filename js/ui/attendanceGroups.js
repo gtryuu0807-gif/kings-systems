@@ -223,6 +223,11 @@ export function createAttendanceSets(records) {
             setNumber: 2,
             clockIn: null,
             clockOut: null
+        },
+        {
+            setNumber: 3,
+            clockIn: null,
+            clockOut: null
         }
     ]
 
@@ -244,7 +249,7 @@ export function createAttendanceSets(records) {
             if (
                 targetSet.clockIn &&
                 targetSet.clockOut &&
-                currentSetIndex < 1
+                currentSetIndex < 2
             ) {
                 currentSetIndex++
 
@@ -255,7 +260,7 @@ export function createAttendanceSets(records) {
                 return
             }
 
-            if (currentSetIndex < 1) {
+            if (currentSetIndex < 2) {
                 currentSetIndex++
                 sets[currentSetIndex].clockIn = record
             }
@@ -269,14 +274,14 @@ export function createAttendanceSets(records) {
             if (!targetSet.clockOut) {
                 targetSet.clockOut = record
 
-                if (targetSet.clockIn && currentSetIndex < 1) {
+                if (targetSet.clockIn && currentSetIndex < 2) {
                     currentSetIndex++
                 }
 
                 return
             }
 
-            if (currentSetIndex < 1) {
+            if (currentSetIndex < 2) {
                 currentSetIndex++
 
                 if (!sets[currentSetIndex].clockOut) {
@@ -296,13 +301,13 @@ export function getVisibleSets(sets) {
         clockOut: null
     }
 
-    const secondSet = sets[1]
-
     const result = [firstSet]
 
-    if (secondSet && (secondSet.clockIn || secondSet.clockOut)) {
-        result.push(secondSet)
-    }
+    sets.slice(1, 3).forEach((set) => {
+        if (set && (set.clockIn || set.clockOut)) {
+            result.push(set)
+        }
+    })
 
     return result
 }

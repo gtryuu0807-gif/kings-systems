@@ -1,3 +1,5 @@
+import { KingsTransitionController } from "./kingsTransitionController.js"
+
 async function loadComponent(targetId, path) {
     const target = document.getElementById(targetId)
 
@@ -22,11 +24,27 @@ async function startApp() {
         await loadComponent("maintenanceMount", "./components/maintenance-screen.html")
         await loadComponent("mainMount", "./components/main-screen.html")
         await loadComponent("adminMount", "./components/admin-screen.html")
+        await loadComponent("settingsMount", "./components/settings-screen.html")
 
-        await import("../app.js")
+        await import("./loginSafety.js")
+
+        try {
+            await import("../app.js")
+        } catch (appError) {
+            console.error("app.js の初期化に失敗しました", appError)
+        }
+
+        try {
+            await import("./kingsV3MenuRoutePatch.js")
+        } catch (routePatchError) {
+            console.error("メニュー遷移補正の読み込みに失敗しました", routePatchError)
+        }
+
+        await KingsTransitionController.bootToLogin()
 
     } catch (error) {
         console.error(error)
+        document.body.className = ""
         document.body.innerHTML = `
             <div style="padding:20px;font-family:sans-serif;color:white;background:#050505;min-height:100vh;">
                 <h2>画面の読み込みに失敗しました</h2>
@@ -37,24 +55,4 @@ async function startApp() {
     }
 }
 
-function finishSplashAndStartApp() {
-    const splash = document.getElementById("splashScreen")
-
-    if (!splash) {
-        document.body.classList.remove("splash-active")
-        document.body.classList.add("app-ready")
-        startApp()
-        return
-    }
-
-    splash.classList.add("splash-hide")
-
-    window.setTimeout(() => {
-        splash.remove()
-        document.body.classList.remove("splash-active")
-        document.body.classList.add("app-ready")
-        startApp()
-    }, 900)
-}
-
-window.setTimeout(finishSplashAndStartApp, 4000)
+startApp()

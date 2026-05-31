@@ -140,25 +140,43 @@ export async function ensureCurrentUserProfile(user) {
             createdAt: exists.createdAt || now
         }
 
-        await setDoc(doc(db, "users", user.uid), {
-            ...repaired,
-            uid: user.uid,
-            email: loginEmail || repaired.email
-        }, { merge: true })
+        try {
+            await setDoc(doc(db, "users", user.uid), {
+                ...repaired,
+                uid: user.uid,
+                email: loginEmail || repaired.email
+            }, { merge: true })
 
-        state.allUsers = state.allUsers.map((item) => {
-            if (item.id === exists.id || item.id === user.uid || item.uid === user.uid || item.email === loginEmail) {
-                return {
-                    ...item,
-                    ...repaired,
-                    id: user.uid,
-                    uid: user.uid,
-                    email: loginEmail || repaired.email
+            state.allUsers = state.allUsers.map((item) => {
+                if (item.id === exists.id || item.id === user.uid || item.uid === user.uid || item.email === loginEmail) {
+                    return {
+                        ...item,
+                        ...repaired,
+                        id: user.uid,
+                        uid: user.uid,
+                        email: loginEmail || repaired.email
+                    }
                 }
-            }
 
-            return item
-        })
+                return item
+            })
+        } catch (error) {
+            console.warn("users profile repair skipped", error)
+
+            // 管理者アカウントなど、過去データの users ドキュメントIDが uid と異なる場合でも
+            // ログイン自体は止めない。role は既存 users データから判定する。
+            state.allUsers = state.allUsers.map((item) => {
+                if (item.id === exists.id || item.uid === user.uid || item.email === loginEmail) {
+                    return {
+                        ...item,
+                        ...repaired,
+                        email: loginEmail || repaired.email
+                    }
+                }
+
+                return item
+            })
+        }
 
         return
     }

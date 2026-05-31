@@ -1,0 +1,109 @@
+/* Kings v3 critical regression fix 2026-05-31
+   Fixes: missing boot presentation, SVG eye icon rendering, menu item click/routing stability. */
+
+/* Dedicated boot overlay: independent from real app DOM so the startup animation cannot disappear. */
+#kingsBootOverlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2147483000 !important;
+  display: grid !important;
+  place-items: center !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(246,209,138,.16), transparent 22%),
+    radial-gradient(circle at 50% 40%, rgba(220,118,44,.14), transparent 42%),
+    linear-gradient(180deg, #030509 0%, #07101b 52%, #030509 100%) !important;
+  opacity: 1 !important;
+}
+#kingsBootOverlay .bootLogoStage {
+  width: min(74vw, 420px) !important;
+  text-align: center !important;
+  transform-origin: center center !important;
+  animation: kingsBootStageMove 3.05s cubic-bezier(.16,1,.24,1) forwards !important;
+}
+#kingsBootOverlay .bootLogoText {
+  color: #fff7dc !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
+  font-size: clamp(64px, 14vw, 118px) !important;
+  line-height: .9 !important;
+  letter-spacing: .01em !important;
+  text-shadow: 0 0 12px rgba(255,255,238,.75), 0 0 36px rgba(246,209,138,.28), 0 0 72px rgba(220,118,44,.18) !important;
+}
+#kingsBootOverlay .bootLogoSub {
+  margin-top: 18px !important;
+  color: rgba(246,209,138,.86) !important;
+  font-size: clamp(10px, 2.4vw, 15px) !important;
+  font-weight: 900 !important;
+  letter-spacing: .34em !important;
+  white-space: nowrap !important;
+}
+#kingsBootOverlay.bootLeaving {
+  animation: kingsBootOverlayFade 3.05s cubic-bezier(.16,1,.24,1) forwards !important;
+}
+@keyframes kingsBootStageMove {
+  0% { opacity: 0; transform: translateY(18px) scale(.82); filter: blur(8px); }
+  20% { opacity: 1; transform: translateY(0) scale(1.08); filter: blur(0); }
+  58% { opacity: 1; transform: translateY(0) scale(1.08); filter: blur(0); }
+  100% { opacity: .98; transform: translateY(-29vh) scale(.43); filter: blur(0); }
+}
+@keyframes kingsBootOverlayFade {
+  0%, 78% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Real brand remains hidden while the overlay performs the splash to avoid double logos. */
+body.kt-booting #appBrand,
+body.kt-boot-run #appBrand { opacity: 0 !important; }
+body.kt-login-ready #appBrand { opacity: 1 !important; }
+
+/* Password eye: do not use CSS mask; Safari sometimes renders it as a square. */
+#loginArea #passwordToggleBtn,
+#passwordToggleBtn.passwordToggleIcon {
+  font-size: 0 !important;
+  color: #f6d18a !important;
+  overflow: hidden !important;
+}
+#loginArea #passwordToggleBtn::before,
+#loginArea #passwordToggleBtn::after,
+#loginArea #passwordToggleBtn span::before,
+#loginArea #passwordToggleBtn span::after {
+  content: none !important;
+  display: none !important;
+  -webkit-mask: none !important;
+  mask: none !important;
+  background: none !important;
+}
+#loginArea #passwordToggleBtn svg {
+  display: block !important;
+  width: 24px !important;
+  height: 24px !important;
+  flex: 0 0 24px !important;
+  color: #f6d18a !important;
+  fill: currentColor !important;
+  stroke: none !important;
+  pointer-events: none !important;
+}
+
+/* Menu overlay: keep panel above backdrop and make every button actually clickable. */
+#menuDropdown.kingsMenuOverlay .kingsMenuBackdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: auto !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuPanel {
+  position: relative !important;
+  z-index: 2 !important;
+  pointer-events: auto !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuItem,
+#menuDropdown.kingsMenuOverlay .kingsMenuClose {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+#menuDropdown.kingsMenuOverlay .kingsMenuItem:active {
+  transform: scale(.985) !important;
+  border-color: rgba(246,209,138,.55) !important;
+}

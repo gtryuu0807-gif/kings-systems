@@ -1,13 +1,13 @@
 <div id="adminScreen">
 
-    <h2>管理画面</h2>
+    <h2>Kings Admin Dashboard</h2>
 
     <div id="adminMaintenanceBanner" class="adminMaintenanceBanner">
-        ⚠ 現在メンテナンスモード中です（社員はシステムを利用できません）
+        <span class="menuItemSvg icon-maintenance" aria-hidden="true"></span>現在メンテナンスモード中です（社員はシステムを利用できません）
     </div>
 
     <p class="adminScreenHelp">
-        使いたい管理機能を選択してください。
+        右上の Kings Menu から管理機能を選択してください。選択中の管理内容だけをこの画面に表示します。
     </p>
 
     <div class="adminLayout">
@@ -16,7 +16,7 @@
             <button class="adminTabBtn active" data-admin-tab="dashboard">
                 <span class="adminTabIcon svgTabIcon icon-dashboard" aria-hidden="true"></span>
                 <span class="adminTabText">
-                    <strong>今日の出勤状況</strong>
+                    <strong>Kings Admin Dashboard</strong>
                     <small>出勤人数や社員別の状態を確認</small>
                 </span>
             </button>
@@ -72,7 +72,7 @@
             <button class="adminTabBtn" data-admin-tab="report">
                 <span class="adminTabIcon svgTabIcon icon-report" aria-hidden="true"></span>
                 <span class="adminTabText">
-                    <strong>月次レポート作成</strong>
+                    <strong>レポートセンター</strong>
                     <small>勤務データをPDFで保存</small>
                 </span>
             </button>
@@ -81,12 +81,14 @@
         <div class="adminContent">
 
             <section id="adminTabDashboard" class="adminTabPanel show">
-                <h3>今日の出勤状況</h3>
+                <h3>Kings Admin Dashboard</h3>
                 <p class="adminSectionHelp">
-                    今日の出勤人数、未退勤人数、残業警告人数、社員ごとの状態を確認できます。
+                    社員数、出勤中、退勤済み、休み、未出勤を確認できます。
                 </p>
 
                 <div id="adminDashboard" class="dashboardGrid"></div>
+
+                <div id="adminLatestNoticeCard" class="adminLatestNoticeBox"></div>
 
                 <div class="todayEmployeeStatusBox">
                     <h4>社員別 今日の状況</h4>
@@ -104,10 +106,15 @@
                     社員に表示するお知らせを投稿したり、確認済みの社員を確認できます。
                 </p>
 
-                <div id="noticeForm">
+                <div id="noticeForm" class="noticeManagerCreateCard">
+                    <div class="premiumSectionTitle"><span class="menuItemSvg icon-notice" aria-hidden="true"></span><strong>お知らせ作成</strong></div>
                     <input type="text" id="noticeTitle" placeholder="お知らせタイトル">
                     <textarea id="noticeBody" placeholder="お知らせ内容"></textarea>
-                    <button id="addNoticeBtn">お知らせを投稿</button>
+                    <div class="noticeDateGrid">
+                        <label><span>開始日時</span><input type="datetime-local" id="noticeStartAt"></label>
+                        <label><span>終了日時</span><input type="datetime-local" id="noticeEndAt"></label>
+                    </div>
+                    <button id="addNoticeBtn"><span class="menuItemSvg icon-send" aria-hidden="true"></span>お知らせを投稿</button>
                 </div>
 
                 <div id="adminNoticeList"></div>
@@ -423,20 +430,20 @@
             </section>
 
             <section id="adminTabReport" class="adminTabPanel">
-                <h3>月次レポート作成</h3>
+                <h3>Kings Report Center</h3>
                 <p class="adminSectionHelp">
-                    勤務履歴管理で社員と月を選択してから、PDFレポートを作成できます。
+                    PDF出力と勤務時間グラフをまとめて確認できます。
                 </p>
 
                 <div class="manualAttendanceBox adminManualBox">
-                    <h4 class="reportTitleWithBadge">月次レポートPDF <span class="a4OptimizedBadge">A4最適化済</span></h4>
+                    <h4 class="reportTitleWithBadge"><span class="menuItemSvg icon-pdf" aria-hidden="true"></span>月次レポート <span class="a4OptimizedBadge">A4最適化済</span></h4>
                     <p class="manualAttendanceHelp">
                         勤務一覧、総勤務時間、残業時間をPDFで保存できます。
                     </p>
 
                     <div id="monthlyReportPreview" class="monthlyReportPreview"></div>
 
-                    <button id="downloadAdminPdfBtn">社員の月次レポートPDFを作成</button>
+                    <button id="downloadAdminPdfBtn">PDF出力</button>
                 </div>
             </section>
 

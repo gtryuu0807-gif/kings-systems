@@ -1,6 +1,7 @@
 import { auth } from "../firebase.js"
 import { dom } from "../dom.js"
 import { state } from "../state.js"
+import { escapeHtml } from "../utils.js"
 
 export function showWelcomeName() {
     const user = auth.currentUser
@@ -27,10 +28,11 @@ export function showWelcomeName() {
         state.currentUserRole ||
         "employee"
 
-    dom.welcomeName.textContent =
-        role === "admin"
-            ? `👑 ${displayName}`
-            : displayName
+    if (role === "admin") {
+        dom.welcomeName.innerHTML = `<span class="welcomeNameWithIcon"><span class="welcomeRoleSvgIcon" aria-hidden="true"></span><span>${escapeHtml(displayName)}</span></span>`
+    } else {
+        dom.welcomeName.textContent = displayName
+    }
 
     dom.welcomeBox.style.display = "flex"
 }

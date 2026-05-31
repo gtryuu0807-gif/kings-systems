@@ -1,22 +1,28 @@
-<div id="loginArea">
+<div id="loginArea" class="kingsLoginCard">
 
     <p class="loginGuide">
         社員用アカウントでログインしてください
     </p>
 
-    <input type="email" id="email" placeholder="メールアドレス">
+    <label class="loginField">
+        <span>メールアドレス</span>
+        <input type="email" id="email" placeholder="メールアドレス" autocomplete="email">
+    </label>
 
-    <div class="passwordBox">
-        <input type="password" id="password" placeholder="パスワード">
-        <button type="button" id="passwordToggleBtn">表示</button>
-    </div>
+    <label class="loginField passwordField">
+        <span>パスワード</span>
+        <div class="passwordBox">
+            <input type="password" id="password" placeholder="パスワード" autocomplete="current-password">
+            <button type="button" id="passwordToggleBtn" class="passwordToggleIcon" aria-label="パスワードを表示する"><svg class="passwordEyeSvg" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5C6.2 5 2.5 9.3 1.5 12c1 2.7 4.7 7 10.5 7s9.5-4.3 10.5-7C21.5 9.3 17.8 5 12 5Zm0 11.2A4.2 4.2 0 1 1 12 7.8a4.2 4.2 0 0 1 0 8.4Zm0-2.1a2.1 2.1 0 1 0 0-4.2 2.1 2.1 0 0 0 0 4.2Z"/></svg></button>
+        </div>
+    </label>
 
     <label class="keepLoginLabel">
         <input type="checkbox" id="keepLoginCheck">
-        ログイン状態を保持する
+        <span>ログイン状態を保持</span>
     </label>
 
-    <button id="loginBtn">
+    <button id="loginBtn" class="kingsLoginButton">
         <span>ログイン</span>
     </button>
 

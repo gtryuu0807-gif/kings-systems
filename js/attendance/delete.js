@@ -77,7 +77,7 @@ async function deleteAttendanceRecordCore(recordId) {
     }
 
     if (!canDeleteRecord(record)) {
-        showWarning("2セット目の出勤・退勤を削除してから、1セット目を削除してください")
+        showWarning("後続セットの出勤・退勤を削除してから、このセットを削除してください")
         return
     }
 
