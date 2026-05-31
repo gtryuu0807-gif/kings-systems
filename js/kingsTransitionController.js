@@ -1,8 +1,8 @@
 import { pauseNotifications, resumeNotifications } from "./notify.js"
 const DEFAULT_CONFIG = {
     durations: {
-        boot: 2850,
-        loginToMain: 2950,
+        boot: 1200,
+        loginToMain: 1200,
         screenSwitch: 620,
         settle: 80
     }
@@ -17,7 +17,41 @@ function wait(ms) {
     return new Promise((resolve) => window.setTimeout(resolve, ms))
 }
 
-function createBootOverlay() {
+async function loadAppVersion() {
+    try {
+        const response = await fetch(`./version.json?ts=${Date.now()}`, { cache: "no-store" })
+        if (!response.ok) throw new Error("version not found")
+        return await response.json()
+    } catch (_) {
+        return { version: "1.3.0", build: "2026.05.31.002" }
+    }
+}
+
+function getVersionLabel(versionInfo) {
+    const version = versionInfo?.version || "1.3.0"
+    const build = versionInfo?.build || "2026.05.31.002"
+    return `v${version} / Build ${build}`
+}
+
+function shouldShowBoot(versionInfo) {
+    const key = `${versionInfo?.version || ""}:${versionInfo?.build || ""}`
+    const lastKey = sessionStorage.getItem("kings:lastBootVersion") || ""
+    const bootDone = sessionStorage.getItem("kings:bootDone") === "true"
+    const force = sessionStorage.getItem("kings:forceBoot") === "true"
+    if (force) {
+        sessionStorage.removeItem("kings:forceBoot")
+        return true
+    }
+    return !bootDone || key !== lastKey
+}
+
+function markBootShown(versionInfo) {
+    const key = `${versionInfo?.version || ""}:${versionInfo?.build || ""}`
+    sessionStorage.setItem("kings:bootDone", "true")
+    sessionStorage.setItem("kings:lastBootVersion", key)
+}
+
+function createBootOverlay(versionInfo = null) {
     document.getElementById("kingsBootOverlay")?.remove()
     const overlay = document.createElement("div")
     overlay.id = "kingsBootOverlay"
@@ -26,6 +60,7 @@ function createBootOverlay() {
         <div class="bootLogoStage">
             <div class="bootLogoText">Kings</div>
             <div class="bootLogoSub">COMPREHENSIVE MANAGEMENT SYSTEM</div>
+            <div class="bootVersionText">${getVersionLabel(versionInfo)}</div>
         </div>
     `
     document.body.appendChild(overlay)
@@ -38,6 +73,32 @@ function removeBootOverlay() {
     if (!overlay) return
     overlay.remove()
 }
+
+
+function createRouteShield(label = "Kings") {
+    document.getElementById("kingsRouteShield")?.remove()
+    const shield = document.createElement("div")
+    shield.id = "kingsRouteShield"
+    shield.setAttribute("aria-hidden", "true")
+    shield.innerHTML = `
+        <div class="routeShieldLogoStage">
+            <div class="routeShieldLogoText">Kings</div>
+            <div class="routeShieldLogoSub">COMPREHENSIVE MANAGEMENT SYSTEM</div>
+        </div>
+    `
+    document.body.appendChild(shield)
+    requestAnimationFrame(() => shield.classList.add("show"))
+    return shield
+}
+
+async function removeRouteShield(delay = 180) {
+    const shield = document.getElementById("kingsRouteShield")
+    if (!shield) return
+    shield.classList.add("hide")
+    await wait(delay)
+    shield.remove()
+}
+
 
 function beginMotion(screenName, allowSameScreen = false) {
     if (!allowSameScreen && isMotionRunning && currentScreenName === screenName) return false
@@ -218,11 +279,13 @@ export const KingsTransitionController = {
     async bootToLogin() {
         if (!beginMotion("login", true)) return
         const token = ++transitionToken
-        const config = await loadConfig()
+        const configPromise = loadConfig()
+        const versionInfo = await loadAppVersion()
+        const showBoot = shouldShowBoot(versionInfo)
         pauseNotifications()
 
         removeLegacyTransitionElements()
-        const bootOverlay = createBootOverlay()
+        const bootOverlay = showBoot ? createBootOverlay(versionInfo) : null
         cleanBodyStates()
         setDisplayForLogin()
         prepareRealMotionTargets()
@@ -231,12 +294,16 @@ export const KingsTransitionController = {
         forceReflow()
         document.body.classList.add("kt-boot-run")
 
-        await wait(Math.max(config.durations.boot, 3050))
+        const config = await configPromise
+        if (showBoot) {
+            await wait(Math.max(config.durations.boot, 1200))
+        }
         if (token !== transitionToken) {
             removeBootOverlay()
             return
         }
 
+        if (showBoot) markBootShown(versionInfo)
         removeBootOverlay()
         cleanBodyStates()
         setDisplayForLogin()
@@ -249,11 +316,13 @@ export const KingsTransitionController = {
     async loginToMain() {
         if (!beginMotion("main", true)) return
         const token = ++transitionToken
-        const config = await loadConfig()
+        const configPromise = loadConfig()
         pauseNotifications()
 
         removeLegacyTransitionElements()
+        const routeShield = createRouteShield()
         cleanBodyStates()
+        document.body.classList.add("kt-route-shielding")
         setDisplayForMain()
         prepareRealMotionTargets()
 
@@ -261,7 +330,8 @@ export const KingsTransitionController = {
         forceReflow()
         document.body.classList.add("kt-real-main-run")
 
-        await wait(config.durations.loginToMain)
+        const config = await configPromise
+        await wait(Math.max(config.durations.loginToMain, 900))
         if (token !== transitionToken) return
 
         cleanBodyStates()
@@ -269,6 +339,8 @@ export const KingsTransitionController = {
         prepareRealMotionTargets()
         document.body.classList.add("kt-main-ready")
         setScreenReadyClass("main")
+        await removeRouteShield(220)
+        document.body.classList.remove("kt-route-shielding")
         resumeNotifications(260)
         finishMotion("main")
     },
@@ -276,11 +348,13 @@ export const KingsTransitionController = {
     async loginToMaintenance() {
         if (!beginMotion("maintenance", true)) return
         const token = ++transitionToken
-        const config = await loadConfig()
+        const configPromise = loadConfig()
         pauseNotifications()
 
         removeLegacyTransitionElements()
+        const routeShield = createRouteShield()
         cleanBodyStates()
+        document.body.classList.add("kt-route-shielding")
         setDisplayForMaintenance()
         prepareRealMotionTargets()
 
@@ -288,13 +362,16 @@ export const KingsTransitionController = {
         forceReflow()
         document.body.classList.add("kt-real-main-run")
 
-        await wait(config.durations.loginToMain)
+        const config = await configPromise
+        await wait(Math.max(config.durations.loginToMain, 900))
         if (token !== transitionToken) return
 
         cleanBodyStates()
         setDisplayForMaintenance()
         prepareRealMotionTargets()
         document.body.classList.add("kt-main-ready", "kt-maintenance-ready")
+        await removeRouteShield(220)
+        document.body.classList.remove("kt-route-shielding")
         resumeNotifications(260)
         finishMotion("maintenance")
     },
@@ -362,6 +439,7 @@ export const KingsTransitionController = {
     resetToLogin() {
         transitionToken++
         removeLegacyTransitionElements()
+        document.getElementById("kingsRouteShield")?.remove()
         cleanBodyStates()
         setDisplayForLogin()
         prepareRealMotionTargets()

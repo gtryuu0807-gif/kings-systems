@@ -46,6 +46,7 @@ export const dom = {
     adminTabHoliday: document.getElementById("adminTabHoliday"),
     adminTabReport: document.getElementById("adminTabReport"),
     adminTabMaintenance: document.getElementById("adminTabMaintenance"),
+    adminTabSystemLog: document.getElementById("adminTabSystemLog"),
 
     clockInBtn: document.getElementById("clockInBtn"),
     clockOutBtn: document.getElementById("clockOutBtn"),
@@ -56,6 +57,12 @@ export const dom = {
     noticeBody: document.getElementById("noticeBody"),
     noticeStartAt: document.getElementById("noticeStartAt"),
     noticeEndAt: document.getElementById("noticeEndAt"),
+    noticeStartNowRadio: document.getElementById("noticeStartNowRadio"),
+    noticeStartDatetimeRadio: document.getElementById("noticeStartDatetimeRadio"),
+    noticeEndNoneRadio: document.getElementById("noticeEndNoneRadio"),
+    noticeEndDatetimeRadio: document.getElementById("noticeEndDatetimeRadio"),
+    noticeStartAtField: document.getElementById("noticeStartAtField"),
+    noticeEndAtField: document.getElementById("noticeEndAtField"),
     addNoticeBtn: document.getElementById("addNoticeBtn"),
     noticeList: document.getElementById("noticeList"),
     adminNoticeList: document.getElementById("adminNoticeList"),
@@ -77,7 +84,10 @@ export const dom = {
 
     myHistoryRangeType: document.getElementById("myHistoryRangeType"),
     myHistoryMonth: document.getElementById("myHistoryMonth"),
+    myHistoryMonthSelect: document.getElementById("myHistoryMonthSelect"),
     myHistoryYear: document.getElementById("myHistoryYear"),
+    myHistoryApplyBtn: document.getElementById("myHistoryApplyBtn"),
+    myHistoryYearModeBtn: document.getElementById("myHistoryYearModeBtn"),
     mySummary: document.getElementById("mySummary"),
 
     manualWorkDate: document.getElementById("manualWorkDate"),
@@ -102,7 +112,10 @@ export const dom = {
     adminHistoryEmployeeSelect: document.getElementById("adminHistoryEmployeeSelect"),
     adminHistoryRangeType: document.getElementById("adminHistoryRangeType"),
     adminHistoryMonth: document.getElementById("adminHistoryMonth"),
+    adminHistoryMonthSelect: document.getElementById("adminHistoryMonthSelect"),
     adminHistoryYear: document.getElementById("adminHistoryYear"),
+    adminHistoryApplyBtn: document.getElementById("adminHistoryApplyBtn"),
+    adminHistoryYearModeBtn: document.getElementById("adminHistoryYearModeBtn"),
     adminSummary: document.getElementById("adminSummary"),
     adminWorkChart: document.getElementById("adminWorkChart"),
     adminChartPlaceholder: document.getElementById("adminChartPlaceholder"),
@@ -138,6 +151,7 @@ export const dom = {
     maintenanceEndAtInput: document.getElementById("maintenanceEndAtInput"),
     maintenanceAdminUpdatedBy: document.getElementById("maintenanceAdminUpdatedBy"),
     maintenanceAdminUpdatedAt: document.getElementById("maintenanceAdminUpdatedAt"),
-    saveMaintenanceBtn: document.getElementById("saveMaintenanceBtn")
+    saveMaintenanceBtn: document.getElementById("saveMaintenanceBtn"),
+    systemLogList: document.getElementById("systemLogList")
 }
 

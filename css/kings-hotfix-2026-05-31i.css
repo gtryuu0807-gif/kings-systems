@@ -1,0 +1,72 @@
+/* Kings Hotfix 2026-05-31i: dashboard/status/password-eye hard fix */
+#loginArea .passwordBox{
+  position:relative!important;
+  display:block!important;
+  width:100%!important;
+}
+#loginArea .passwordBox input#password{
+  padding-right:58px!important;
+}
+#loginArea #passwordToggleBtn.passwordToggleIcon,
+#loginArea .passwordBox > #passwordToggleBtn{
+  all:unset!important;
+  box-sizing:border-box!important;
+  position:absolute!important;
+  right:8px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  max-width:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  cursor:pointer!important;
+  border-radius:12px!important;
+  border:1px solid rgba(219,126,48,.28)!important;
+  background:rgba(7,10,16,.82)!important;
+  color:#f2b168!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  z-index:5!important;
+}
+#loginArea #passwordToggleBtn.passwordToggleIcon svg,
+#loginArea #passwordToggleBtn.passwordToggleIcon .passwordEyeSvg{
+  display:block!important;
+  width:21px!important;
+  height:21px!important;
+  max-width:21px!important;
+  max-height:21px!important;
+  min-width:21px!important;
+  min-height:21px!important;
+  fill:currentColor!important;
+  color:currentColor!important;
+  margin:0!important;
+  padding:0!important;
+  opacity:1!important;
+  flex:0 0 21px!important;
+}
+#loginArea #passwordToggleBtn.passwordToggleIcon::before,
+#loginArea #passwordToggleBtn.passwordToggleIcon::after{
+  display:none!important;
+  content:none!important;
+}
+.historyAlwaysSetLines,
+.historySetLines{
+  display:block!important;
+}
+.historyAlwaysSetLines:empty::before,
+.historySetLines:empty::before{
+  content:"出勤・退勤記録を確認できません";
+  display:block;
+  color:#ffd7a1;
+  font-size:13px;
+  font-weight:800;
+}
+.todayEmployeeStatusItem,
+.dashboardCard{
+  min-width:0!important;
+}

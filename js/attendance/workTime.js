@@ -9,8 +9,14 @@ export function calculateDailyWorkTime({
         return getTimeValue(a) - getTimeValue(b)
     })
 
-    const clockIns = sortedRecords.filter((record) => record.type === "出勤")
-    const clockOuts = sortedRecords.filter((record) => record.type === "退勤")
+    let clockIns = sortedRecords.filter((record) => isClockInRecord(record))
+    let clockOuts = sortedRecords.filter((record) => isClockOutRecord(record))
+
+    if (sortedRecords.length > 0 && clockIns.length === 0 && clockOuts.length === 0) {
+        const inferred = inferClockRecords(sortedRecords)
+        clockIns = inferred.clockIns
+        clockOuts = inferred.clockOuts
+    }
 
     const hasClockIn = clockIns.length > 0
     const hasClockOut = clockOuts.length > 0
@@ -22,11 +28,13 @@ export function calculateDailyWorkTime({
 
     let status = "empty"
 
-    if (isRegisteredHoliday) {
+    const hasAnyUsableRecord = sortedRecords.some((record) => getTimeValue(record) > 0)
+
+    if (isRegisteredHoliday && !hasAnyUsableRecord) {
         status = "holiday"
     } else if (hasClockIn && hasClockOut) {
         status = "worked"
-    } else if (hasClockIn || hasClockOut) {
+    } else if (hasClockIn || hasClockOut || hasAnyUsableRecord) {
         status = "missing"
     } else if (isPastDate) {
         status = "autoHoliday"
@@ -93,6 +101,67 @@ export function formatMinutes(minutes) {
     return `${hour}時間${minute}分`
 }
 
+function getAttendanceType(record) {
+    const rawText = String(
+        record?.type ??
+        record?.attendanceType ??
+        record?.kind ??
+        record?.status ??
+        record?.action ??
+        record?.direction ??
+        record?.clockType ??
+        ""
+    ).trim()
+
+    const normalized = rawText
+        .toLowerCase()
+        .replace(/[\s_　-]/g, "")
+
+    if (
+        rawText === "出勤" ||
+        ["clockin", "checkin", "start", "in", "punchin", "workstart", "begin", "出社", "出勤時刻"].includes(normalized) ||
+        normalized.includes("clockin") ||
+        normalized.includes("checkin")
+    ) {
+        return "出勤"
+    }
+
+    if (
+        rawText === "退勤" ||
+        ["clockout", "checkout", "end", "out", "punchout", "workend", "finish", "退社", "退勤時刻"].includes(normalized) ||
+        normalized.includes("clockout") ||
+        normalized.includes("checkout")
+    ) {
+        return "退勤"
+    }
+
+    return rawText
+}
+
+function isClockInRecord(record) {
+    return getAttendanceType(record) === "出勤"
+}
+
+function isClockOutRecord(record) {
+    return getAttendanceType(record) === "退勤"
+}
+
+
+function inferClockRecords(records) {
+    const clockIns = []
+    const clockOuts = []
+
+    records.forEach((record, index) => {
+        if (index % 2 === 0) {
+            clockIns.push(record)
+        } else {
+            clockOuts.push(record)
+        }
+    })
+
+    return { clockIns, clockOuts }
+}
+
 function calculateWorkedMinutes(clockIns, clockOuts) {
     let total = 0
 
@@ -109,10 +178,14 @@ function calculateWorkedMinutes(clockIns, clockOuts) {
 
         if (!clockInMinute || !clockOutMinute) continue
 
-        // 画面では秒を表示しないため、勤務時間も「表示されている分」単位で計算する。
-        // 例：08:09:50 → 08:10:05 は、表示上 08:09 → 08:10 なので 1分として扱う。
-        // これにより、入力済みなのに総勤務 0時間0分に見える不自然さを防ぐ。
-        if (clockOutMinute <= clockInMinute) {
+        // 同じ分の出勤・退勤は登録時点で禁止する。
+        // 既存データに同分レコードが残っていても24時間勤務扱いにせず、0分として扱う。
+        if (clockOutMinute === clockInMinute) {
+            continue
+        }
+
+        // 退勤が出勤より前の時だけ夜勤の翌日退勤として扱う。
+        if (clockOutMinute < clockInMinute) {
             clockOutMinute += 24 * 60 * 60000
         }
 
@@ -164,7 +237,17 @@ function isSameUser(a, b) {
 export function getTimeValue(data) {
     if (!data) return 0
 
-    return normalizeTimeToMs(data.time ?? data)
+    return normalizeTimeToMs(
+        data.time ??
+        data.timestamp ??
+        data.createdAt ??
+        data.clockedAt ??
+        data.datetime ??
+        data.dateTime ??
+        data.punchedAt ??
+        data.workTime ??
+        data
+    )
 }
 
 function getMinuteValue(data) {

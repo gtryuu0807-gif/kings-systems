@@ -1,6 +1,15 @@
 export function getTimeMs(data) {
-    if (data.time && data.time.seconds) return data.time.seconds * 1000
-    if (data.time instanceof Date) return data.time.getTime()
+    const value = data?.time ?? data
+    if (!value) return 0
+    if (typeof value === "number") return value
+    if (value instanceof Date) return value.getTime()
+    if (typeof value === "string") {
+        const date = new Date(value)
+        return isNaN(date.getTime()) ? 0 : date.getTime()
+    }
+    if (typeof value.toMillis === "function") return value.toMillis()
+    if (typeof value.toDate === "function") return value.toDate().getTime()
+    if (typeof value.seconds === "number") return value.seconds * 1000 + Math.floor((value.nanoseconds || 0) / 1000000)
     return 0
 }
 

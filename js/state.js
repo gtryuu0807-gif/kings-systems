@@ -12,6 +12,9 @@ export const state = {
     currentPage: 0,
     adminCurrentPage: 0,
 
+    hasAppliedMyHistoryFilter: false,
+    hasAppliedAdminHistoryFilter: false,
+
     currentUserRole: "employee",
 
     isLoginBusy: false,

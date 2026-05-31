@@ -33,7 +33,7 @@ export async function updateAttendanceTime(recordId, newDateTimeValue) {
     const user = auth.currentUser
 
     if (!user) {
-        showError("ログインしてください")
+        showError("ログインしてください", "AUTH-004")
         return
     }
 
@@ -42,7 +42,7 @@ export async function updateAttendanceTime(recordId, newDateTimeValue) {
     })
 
     if (!record) {
-        showError("勤怠履歴が見つかりません")
+        showError("勤怠履歴が見つかりません", "ATT-004")
         return
     }
 
@@ -51,7 +51,7 @@ export async function updateAttendanceTime(recordId, newDateTimeValue) {
         record.email === user.email
 
     if (!isOwnRecord) {
-        showError("自分の勤怠履歴のみ編集できます")
+        showError("自分の勤怠履歴のみ編集できます", "ROLE-003")
         return
     }
 
@@ -60,7 +60,7 @@ export async function updateAttendanceTime(recordId, newDateTimeValue) {
 
 export async function updateAttendanceTimeByAdmin(recordId, newDateTimeValue) {
     if (state.currentUserRole !== "admin") {
-        showError("管理者のみ変更できます")
+        showError("管理者のみ変更できます", "ROLE-002")
         return
     }
 
@@ -69,7 +69,7 @@ export async function updateAttendanceTimeByAdmin(recordId, newDateTimeValue) {
 
 async function updateAttendanceTimeCore(recordId, newDateTimeValue) {
     if (!recordId) {
-        showError("編集対象が見つかりません")
+        showError("編集対象が見つかりません", "ATT-004")
         return
     }
 
@@ -83,7 +83,7 @@ async function updateAttendanceTimeCore(recordId, newDateTimeValue) {
     })
 
     if (!record) {
-        showError("勤怠履歴が見つかりません")
+        showError("勤怠履歴が見つかりません", "ATT-004")
         return
     }
 
@@ -97,7 +97,7 @@ async function updateAttendanceTimeCore(recordId, newDateTimeValue) {
     const latestCheck = await checkLatestVersion(record)
 
     if (!latestCheck.ok) {
-        showError(latestCheck.message)
+        showError(latestCheck.message, "ATT-004")
         return
     }
 
@@ -164,7 +164,7 @@ async function updateAttendanceTimeCore(recordId, newDateTimeValue) {
 
     } catch (error) {
         console.log(error)
-        showError("勤怠時間の変更に失敗しました")
+        showError("勤怠時間の変更に失敗しました", "ATT-004")
     }
 }
 
@@ -172,7 +172,7 @@ export async function createAttendanceRecord(type, newDateTimeValue, targetUser 
     const loginUser = auth.currentUser
 
     if (!loginUser) {
-        showError("ログインしてください")
+        showError("ログインしてください", "AUTH-004")
         return
     }
 
@@ -279,7 +279,7 @@ export async function createAttendanceRecord(type, newDateTimeValue, targetUser 
 
     } catch (error) {
         console.log(error)
-        showError(`${type}履歴の追加に失敗しました`)
+        showError(`${type}履歴の追加に失敗しました`, "ATT-001")
     }
 }
 

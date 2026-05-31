@@ -1,0 +1,163 @@
+
+/* Kings Hotfix 2026-05-31g
+   - Settings menu restore
+   - Work history clock-in/out lines always visible
+   - Error-code toast visibility reinforcement
+   - Premium button restore for common actions
+*/
+
+/* Settings screen */
+#settingsMount { display: contents; }
+.settingsScreen {
+  display: none;
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(255, 152, 52, .28);
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(16, 22, 32, .94), rgba(7, 10, 16, .94));
+  box-shadow: 0 18px 48px rgba(0,0,0,.38);
+}
+.settingsScreen.show { display: block !important; }
+.settingsScreen[hidden] { display: none !important; }
+.settingsCard,
+.kingsPremiumCard {
+  margin: 12px 0;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 152, 52, .25);
+  background: rgba(6, 10, 16, .72);
+}
+.settingsInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.settingsInfoGrid div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.settingsInfoGrid span { color: rgba(255,255,255,.66); }
+.settingsInfoGrid strong { color: #fff3d0; }
+
+/* Restore a settings icon even if the SVG set does not define it */
+.menuItemSvg.icon-settings::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 4px rgba(255,255,255,.08);
+}
+
+/* Work history: clock-in/out records must be visible in the confirmation area without opening details. */
+.historyAlwaysSetLines {
+  display: grid !important;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+.historyAlwaysSetLines .historySetLine,
+.historySetLines .historySetLine {
+  display: block !important;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 152, 52, .24);
+  background: rgba(255,255,255,.045);
+  color: rgba(255,255,255,.92);
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+.historyDetailPanel .historySetLines {
+  display: none !important;
+}
+
+/* Premium button normalization for restored / previously missed buttons. */
+#clockInBtn,
+#clockOutBtn,
+#addManualAttendanceRowBtn,
+#addManualAttendanceBtn,
+#addMyHolidayRowBtn,
+#addMyHolidayBtn,
+#myHistoryApplyBtn,
+#adminHistoryApplyBtn,
+#prevPageBtn,
+#nextPageBtn,
+#adminPrevPageBtn,
+#adminNextPageBtn,
+.attendanceEditBtn,
+.attendanceDeleteBtn,
+.holidayDeleteBtn,
+#settingsBackToMainBtn,
+#settingsCheckUpdateBtn,
+.kingsPremiumBtn {
+  min-height: 46px;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 152, 52, .42) !important;
+  background: linear-gradient(180deg, rgba(31, 38, 50, .96), rgba(12, 16, 24, .96)) !important;
+  color: #fff3d0 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 12px 28px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+#clockInBtn:disabled,
+#clockOutBtn:disabled,
+#prevPageBtn:disabled,
+#nextPageBtn:disabled,
+#adminPrevPageBtn:disabled,
+#adminNextPageBtn:disabled,
+button:disabled {
+  opacity: .52;
+  filter: grayscale(.25);
+}
+
+/* Keep attendance action buttons visible; state should disable, not hide. */
+#clockInBtn,
+#clockOutBtn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+/* Error-code line must be obvious on screen. */
+.errorCodeLine {
+  display: block !important;
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255,255,255,.16);
+  color: #ffd08a !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: .03em;
+}
+.toast.error .toastMessage {
+  white-space: normal !important;
+}
+
+/* Old filter fragments stay hidden; current filter is year/month/apply only. */
+.kingsHiddenRangeType,
+#myHistoryYearBtn,
+#adminHistoryYearBtn,
+.historyRangeMode,
+.historyRangeType,
+.legacyHistoryFilter,
+.oldHistoryFilter,
+.periodFilterCard,
+.rangeFilterCard {
+  display: none !important;
+}
+
+/* Admin edit white-box regression guard */
+.adminItem .historyEditArea,
+.adminItem .attendanceEditSetBlock,
+.adminItem .attendanceEditBlock,
+.adminItem .attendanceEditControl {
+  background: rgba(6, 10, 16, .76) !important;
+  border-color: rgba(255, 152, 52, .25) !important;
+  color: rgba(255,255,255,.92) !important;
+}

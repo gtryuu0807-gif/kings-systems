@@ -74,6 +74,12 @@ function handleMenuRoute(route = "") {
     }
 
 
+    if (route === "info") {
+        showInfoScreen()
+        closeMenu()
+        return
+    }
+
     if (route === "settings") {
         showSettingsScreen()
         closeMenu()
@@ -115,12 +121,13 @@ function handleMenuRoute(route = "") {
     closeMenu()
 }
 
-function showSettingsScreen() {
+function showInfoScreen() {
     const loginArea = document.getElementById("loginArea")
     const appContent = document.getElementById("appContent")
     const mainScreen = document.getElementById("mainScreen")
     const adminScreen = document.getElementById("adminScreen")
     const settingsScreen = document.getElementById("settingsScreen")
+    const infoScreen = document.getElementById("infoScreen")
     const maintenanceScreen = document.getElementById("maintenanceScreen")
 
     if (loginArea) loginArea.style.display = "none"
@@ -129,12 +136,47 @@ function showSettingsScreen() {
     if (adminScreen) adminScreen.style.display = "none"
     if (maintenanceScreen) maintenanceScreen.classList.remove("show")
     if (settingsScreen) {
+        settingsScreen.hidden = true
+        settingsScreen.classList.remove("show")
+        settingsScreen.style.display = "none"
+    }
+    if (infoScreen) {
+        infoScreen.hidden = false
+        infoScreen.classList.add("show")
+        infoScreen.style.display = "block"
+    }
+
+    document.body.classList.remove("kt-screen-main", "kt-screen-admin", "kt-screen-settings")
+    document.body.classList.add("kt-main-ready", "kt-screen-info")
+    window.dispatchEvent(new CustomEvent("kings:screen-changed"))
+}
+
+function showSettingsScreen() {
+    const loginArea = document.getElementById("loginArea")
+    const appContent = document.getElementById("appContent")
+    const mainScreen = document.getElementById("mainScreen")
+    const adminScreen = document.getElementById("adminScreen")
+    const settingsScreen = document.getElementById("settingsScreen")
+    const infoScreen = document.getElementById("infoScreen")
+    const maintenanceScreen = document.getElementById("maintenanceScreen")
+
+    if (loginArea) loginArea.style.display = "none"
+    if (appContent) appContent.style.display = "block"
+    if (mainScreen) mainScreen.style.display = "none"
+    if (adminScreen) adminScreen.style.display = "none"
+    if (maintenanceScreen) maintenanceScreen.classList.remove("show")
+    if (infoScreen) {
+        infoScreen.hidden = true
+        infoScreen.classList.remove("show")
+        infoScreen.style.display = "none"
+    }
+    if (settingsScreen) {
         settingsScreen.hidden = false
         settingsScreen.classList.add("show")
         settingsScreen.style.display = "block"
     }
 
-    document.body.classList.remove("kt-screen-main", "kt-screen-admin")
+    document.body.classList.remove("kt-screen-main", "kt-screen-admin", "kt-screen-info")
     document.body.classList.add("kt-main-ready", "kt-screen-settings")
     window.dispatchEvent(new CustomEvent("kings:screen-changed"))
 }

@@ -1,4 +1,5 @@
 import { dom } from "../dom.js"
+import { saveMainTab } from "../screenState.js"
 
 import {
     renderHistory
@@ -22,6 +23,7 @@ export function setupMainTabs() {
 }
 
 export function showMainTab(tabName) {
+    saveMainTab(tabName)
     dom.mainTabButtons.forEach((button) => {
         button.classList.toggle(
             "active",

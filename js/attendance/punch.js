@@ -18,7 +18,8 @@ import {
 
 import {
     isSameLocalDate,
-    getLatestMyRecord
+    getLatestMyRecord,
+    isSameClockMinute
 } from "./time.js"
 
 import {
@@ -66,6 +67,12 @@ export async function punch(type) {
 
     if (type === "退勤" && (!latest || latest.type === "退勤")) {
         showWarning("現在出勤中ではありません")
+        updateWorkButtons()
+        return
+    }
+
+    if (type === "退勤" && latest && latest.type === "出勤" && isSameClockMinute(latest, { time: now })) {
+        showWarning("出勤時刻と同じ時刻には退勤できません。1分以上経過してから退勤してください")
         updateWorkButtons()
         return
     }

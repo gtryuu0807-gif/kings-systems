@@ -137,11 +137,17 @@ export async function createManualAttendanceSets({
                 workDate: row.workDate
             })
 
-            if (
-                referenceClockIn &&
-                clockOutDate.getTime() <= referenceClockIn.getTime()
-            ) {
-                clockOutDate.setDate(clockOutDate.getDate() + 1)
+            if (referenceClockIn) {
+                const sameMinute = Math.floor(clockOutDate.getTime() / 60000) === Math.floor(referenceClockIn.getTime() / 60000)
+
+                if (sameMinute) {
+                    showWarning(`${rowNo}件目は出勤時刻と退勤時刻が同じです。退勤時刻を変更してください`)
+                    return false
+                }
+
+                if (clockOutDate.getTime() < referenceClockIn.getTime()) {
+                    clockOutDate.setDate(clockOutDate.getDate() + 1)
+                }
             }
 
             newRecords.push({

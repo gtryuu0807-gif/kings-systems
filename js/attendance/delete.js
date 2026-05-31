@@ -13,7 +13,7 @@ import {
     updateWorkButtons
 } from "../ui.js"
 
-import { canDeleteRecord } from "./rules.js"
+import { canDeleteRecord, getDeleteRestrictionMessage } from "./rules.js"
 
 import {
     showSuccess,
@@ -25,7 +25,7 @@ export async function deleteAttendanceRecord(recordId) {
     const user = auth.currentUser
 
     if (!user) {
-        showError("ログインしてください")
+        showError("ログインしてください", "AUTH-004")
         return
     }
 
@@ -34,7 +34,7 @@ export async function deleteAttendanceRecord(recordId) {
     })
 
     if (!record) {
-        showError("削除対象が見つかりません")
+        showError("削除対象が見つかりません", "ATT-005")
         return
     }
 
@@ -43,7 +43,7 @@ export async function deleteAttendanceRecord(recordId) {
         record.email === user.email
 
     if (!isOwnRecord) {
-        showError("自分の勤怠履歴のみ削除できます")
+        showError("自分の勤怠履歴のみ削除できます", "PERM-003")
         return
     }
 
@@ -52,7 +52,7 @@ export async function deleteAttendanceRecord(recordId) {
 
 export async function deleteAttendanceRecordByAdmin(recordId) {
     if (state.currentUserRole !== "admin") {
-        showError("管理者のみ削除できます")
+        showError("管理者のみ削除できます", "ROLE-002")
         return
     }
 
@@ -65,19 +65,20 @@ async function deleteAttendanceRecordCore(recordId) {
     })
 
     if (!record) {
-        showError("削除対象が見つかりません")
+        showError("削除対象が見つかりません", "ATT-005")
         return
     }
 
     const latestCheck = await checkLatestVersion(record)
 
     if (!latestCheck.ok) {
-        showError(latestCheck.message)
+        showError(latestCheck.message, "ATT-012")
         return
     }
 
-    if (!canDeleteRecord(record)) {
-        showWarning("後続セットの出勤・退勤を削除してから、このセットを削除してください")
+    const restrictionMessage = getDeleteRestrictionMessage(record)
+    if (restrictionMessage) {
+        showError(restrictionMessage, "ATT-011")
         return
     }
 
@@ -106,7 +107,7 @@ async function deleteAttendanceRecordCore(recordId) {
 
     } catch (error) {
         console.log(error)
-        showError("勤怠履歴の削除に失敗しました")
+        showError("勤怠履歴の削除に失敗しました", "ATT-005")
     }
 }
 

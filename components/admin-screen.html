@@ -49,7 +49,7 @@
                 <span class="adminTabIcon svgTabIcon icon-history" aria-hidden="true"></span>
                 <span class="adminTabText">
                     <strong>勤務履歴の確認</strong>
-                    <small>社員ごとの履歴を月別・年別で確認</small>
+                    <small>社員ごとの履歴を年と月で確認</small>
                 </span>
             </button>
 
@@ -76,6 +76,14 @@
                     <small>勤務データをPDFで保存</small>
                 </span>
             </button>
+            <button class="adminTabBtn" data-admin-tab="systemLog">
+                <span class="adminTabIcon svgTabIcon icon-report" aria-hidden="true"></span>
+                <span class="adminTabText">
+                    <strong>システムログ</strong>
+                    <small>エラーコード履歴を確認</small>
+                </span>
+            </button>
+
         </div>
 
         <div class="adminContent">
@@ -110,11 +118,25 @@
                     <div class="premiumSectionTitle"><span class="menuItemSvg icon-notice" aria-hidden="true"></span><strong>お知らせ作成</strong></div>
                     <input type="text" id="noticeTitle" placeholder="お知らせタイトル">
                     <textarea id="noticeBody" placeholder="お知らせ内容"></textarea>
-                    <div class="noticeDateGrid">
-                        <label><span>開始日時</span><input type="datetime-local" id="noticeStartAt"></label>
-                        <label><span>終了日時</span><input type="datetime-local" id="noticeEndAt"></label>
+                    <div class="noticeDateGrid noticeScheduleOptions">
+                        <div class="noticeScheduleCard">
+                            <span class="formLabelText">開始日時</span>
+                            <div class="noticeRadioBox">
+                                <label><input type="radio" name="noticeStartType" id="noticeStartNowRadio" value="now" checked>今すぐ公開</label>
+                                <label><input type="radio" name="noticeStartType" id="noticeStartDatetimeRadio" value="datetime">日時を指定</label>
+                            </div>
+                            <label id="noticeStartAtField" class="noticeDateField" hidden><span>開始日時</span><input type="datetime-local" id="noticeStartAt"></label>
+                        </div>
+                        <div class="noticeScheduleCard">
+                            <span class="formLabelText">終了日時</span>
+                            <div class="noticeRadioBox">
+                                <label><input type="radio" name="noticeEndType" id="noticeEndNoneRadio" value="none" checked>終了日時なし</label>
+                                <label><input type="radio" name="noticeEndType" id="noticeEndDatetimeRadio" value="datetime">日時を指定</label>
+                            </div>
+                            <label id="noticeEndAtField" class="noticeDateField" hidden><span>終了日時</span><input type="datetime-local" id="noticeEndAt"></label>
+                        </div>
                     </div>
-                    <button id="addNoticeBtn"><span class="menuItemSvg icon-send" aria-hidden="true"></span>お知らせを投稿</button>
+                    <button id="addNoticeBtn">お知らせを投稿</button>
                 </div>
 
                 <div id="adminNoticeList"></div>
@@ -290,43 +312,65 @@
             <section id="adminTabHistory" class="adminTabPanel">
                 <h3>勤務履歴の確認</h3>
                 <p class="adminSectionHelp">
-                    社員ごとの勤務履歴を、月別または年別で確認できます。
+                    社員ごとの勤務履歴を年と月で確認できます。
                 </p>
 
-                <div class="historyFilterBox historyFilterCards adminHistoryFilterCards">
+                <div class="historyFilterBox historyFilterCards adminHistoryFilterCards kingsUnifiedFilter" data-filter-scope="admin">
                     <h4>表示条件</h4>
                     <p class="manualAttendanceHelp">
-                        表示したい社員と期間を選択してください。
+                        表示したい社員、年、月を選択してください。
                     </p>
 
-                    <div class="historyFilterCard">
-                        <div class="historyFilterCardTitle">
-                            <span class="filterSvgIcon filterIconUser" aria-hidden="true"></span>
-                            <span>① 社員を選択</span>
-                        </div>
-                        <select id="adminHistoryEmployeeSelect">
-                            <option value="">社員を選択してください</option>
-                        </select>
+                    <input type="hidden" id="adminHistoryMonth">
+                    <select id="adminHistoryRangeType" class="kingsHiddenRangeType" aria-hidden="true" tabindex="-1">
+                        <option value="month" selected>月別</option>
+                        <option value="year">年別</option>
+                    </select>
+
+                    <div class="kingsUnifiedFilterGrid">
+                        <label class="kingsUnifiedFilterField kingsEmployeeField">
+                            <span class="historyFilterCardTitle">
+                                <span class="filterSvgIcon filterIconUser" aria-hidden="true"></span>
+                                <span>社員</span>
+                            </span>
+                            <select id="adminHistoryEmployeeSelect">
+                                <option value="">社員を選択してください</option>
+                            </select>
+                        </label>
+
+                        <label class="kingsUnifiedFilterField">
+                            <span class="historyFilterCardTitle">
+                                <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                                <span>年</span>
+                            </span>
+                            <input type="number" id="adminHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                        </label>
+
+                        <label class="kingsUnifiedFilterField kingsMonthField">
+                            <span class="historyFilterCardTitle">
+                                <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                                <span>月</span>
+                            </span>
+                            <select id="adminHistoryMonthSelect" class="kingsMonthSelect">
+                                <option value="1">1月</option>
+                                <option value="2">2月</option>
+                                <option value="3">3月</option>
+                                <option value="4">4月</option>
+                                <option value="5">5月</option>
+                                <option value="6">6月</option>
+                                <option value="7">7月</option>
+                                <option value="8">8月</option>
+                                <option value="9">9月</option>
+                                <option value="10">10月</option>
+                                <option value="11">11月</option>
+                                <option value="12">12月</option>
+                            </select>
+                        </label>
                     </div>
 
-                    <div class="historyFilterCard">
-                        <div class="historyFilterCardTitle">
-                            <span class="filterSvgIcon filterIconRange" aria-hidden="true"></span>
-                            <span>② 表示方法</span>
-                        </div>
-                        <select id="adminHistoryRangeType">
-                            <option value="month">月別</option>
-                            <option value="year">年別</option>
-                        </select>
-                    </div>
-
-                    <div class="historyFilterCard">
-                        <div class="historyFilterCardTitle">
-                            <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
-                            <span>③ 期間を選択</span>
-                        </div>
-                        <input type="month" id="adminHistoryMonth">
-                        <input type="number" id="adminHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                    <div class="kingsFilterActions">
+                        <button type="button" id="adminHistoryApplyBtn" class="kingsFilterApplyBtn">表示する</button>
+                        
                     </div>
                 </div>
 
@@ -375,7 +419,7 @@
 
                     <div class="manualFormGrid employeeSelectGrid">
                         <label>
-                            <span>① 社員を選択してください</span>
+                            <span>社員してください</span>
                             <select id="adminManualEmployeeSelect">
                                 <option value="">社員を選択してください</option>
                             </select>
@@ -412,7 +456,7 @@
 
                     <div class="manualFormGrid employeeSelectGrid">
                         <label>
-                            <span>社員を選択してください</span>
+                            <span>社員</span>
                             <select id="adminHolidayEmployeeSelect">
                                 <option value="">社員を選択してください</option>
                             </select>
@@ -445,6 +489,13 @@
 
                     <button id="downloadAdminPdfBtn">PDF出力</button>
                 </div>
+            </section>
+
+
+            <section id="adminTabSystemLog" class="adminTabPanel">
+                <h3>システムログ</h3>
+                <p class="adminSectionHelp">端末内に記録されたエラーコード履歴を確認できます。</p>
+                <div id="systemLogList" class="systemLogList"></div>
             </section>
 
         </div>

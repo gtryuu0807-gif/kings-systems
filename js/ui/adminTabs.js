@@ -1,4 +1,5 @@
 import { dom } from "../dom.js"
+import { saveAdminTab } from "../screenState.js"
 
 import {
     renderAdminDashboard
@@ -28,6 +29,8 @@ import {
     renderMaintenanceAdminForm
 } from "../maintenance/maintenance.js"
 
+import { renderSystemLog } from "../systemLog.js"
+
 export function setupAdminTabs() {
     dom.adminTabButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -38,6 +41,7 @@ export function setupAdminTabs() {
 }
 
 export function showAdminTab(tabName) {
+    saveAdminTab(tabName)
     dom.adminTabButtons.forEach((button) => {
         button.classList.toggle(
             "active",
@@ -67,6 +71,7 @@ function getPanelByTabName(tabName) {
     if (tabName === "holiday") return dom.adminTabHoliday
     if (tabName === "report") return dom.adminTabReport
     if (tabName === "maintenance") return dom.adminTabMaintenance
+    if (tabName === "systemLog") return dom.adminTabSystemLog
 
     return dom.adminTabDashboard
 }
@@ -96,5 +101,10 @@ function refreshAdminTab(tabName) {
         renderAdminHistory()
         renderAdminSummary()
         renderAdminWorkChart()
+        return
+    }
+
+    if (tabName === "systemLog") {
+        renderSystemLog()
     }
 }

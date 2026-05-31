@@ -1,0 +1,50 @@
+/* Kings route shield: prevents the partially-rendered old/intermediate screen from flashing
+   between boot/login transition and the final main/maintenance screen. */
+#kingsRouteShield{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147482999!important;
+  display:grid!important;
+  place-items:center!important;
+  pointer-events:none!important;
+  opacity:0!important;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(246,209,138,.13), transparent 24%),
+    radial-gradient(circle at 50% 42%, rgba(220,118,44,.10), transparent 44%),
+    linear-gradient(180deg,#030509 0%,#06101a 54%,#030509 100%)!important;
+  transition:opacity .18s ease!important;
+}
+#kingsRouteShield.show{opacity:1!important;}
+#kingsRouteShield.hide{opacity:0!important;}
+#kingsRouteShield .routeShieldLogoStage{
+  text-align:center!important;
+  width:min(72vw,420px)!important;
+  transform:translateY(-3vh) scale(.82)!important;
+  filter:drop-shadow(0 0 28px rgba(255,226,180,.22))!important;
+}
+#kingsRouteShield .routeShieldLogoText{
+  color:#fff7dc!important;
+  font-family:Georgia,'Times New Roman',serif!important;
+  font-size:clamp(56px,13vw,96px)!important;
+  line-height:.9!important;
+  text-shadow:0 0 12px rgba(255,255,238,.68),0 0 34px rgba(246,209,138,.22)!important;
+}
+#kingsRouteShield .routeShieldLogoSub{
+  margin-top:16px!important;
+  color:rgba(246,209,138,.78)!important;
+  font-size:clamp(9px,2.2vw,14px)!important;
+  font-weight:900!important;
+  letter-spacing:.32em!important;
+  white-space:nowrap!important;
+}
+/* The real app can be laid out underneath, but it must never be visually exposed mid-transition. */
+body.kt-route-shielding #loginMount,
+body.kt-route-shielding #appContent,
+body.kt-route-shielding #headerMount{
+  visibility:hidden!important;
+}
+body.kt-main-ready:not(.kt-route-shielding) #loginMount,
+body.kt-main-ready:not(.kt-route-shielding) #appContent,
+body.kt-main-ready:not(.kt-route-shielding) #headerMount{
+  visibility:visible!important;
+}

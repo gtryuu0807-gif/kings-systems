@@ -3,8 +3,8 @@
   "phoneMaxWidth": 430,
   "edge": 22,
   "durations": {
-    "boot": 2350,
-    "loginToMain": 2350,
+    "boot": 1200,
+    "loginToMain": 1200,
     "screenSwitch": 480,
     "settle": 80
   },

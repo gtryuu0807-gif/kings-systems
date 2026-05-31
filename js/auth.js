@@ -66,6 +66,10 @@ import {
 
 import { renderIncompleteAttendanceAlert } from "./unclosedAttendance.js"
 import { KingsTransitionController } from "./kingsTransitionController.js"
+import { renderAdminSelectOptions } from "./events/adminSelectOptions.js"
+import { getSavedScreenState, shouldRestoreAdminScreen, saveCurrentScreen } from "./screenState.js"
+import { showMainTab } from "./ui/mainTabs.js"
+import { showAdminTab } from "./ui/adminTabs.js"
 
 let isAutoLoginChecked = false
 let isSettingUpLoginScreen = false
@@ -250,6 +254,13 @@ function prepareLoggedInView(isMaintenanceForUser) {
 
     showWelcomeName()
 }
+
+function prepareLoggedInViewForTransition() {
+    document.body.classList.remove("auto-auth-checking")
+    syncAdminMenuVisibility()
+    showWelcomeName()
+}
+
 function safeLoginStep(label, callback) {
     return Promise.resolve()
         .then(callback)
@@ -357,12 +368,13 @@ async function setupLoggedInScreen(
             safeRenderStep("render-admin-summary", renderAdminSummary)
             safeRenderStep("render-admin-work-chart", renderAdminWorkChart)
             safeRenderStep("render-maintenance-admin-form", renderMaintenanceAdminForm)
+            safeRenderStep("render-admin-select-options", renderAdminSelectOptions)
         }
 
         const shouldShowTransition = options.showLoginSuccess || options.autoLogin
 
         if (shouldShowTransition) {
-            prepareLoggedInView(isMaintenanceForUser)
+            prepareLoggedInViewForTransition()
 
             if (isMaintenanceForUser) {
                 await KingsTransitionController.loginToMaintenance()
@@ -383,6 +395,8 @@ async function setupLoggedInScreen(
             }
         }
 
+        safeRenderStep("restore-saved-screen", () => restoreSavedScreenAfterLogin(isMaintenanceForUser))
+
         startMaintenanceWatcher()
         startLoginSessionWatcher()
 
@@ -397,6 +411,28 @@ async function setupLoggedInScreen(
         isSettingUpLoginScreen = false
     }
 }
+
+function restoreSavedScreenAfterLogin(isMaintenanceForUser) {
+    if (isMaintenanceForUser) return
+
+    const saved = getSavedScreenState()
+
+    if (shouldRestoreAdminScreen()) {
+        KingsTransitionController.setDisplayForAdmin()
+        document.body.classList.remove("kt-screen-main")
+        document.body.classList.add("kt-main-ready", "kt-screen-admin")
+        showAdminTab(saved.adminTab || "dashboard")
+        saveCurrentScreen("admin")
+        return
+    }
+
+    KingsTransitionController.setDisplayForMain()
+    document.body.classList.remove("kt-screen-admin")
+    document.body.classList.add("kt-main-ready", "kt-screen-main")
+    showMainTab(saved.mainTab || "history")
+    saveCurrentScreen("main")
+}
+
 function getTransitionDisplayName(user) {
     const email = String(user?.email || "")
     const userData = state.allUsers.find((item) => {

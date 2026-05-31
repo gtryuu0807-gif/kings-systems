@@ -1,7 +1,7 @@
 import { dom } from "../dom.js"
 import { state } from "../state.js"
 import { getMyRecords } from "../data.js"
-import { getTimeValue } from "./attendanceGroups.js"
+import { createAttendanceSets, getTimeValue } from "./attendanceGroups.js"
 
 const MAX_SETS_PER_DAY = 3
 
@@ -39,8 +39,8 @@ export function updateWorkButtons() {
     }
 
     if (todayClockInCount >= MAX_SETS_PER_DAY) {
-        setButtonMode(dom.clockInBtn, "disabled", "本日の打刻完了")
-        setButtonMode(dom.clockOutBtn, "disabled", "退勤")
+        setButtonMode(dom.clockInBtn, "hidden", "")
+        setButtonMode(dom.clockOutBtn, "hidden", "")
         renderCurrentWorkStatus(records, "退勤済み")
         renderAdditionalWorkCard(records, "complete")
         return
@@ -91,7 +91,24 @@ function renderAdditionalWorkCard(records, mode) {
 }
 
 function setButtonMode(button, mode, label) {
-    button.classList.remove("workBtnPrimary", "workBtnDisabled", "workBtnCompleted", "workBtnBusy")
+    button.classList.remove("workBtnPrimary", "workBtnDisabled", "workBtnCompleted", "workBtnBusy", "workBtnHidden")
+
+    if (mode === "hidden") {
+        // 2026-05-31f hotfix:
+        // ボタンを完全非表示にすると、状態復元やCSS競合時に出勤/退勤ボタンが戻らないことがあるため、
+        // 本日の上限到達時も「表示したまま無効化」に統一する。
+        button.hidden = false
+        button.style.display = ""
+        button.disabled = true
+        button.classList.add("workBtnDisabled")
+        const safeLabel = button.id === "clockInBtn" ? "本日の打刻完了" : "退勤"
+        button.innerHTML = `<span class="workBtnIcon" aria-hidden="true">${getButtonIcon(button.id, "completed")}</span><span>${safeLabel}</span>`
+        return
+    }
+
+    button.hidden = false
+    button.style.display = ""
+
     const isDisabled = mode === "disabled" || mode === "completed" || mode === "busy"
     button.disabled = isDisabled
     button.classList.add(`workBtn${capitalize(mode)}`)
@@ -101,13 +118,17 @@ function setButtonMode(button, mode, label) {
 function renderCurrentWorkStatus(records, statusLabel) {
     if (!dom.currentWorkStatusCard) return
 
-    const latestClockIn = records.find((record) => record.type === "出勤")
-    const latestClockOut = records.find((record) => record.type === "退勤")
+    const todayRecords = getTodayRecords(records)
+    const sets = createAttendanceSets(todayRecords)
+    const visibleSets = sets.filter((set) => set.clockIn || set.clockOut)
+    const latestSet = [...visibleSets].reverse().find((set) => set.clockIn || set.clockOut) || null
+    const latestClockIn = latestSet?.clockIn || todayRecords.find((record) => record.type === "出勤")
+    const latestClockOut = latestSet?.clockOut || todayRecords.find((record) => record.type === "退勤")
     const clockInDate = latestClockIn ? getRecordDate(latestClockIn) : null
     const clockOutDate = latestClockOut ? getRecordDate(latestClockOut) : null
     const clockInText = clockInDate ? formatTimeOnly(clockInDate) : "-"
     const clockOutText = clockOutDate ? formatTimeOnly(clockOutDate) : "-"
-    const workTimeText = getWorkTimeText(statusLabel, clockInDate, clockOutDate)
+    const workTimeText = getWorkTimeText(statusLabel, sets)
 
     const statusClass = statusLabel === "出勤中" ? "working" : statusLabel === "退勤済み" ? "left" : statusLabel === "処理中" ? "busy" : statusLabel === "休み" ? "holiday" : "none"
 
@@ -128,10 +149,61 @@ function renderCurrentWorkStatus(records, statusLabel) {
     `
 }
 
-function getWorkTimeText(statusLabel, inDate, outDate) {
-    if (statusLabel === "出勤中" && inDate) return formatDuration(Date.now() - inDate.getTime())
-    if (statusLabel === "退勤済み" && inDate && outDate) return formatDuration(outDate.getTime() - inDate.getTime())
-    return "-"
+function getWorkTimeText(statusLabel, sets) {
+    if (statusLabel === "未出勤" || statusLabel === "処理中") return "-"
+
+    const minutes = calculateTodayWorkedMinutes(sets, statusLabel === "出勤中")
+    return formatDurationFromMinutes(minutes)
+}
+
+function calculateTodayWorkedMinutes(sets, includeRunningSet) {
+    let total = 0
+
+    sets.forEach((set) => {
+        const inDate = getRecordDate(set.clockIn)
+        const outDate = getRecordDate(set.clockOut)
+
+        if (!inDate) return
+
+        if (outDate) {
+            total += calculateSetMinutes(inDate, outDate)
+            return
+        }
+
+        if (includeRunningSet) {
+            total += calculateSetMinutes(inDate, new Date())
+        }
+    })
+
+    return total
+}
+
+function calculateSetMinutes(inDate, outDate) {
+    const inMinute = Math.floor(inDate.getTime() / 60000)
+    let outMinute = Math.floor(outDate.getTime() / 60000)
+
+    if (outMinute === inMinute) return 0
+    if (outMinute < inMinute) outMinute += 24 * 60
+
+    const diff = outMinute - inMinute
+    if (diff <= 0 || diff >= 24 * 60) return 0
+
+    return diff
+}
+
+function getTodayRecords(records) {
+    const today = new Date()
+
+    return records.filter((record) => {
+        if (record.workDate) return record.workDate === formatDateKey(today)
+        const date = getRecordDate(record)
+        if (!date) return false
+        return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()
+    }).sort((a, b) => getTimeValue(b) - getTimeValue(a))
+}
+
+function formatDateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
 }
 
 function getStatusIcon(statusLabel) {
@@ -170,9 +242,13 @@ function formatTimeOnly(date) {
 
 function formatDuration(ms) {
     if (!ms || ms < 0) return "-"
-    const minutes = Math.floor(ms / 60000)
-    const h = Math.floor(minutes / 60)
-    const m = minutes % 60
+    return formatDurationFromMinutes(Math.floor(ms / 60000))
+}
+
+function formatDurationFromMinutes(minutes) {
+    const safeMinutes = Math.max(0, Number(minutes) || 0)
+    const h = Math.floor(safeMinutes / 60)
+    const m = safeMinutes % 60
     return `${h}時間${m}分`
 }
 

@@ -20,22 +20,22 @@
     </button>
     <button id="clockOutBtn">退勤</button>
 
-    <h2>自分の勤怠管理</h2>
+    <h2 class="selfManagementTitle">自分の勤怠管理</h2>
     <p class="mainScreenHelp">
         勤務履歴の確認、打刻忘れの追加、休み登録をメニューから選択できます。
     </p>
 
     <div class="mainHistoryMenu">
         <button class="mainTabBtn active" data-main-tab="history">
-            <span class="mainTabIcon svgTabIcon icon-history" aria-hidden="true"></span>
+            <span class="mainTabIcon actualMainIcon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 4h12v16H6z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 12h6M9 16h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
             <span class="mainTabText">
                 <strong>勤務履歴の確認</strong>
-                <small>月別・年別で自分の履歴を確認</small>
+                <small>年月で自分の履歴を確認</small>
             </span>
         </button>
 
         <button class="mainTabBtn" data-main-tab="manual">
-            <span class="mainTabIcon svgTabIcon icon-plus" aria-hidden="true"></span>
+            <span class="mainTabIcon actualMainIcon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
             <span class="mainTabText">
                 <strong>打刻忘れの追加</strong>
                 <small>出勤・退勤の打刻漏れを追加</small>
@@ -43,54 +43,68 @@
         </button>
 
         <button class="mainTabBtn" data-main-tab="holiday">
-            <span class="mainTabIcon svgTabIcon icon-holiday" aria-hidden="true"></span>
+            <span class="mainTabIcon actualMainIcon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 5h14v15H5z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M5 10h14M8 15l2 2 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <span class="mainTabText">
                 <strong>休み登録</strong>
                 <small>勤務しない日を休みとして登録</small>
             </span>
         </button>
-
-        <button class="mainTabBtn mainSettingsTabBtn" data-main-tab="settings" hidden>
-            <span class="mainTabIcon svgTabIcon icon-settings" aria-hidden="true"></span>
-            <span class="mainTabText">
-                <strong>設定</strong>
-                <small>個人設定を管理</small>
-            </span>
-        </button>
-    </div>
+</div>
 
     <div class="mainHistoryContent">
 
         <section id="mainTabHistory" class="mainTabPanel show">
             <h3>勤務履歴の確認</h3>
             <p class="mainSectionHelp">
-                自分の勤務履歴を月別または年別で確認できます。
+                自分の勤務履歴を年と月で確認できます。
             </p>
 
-            <div class="historyFilterBox historyFilterCards">
+            <div class="historyFilterBox historyFilterCards kingsUnifiedFilter" data-filter-scope="main">
                 <h4>表示条件</h4>
                 <p class="manualAttendanceHelp">
-                    表示したい期間を選択してください。
+                    表示したい年と月を選択してください。
                 </p>
 
-                <div class="historyFilterCard">
-                    <div class="historyFilterCardTitle">
-                        <span class="filterSvgIcon filterIconRange" aria-hidden="true"></span>
-                        <span>① 表示方法</span>
-                    </div>
-                    <select id="myHistoryRangeType">
-                        <option value="month">月別</option>
-                        <option value="year">年別</option>
-                    </select>
+                <input type="hidden" id="myHistoryMonth">
+                <select id="myHistoryRangeType" class="kingsHiddenRangeType" aria-hidden="true" tabindex="-1">
+                    <option value="month" selected>月別</option>
+                    <option value="year">年別</option>
+                </select>
+
+                <div class="kingsUnifiedFilterGrid">
+                    <label class="kingsUnifiedFilterField">
+                        <span class="historyFilterCardTitle">
+                            <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                            <span>年</span>
+                        </span>
+                        <input type="number" id="myHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                    </label>
+
+                    <label class="kingsUnifiedFilterField kingsMonthField">
+                        <span class="historyFilterCardTitle">
+                            <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
+                            <span>月</span>
+                        </span>
+                        <select id="myHistoryMonthSelect" class="kingsMonthSelect">
+                            <option value="1">1月</option>
+                            <option value="2">2月</option>
+                            <option value="3">3月</option>
+                            <option value="4">4月</option>
+                            <option value="5">5月</option>
+                            <option value="6">6月</option>
+                            <option value="7">7月</option>
+                            <option value="8">8月</option>
+                            <option value="9">9月</option>
+                            <option value="10">10月</option>
+                            <option value="11">11月</option>
+                            <option value="12">12月</option>
+                        </select>
+                    </label>
                 </div>
 
-                <div class="historyFilterCard">
-                    <div class="historyFilterCardTitle">
-                        <span class="filterSvgIcon filterIconCalendar" aria-hidden="true"></span>
-                        <span>② 期間を選択</span>
-                    </div>
-                    <input type="month" id="myHistoryMonth">
-                    <input type="number" id="myHistoryYear" placeholder="例：2026" min="2000" max="2100">
+                <div class="kingsFilterActions">
+                    <button type="button" id="myHistoryApplyBtn" class="kingsFilterApplyBtn">表示する</button>
+                    
                 </div>
             </div>
 
@@ -153,18 +167,7 @@
                 <button id="addMyHolidayBtn">登録</button>
             </div>
         </section>
-
-        <section id="mainTabSettings" class="mainTabPanel">
-            <h3>設定</h3>
-            <p class="mainSectionHelp">個人設定画面は現在準備中です。</p>
-            <div class="premiumSettingsPlaceholder">
-                <div class="settingsPlaceholderIcon"><span class="menuItemSvg icon-settings" aria-hidden="true"></span></div>
-                <strong>設定機能は今後追加予定です</strong>
-                <p>ログイン状態や表示設定など、社員・管理者共通の個人設定をここに追加予定です。</p>
-            </div>
-        </section>
-
-    </div>
+</div>
 
 
 

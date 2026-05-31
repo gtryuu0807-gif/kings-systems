@@ -20,7 +20,7 @@ function groupAttendanceByUserAndWorkDate(records, isAdmin, options = {}) {
         })
 
         const dateKey = getWorkDateKey(record, sameUserRecords)
-        const userKey = String(record.email || record.uid || "unknown").toLowerCase()
+        const userKey = getCanonicalUserKey(record)
         const groupKey = isAdmin ? `${userKey}_${dateKey}` : dateKey
 
         if (!groups[groupKey]) {
@@ -83,10 +83,11 @@ function addHolidayOnlyGroups(groups, records, isAdmin) {
         if (!holiday.date) return
         if (!shouldIncludeHoliday(holiday, records, isAdmin)) return
 
-        const userKey = String(holiday.email || holiday.uid || "unknown").toLowerCase()
+        const userKey = getCanonicalUserKey(holiday)
         const groupKey = isAdmin ? `${userKey}_${holiday.date}` : holiday.date
 
         if (groups[groupKey]) return
+        if (hasGroupForSameUserAndDate(groups, holiday, holiday.date, isAdmin)) return
 
         groups[groupKey] = createGroup({
             groupKey,
@@ -122,12 +123,13 @@ function addEmptyDateGroups(groups, records, isAdmin, options) {
 
     if (!baseUser) return
 
-    const userKey = String(baseUser.email || baseUser.uid || "unknown").toLowerCase()
+    const userKey = getCanonicalUserKey(baseUser)
 
     dateKeys.forEach((dateKey) => {
         const groupKey = isAdmin ? `${userKey}_${dateKey}` : dateKey
 
         if (groups[groupKey]) return
+        if (hasGroupForSameUserAndDate(groups, baseUser, dateKey, isAdmin)) return
 
         groups[groupKey] = createGroup({
             groupKey,
@@ -235,10 +237,24 @@ export function createAttendanceSets(records) {
         return getTimeValue(a) - getTimeValue(b)
     })
 
+    const hasTypedRecords = sortedRecords.some((record) => isClockInRecord(record) || isClockOutRecord(record))
+
+    if (!hasTypedRecords && sortedRecords.length > 0) {
+        sortedRecords.slice(0, 6).forEach((record, index) => {
+            const setIndex = Math.min(Math.floor(index / 2), 2)
+            if (index % 2 === 0) {
+                sets[setIndex].clockIn = record
+            } else {
+                sets[setIndex].clockOut = record
+            }
+        })
+        return sets
+    }
+
     let currentSetIndex = 0
 
     sortedRecords.forEach((record) => {
-        if (record.type === "出勤") {
+        if (isClockInRecord(record)) {
             const targetSet = sets[currentSetIndex]
 
             if (!targetSet.clockIn) {
@@ -268,7 +284,7 @@ export function createAttendanceSets(records) {
             return
         }
 
-        if (record.type === "退勤") {
+        if (isClockOutRecord(record)) {
             const targetSet = sets[currentSetIndex]
 
             if (!targetSet.clockOut) {
@@ -312,12 +328,57 @@ export function getVisibleSets(sets) {
     return result
 }
 
+function getAttendanceType(record) {
+    const rawText = String(
+        record?.type ??
+        record?.attendanceType ??
+        record?.kind ??
+        record?.status ??
+        record?.action ??
+        record?.direction ??
+        record?.clockType ??
+        ""
+    ).trim()
+
+    const normalized = rawText
+        .toLowerCase()
+        .replace(/[\s_　-]/g, "")
+
+    if (
+        rawText === "出勤" ||
+        ["clockin", "checkin", "start", "in", "punchin", "workstart", "begin", "出社", "出勤時刻"].includes(normalized) ||
+        normalized.includes("clockin") ||
+        normalized.includes("checkin")
+    ) {
+        return "出勤"
+    }
+
+    if (
+        rawText === "退勤" ||
+        ["clockout", "checkout", "end", "out", "punchout", "workend", "finish", "退社", "退勤時刻"].includes(normalized) ||
+        normalized.includes("clockout") ||
+        normalized.includes("checkout")
+    ) {
+        return "退勤"
+    }
+
+    return rawText
+}
+
+function isClockInRecord(record) {
+    return getAttendanceType(record) === "出勤"
+}
+
+function isClockOutRecord(record) {
+    return getAttendanceType(record) === "退勤"
+}
+
 function getWorkDateKey(record, records) {
     if (record.workDate) {
         return record.workDate
     }
 
-    if (record.type === "出勤") {
+    if (isClockInRecord(record)) {
         return getDateKey(record)
     }
 
@@ -338,7 +399,7 @@ function findRelatedClockIn(clockOutRecord, records) {
     if (clockOutRecord.workDate) {
         const sameWorkDateClockIns = sortedRecords.filter((record) => {
             return (
-                record.type === "出勤" &&
+                isClockInRecord(record) &&
                 getWorkDateKey(record, records) === clockOutRecord.workDate
             )
         })
@@ -352,12 +413,43 @@ function findRelatedClockIn(clockOutRecord, records) {
 
     const beforeClockIns = sortedRecords.filter((record) => {
         return (
-            record.type === "出勤" &&
+            isClockInRecord(record) &&
             getTimeValue(record) <= clockOutTime
         )
     })
 
     return beforeClockIns[beforeClockIns.length - 1] || null
+}
+
+
+function hasGroupForSameUserAndDate(groups, targetUser, dateKey, isAdmin) {
+    if (!isAdmin) {
+        return Boolean(groups[dateKey])
+    }
+
+    return Object.values(groups).some((group) => {
+        return group.dateKey === dateKey && isSameUser(group, targetUser)
+    })
+}
+
+function getCanonicalUserKey(data) {
+    const uid = String(data?.uid || "").trim()
+    const email = String(data?.email || "").trim().toLowerCase()
+
+    if (uid) return `uid:${uid}`
+
+    if (email) {
+        const matchedUser = state.allUsers.find((user) => {
+            return String(user.email || "").toLowerCase() === email
+        })
+
+        if (matchedUser?.uid) return `uid:${matchedUser.uid}`
+        if (matchedUser?.id) return `uid:${matchedUser.id}`
+
+        return `email:${email}`
+    }
+
+    return "unknown"
 }
 
 function getDisplayName(record) {
@@ -454,12 +546,19 @@ function getDateFromRecord(data) {
 }
 
 export function getTimeValue(data) {
-    if (data.time && data.time.seconds) {
-        return data.time.seconds * 1000
-    }
+    const value = data?.time ?? data?.createdAt ?? data
 
-    if (data.time instanceof Date) {
-        return data.time.getTime()
+    if (!value) return 0
+    if (typeof value === "number") return value
+    if (value instanceof Date) return value.getTime()
+    if (typeof value === "string") {
+        const date = new Date(value)
+        return isNaN(date.getTime()) ? 0 : date.getTime()
+    }
+    if (typeof value.toMillis === "function") return value.toMillis()
+    if (typeof value.toDate === "function") return value.toDate().getTime()
+    if (typeof value.seconds === "number") {
+        return value.seconds * 1000 + Math.floor((value.nanoseconds || 0) / 1000000)
     }
 
     return 0

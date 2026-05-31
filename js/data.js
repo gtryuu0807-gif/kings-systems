@@ -27,9 +27,18 @@ export async function reloadRecords() {
             id: docItem.id,
             uid: data.uid || "",
             email: data.email || "",
-            type: data.type || "",
-            time: data.time,
-            workDate: data.workDate || "",
+            type: data.type || data.attendanceType || data.kind || data.status || data.action || data.direction || data.clockType || "",
+            attendanceType: data.attendanceType || "",
+            kind: data.kind || "",
+            status: data.status || "",
+            action: data.action || "",
+            direction: data.direction || "",
+            clockType: data.clockType || "",
+            time: data.time || data.timestamp || data.createdAt || data.clockedAt || data.datetime || null,
+            timestamp: data.timestamp || null,
+            clockedAt: data.clockedAt || null,
+            datetime: data.datetime || "",
+            workDate: data.workDate || data.date || "",
             version: data.version || 1,
             updatedAt: data.updatedAt
         })
@@ -58,6 +67,8 @@ export async function reloadNotices() {
             authorEmail: data.authorEmail || "",
             createdAt: data.createdAt,
             updatedAt: data.updatedAt,
+            startAt: data.startAt || "",
+            endAt: data.endAt || "",
             confirmedUsers: data.confirmedUsers || []
         })
     })

@@ -1,0 +1,140 @@
+
+/* Kings hotfix 2026-05-31f
+   - 出勤/退勤ボタンが非表示になる問題を修正
+   - 打刻忘れ追加・休み登録タブ/フォームが表示されない問題を修正
+   - 旧cleanup CSSの display:none が主要操作UIまで巻き込む問題を上書き
+*/
+
+/* メイン画面の勤怠操作ボタンは、ログイン後は常に表示対象にする。
+   押せない状態は disabled/グレーアウトで表現し、display:none にはしない。 */
+#mainScreen > #clockInBtn,
+#mainScreen > #clockOutBtn,
+#clockInBtn,
+#clockOutBtn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 56px !important;
+    margin: 10px 0 !important;
+    pointer-events: auto !important;
+}
+
+/* hidden属性や過去の workBtnHidden が残っても、完全に消さず無効ボタンとして見せる */
+#clockInBtn[hidden],
+#clockOutBtn[hidden],
+#clockInBtn.workBtnHidden,
+#clockOutBtn.workBtnHidden {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 3セット完了カードの隣接セレクタでボタンを消す旧指定を無効化 */
+.additionalWorkCard.complete + #clockInBtn,
+.additionalWorkCard.complete + #clockInBtn + #clockOutBtn {
+    display: flex !important;
+}
+
+/* 自分の勤怠管理メニューは、打刻忘れ追加・休み登録へ入るため必ず表示 */
+.selfManagementTitle {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.mainScreenHelp {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.mainHistoryMenu {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.mainTabBtn {
+    display: flex !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.mainHistoryContent,
+.mainTabPanel.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.mainTabPanel:not(.show) {
+    display: none !important;
+}
+
+/* 打刻忘れ追加・休み登録の追加行エリアとボタンを必ず表示 */
+#manualAttendanceRows,
+#myHolidayRows,
+#adminManualAttendanceRows,
+#adminHolidayRows,
+.multiEntryList {
+    display: grid !important;
+    gap: 12px !important;
+    visibility: visible !important;
+}
+
+#addManualAttendanceRowBtn,
+#addMyHolidayRowBtn,
+#addAdminManualAttendanceRowBtn,
+#addAdminHolidayRowBtn,
+#addManualAttendanceBtn,
+#addMyHolidayBtn,
+#adminAddManualAttendanceBtn,
+#adminAddHolidayBtn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.manualAttendanceBox {
+    display: block !important;
+    visibility: visible !important;
+}
+
+.multiEntryItem {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Kingsボタン補強 */
+#clockInBtn,
+#clockOutBtn,
+#addManualAttendanceRowBtn,
+#addMyHolidayRowBtn,
+#addAdminManualAttendanceRowBtn,
+#addAdminHolidayRowBtn,
+#addManualAttendanceBtn,
+#addMyHolidayBtn,
+#adminAddManualAttendanceBtn,
+#adminAddHolidayBtn {
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 145, 55, .42) !important;
+    background: linear-gradient(180deg, rgba(28, 22, 17, .96), rgba(12, 15, 23, .96)) !important;
+    color: #fff7ed !important;
+    font-weight: 900 !important;
+}
+
+#clockInBtn:disabled,
+#clockOutBtn:disabled,
+#addManualAttendanceBtn:disabled,
+#addMyHolidayBtn:disabled {
+    opacity: .55 !important;
+    filter: grayscale(.15) !important;
+}

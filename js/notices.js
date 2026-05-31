@@ -25,14 +25,16 @@ import {
 
 export async function addNotice() {
     if (state.currentUserRole !== "admin") {
-        showError("管理者のみ投稿できます")
+        showError("管理者のみ投稿できます", "ROLE-002")
         return
     }
 
     const title = dom.noticeTitle.value.trim()
     const body = dom.noticeBody.value.trim()
-    const startAt = dom.noticeStartAt?.value || ""
-    const endAt = dom.noticeEndAt?.value || ""
+    const startType = dom.noticeStartDatetimeRadio?.checked ? "datetime" : "now"
+    const endType = dom.noticeEndDatetimeRadio?.checked ? "datetime" : "none"
+    const startAt = startType === "datetime" ? (dom.noticeStartAt?.value || "") : ""
+    const endAt = endType === "datetime" ? (dom.noticeEndAt?.value || "") : ""
 
     if (!title) {
         showWarning("お知らせタイトルを入力してください")
@@ -44,10 +46,25 @@ export async function addNotice() {
         return
     }
 
+    if (startType === "datetime" && !startAt) {
+        showWarning("開始日時を入力するか、今すぐ公開を選択してください")
+        return
+    }
+
+    if (endType === "datetime" && !endAt) {
+        showWarning("終了日時を入力するか、終了日時なしを選択してください")
+        return
+    }
+
+    if (startAt && endAt && new Date(endAt).getTime() <= new Date(startAt).getTime()) {
+        showWarning("終了日時は開始日時より後にしてください")
+        return
+    }
+
     const user = auth.currentUser
 
     if (!user) {
-        showError("ログインしてください")
+        showError("ログインしてください", "AUTH-004")
         return
     }
 
@@ -88,6 +105,10 @@ export async function addNotice() {
         dom.noticeBody.value = ""
         if (dom.noticeStartAt) dom.noticeStartAt.value = ""
         if (dom.noticeEndAt) dom.noticeEndAt.value = ""
+        if (dom.noticeStartNowRadio) dom.noticeStartNowRadio.checked = true
+        if (dom.noticeEndNoneRadio) dom.noticeEndNoneRadio.checked = true
+        if (dom.noticeStartAtField) dom.noticeStartAtField.hidden = true
+        if (dom.noticeEndAtField) dom.noticeEndAtField.hidden = true
 
         renderNotices()
         renderAdminNoticeList()
@@ -96,13 +117,13 @@ export async function addNotice() {
 
     } catch (error) {
         console.log(error)
-        showError("お知らせの投稿に失敗しました")
+        showError("お知らせの投稿に失敗しました", "NOTICE-001")
     }
 }
 
 export async function deleteNotice(noticeId) {
     if (state.currentUserRole !== "admin") {
-        showError("管理者のみ削除できます")
+        showError("管理者のみ削除できます", "ROLE-002")
         return
     }
 
@@ -111,7 +132,7 @@ export async function deleteNotice(noticeId) {
     })
 
     if (!notice) {
-        showError("お知らせが見つかりません")
+        showError("お知らせが見つかりません", "NOTICE-004")
         return
     }
 
@@ -137,7 +158,7 @@ export async function deleteNotice(noticeId) {
 
     } catch (error) {
         console.log(error)
-        showError("お知らせの削除に失敗しました")
+        showError("お知らせの削除に失敗しました", "NOTICE-002")
     }
 }
 
@@ -145,7 +166,7 @@ export async function confirmNotice(noticeId) {
     const user = auth.currentUser
 
     if (!user) {
-        showError("ログインしてください")
+        showError("ログインしてください", "AUTH-004")
         return
     }
 
@@ -154,7 +175,7 @@ export async function confirmNotice(noticeId) {
     })
 
     if (!notice) {
-        showError("お知らせが見つかりません")
+        showError("お知らせが見つかりません", "NOTICE-004")
         return
     }
 
@@ -188,7 +209,7 @@ export async function confirmNotice(noticeId) {
 
     } catch (error) {
         console.log(error)
-        showError("確認状態の保存に失敗しました")
+        showError("確認状態の保存に失敗しました", "NOTICE-003")
     }
 }
 

@@ -153,3 +153,42 @@
     color:inherit;
     line-height:1.6;
 }
+
+/* 2026-05-31: 勤怠編集を出勤・退勤1セット単位でまとめる */
+.attendanceEditSetBlock{
+    width:100%;
+    box-sizing:border-box;
+    margin-top:14px;
+    padding:14px;
+    border-radius:18px;
+    background:rgba(15,23,42,0.04);
+    border:1px solid rgba(255,138,31,0.18);
+}
+
+.attendanceEditSetTitle{
+    margin-bottom:12px;
+    font-size:15px;
+    font-weight:800;
+    color:#f8c77e;
+    letter-spacing:0.02em;
+}
+
+.attendanceEditSetGrid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:12px;
+}
+
+.attendanceEditControl{
+    min-width:0;
+    padding:12px;
+    border-radius:16px;
+    background:rgba(0,0,0,0.18);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+@media (max-width:640px){
+    .attendanceEditSetGrid{
+        grid-template-columns:1fr;
+    }
+}

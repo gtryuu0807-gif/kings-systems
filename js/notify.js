@@ -117,7 +117,23 @@ function flushNotifications() {
     }
 }
 
+function saveSystemLog(payload) {
+    if (payload.type !== "error") return
+    try {
+        const logs = JSON.parse(localStorage.getItem("kings:systemLogs") || "[]")
+        const match = String(payload.message || "").match(/\[([A-Z]+-[0-9]{3})\]/)
+        logs.unshift({
+            at: new Date().toISOString(),
+            code: match?.[1] || "SYS-001",
+            message: payload.message
+        })
+        localStorage.setItem("kings:systemLogs", JSON.stringify(logs.slice(0, 100)))
+        window.dispatchEvent(new CustomEvent("kings:system-log-updated"))
+    } catch (_) {}
+}
+
 function renderToast(payload) {
+    saveSystemLog(payload)
     const area = createToastArea()
 
     while (area.children.length >= MAX_VISIBLE_TOASTS) {
@@ -132,7 +148,7 @@ function renderToast(payload) {
         <span class="toastIcon" aria-hidden="true">${meta.icon}</span>
         <span class="toastBody">
             <span class="toastLabel">${meta.label}</span>
-            <span class="toastMessage">${escapeHtml(payload.message)}</span>
+            <span class="toastMessage">${formatToastHtml(payload.message, payload.type)}</span>
         </span>
     `
 
@@ -150,6 +166,16 @@ function renderToast(payload) {
         }, 280)
 
     }, payload.duration)
+}
+
+function formatToastHtml(message, type) {
+    const text = String(message || "")
+    if (type !== "error") return escapeHtml(text)
+
+    const match = text.match(/^\[([A-Z]+-[0-9]{3})\]\s*(.*)$/)
+    if (!match) return escapeHtml(text)
+
+    return `${escapeHtml(match[2] || "エラーが発生しました")}<span class="errorCodeLine">エラーコード：${escapeHtml(match[1])}</span>`
 }
 
 function getDuration(type, message) {
@@ -178,12 +204,14 @@ function formatErrorMessage(message, code = "") {
 }
 
 function inferErrorCode(message) {
+    if ((message.includes("勤怠") || message.includes("出勤・退勤")) && (message.includes("変更") || message.includes("編集"))) return "ATT-004"
+    if ((message.includes("勤怠") || message.includes("出勤") || message.includes("退勤")) && message.includes("削除")) return "ATT-005"
     if (message.includes("管理者のみアクセス")) return "ROLE-002"
     if (message.includes("管理者のみ")) return "ROLE-003"
     if (message.includes("権限情報が不正")) return "ROLE-001"
     if (message.includes("Firestore") || message.includes("permission")) return "PERM-001"
-    if (message.includes("ユーザー情報")) return "AUTH-007"
-    if (message.includes("自動ログイン")) return "AUTH-010"
+    if (message.includes("ユーザー情報")) return "AUTH-002"
+    if (message.includes("自動ログイン")) return "AUTH-004"
     if (message.includes("メールアドレス") && message.includes("既に")) return "ACC-001"
     if (message.includes("Authentication") && message.includes("登録")) return "ACC-004"
     if (message.includes("アカウント") && message.includes("作成")) return "ACC-002"
@@ -194,8 +222,8 @@ function inferErrorCode(message) {
     if (message.includes("休み") || message.includes("休日")) return "HOL-001"
     if (message.includes("お知らせ")) return "NOTICE-001"
     if (message.includes("メンテナンス")) return "MAINT-001"
-    if (message.includes("ログイン") || message.includes("認証")) return "AUTH-999"
-    return "APP-999"
+    if (message.includes("ログイン") || message.includes("認証")) return "AUTH-001"
+    return "SYS-001"
 }
 
 export function showWarning(message) {

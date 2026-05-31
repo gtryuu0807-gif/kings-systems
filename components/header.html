@@ -1,5 +1,10 @@
 <div id="welcomeBox">
-    <div class="welcomeIcon"><span class="inlineSvgIcon inlineEmployeeCard" aria-hidden="true"></span></div>
+    <div class="welcomeIcon" aria-hidden="true">
+        <svg class="kingsActualSvg welcomeActualSvg" viewBox="0 0 24 24" focusable="false">
+            <path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="1.9"/>
+            <path d="M7 8h10M7 12h5M15 12h2M7 16h10" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+    </div>
     <div>
         <div class="welcomeText">Welcome</div>
         <span id="welcomeName"></span>
@@ -21,7 +26,8 @@
             <div class="kingsMenuSection" data-menu-section="main">
                 <button type="button" id="openMainBtn" class="kingsMenuItem" data-menu-route="main"><span class="menuItemSvg icon-home" aria-hidden="true"></span><span>メイン画面</span></button>
                 <button type="button" id="openAdminBtn" class="kingsMenuItem adminOnly" data-menu-route="admin:dashboard"><span class="menuItemSvg icon-admin" aria-hidden="true"></span><span>管理者画面</span></button>
-                <button type="button" class="kingsMenuItem" data-menu-route="settings"><span class="menuItemSvg icon-settings" aria-hidden="true"></span><span>設定</span></button>
+                <button type="button" id="openInfoBtn" class="kingsMenuItem" data-menu-route="info"><span class="menuItemSvg icon-info" aria-hidden="true"></span><span>情報</span></button>
+                <button type="button" id="openSettingsBtn" class="kingsMenuItem" data-menu-route="settings"><span class="menuItemSvg icon-settings" aria-hidden="true"></span><span>設定</span></button>
             </div>
 
             <div class="kingsMenuSection" data-menu-section="admin">
@@ -35,6 +41,8 @@
                 <button type="button" class="kingsMenuItem" data-menu-route="admin:report"><span class="menuItemSvg icon-report" aria-hidden="true"></span><span>レポート・グラフ</span></button>
                 <button type="button" class="kingsMenuItem" data-menu-route="admin:maintenance"><span class="menuItemSvg icon-maintenance" aria-hidden="true"></span><span>メンテナンス設定</span></button>
                 <button type="button" class="kingsMenuItem" data-menu-route="main"><span class="menuItemSvg icon-home" aria-hidden="true"></span><span>メイン画面へ戻る</span></button>
+                <button type="button" class="kingsMenuItem" data-menu-route="info"><span class="menuItemSvg icon-info" aria-hidden="true"></span><span>情報</span></button>
+                <button type="button" class="kingsMenuItem" data-menu-route="settings"><span class="menuItemSvg icon-settings" aria-hidden="true"></span><span>設定</span></button>
             </div>
 
             <button type="button" id="menuLogoutBtn" class="kingsMenuItem danger"><span class="menuItemSvg icon-logout" aria-hidden="true"></span><span>ログアウト</span></button>

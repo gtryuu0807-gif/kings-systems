@@ -1,0 +1,189 @@
+
+/* Kings hotfix 2026-05-31e
+   - 勤務履歴表示条件を「年・月・表示する」に統一
+   - 管理画面/社員画面の勤務編集ボタンを出勤/退勤別へ戻す
+   - 出勤退勤カードの表示を補強
+   - お知らせ投稿/削除ボタンの左アイコン削除後の中央寄せ
+   - Kings Premiumボタン統一の補強
+*/
+
+/* 表示条件：旧年別ボタン・旧表示方法を完全非表示 */
+#myHistoryYearModeBtn,
+#adminHistoryYearModeBtn,
+.kingsFilterSubBtn,
+.kingsHiddenRangeType,
+.historyFilterModeBox,
+.historyPeriodSummary,
+.legacyFilterCard,
+.oldRangeCard {
+    display: none !important;
+}
+
+.kingsUnifiedFilter,
+.historyFilterBox.kingsUnifiedFilter {
+    background: linear-gradient(180deg, rgba(12, 17, 26, .96), rgba(8, 12, 20, .94)) !important;
+    border: 1px solid rgba(255, 145, 55, .34) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.06) !important;
+    padding: 18px !important;
+}
+
+.kingsUnifiedFilter h4 {
+    color: #fff7ed !important;
+    margin: 0 0 8px !important;
+}
+
+.kingsUnifiedFilterGrid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+}
+
+.kingsUnifiedFilterField {
+    display: grid !important;
+    gap: 7px !important;
+    background: rgba(255,255,255,.035) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    border-radius: 16px !important;
+    padding: 12px !important;
+}
+
+.kingsUnifiedFilterField input,
+.kingsUnifiedFilterField select,
+.kingsMonthSelect,
+#adminHistoryEmployeeSelect,
+#myHistoryYear,
+#adminHistoryYear {
+    width: 100% !important;
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 145, 55, .35) !important;
+    background: rgba(3, 7, 18, .72) !important;
+    color: #fff7ed !important;
+    padding: 0 12px !important;
+    outline: none !important;
+}
+
+.kingsFilterActions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 14px !important;
+}
+
+/* 出勤・退勤カードの再表示補強 */
+#currentWorkStatusCard.currentWorkStatusCard {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+#clockInBtn:not([hidden]),
+#clockOutBtn:not([hidden]) {
+    display: flex !important;
+}
+
+#clockInBtn,
+#clockOutBtn,
+.kingsFilterApplyBtn,
+.addRowBtn,
+#addManualAttendanceBtn,
+#adminAddManualAttendanceBtn,
+#addMyHolidayBtn,
+#adminAddHolidayBtn,
+#addNoticeBtn,
+.noticeDeleteBtn,
+.attendanceEditBtn,
+.attendanceDeleteBtn,
+.pageButtons button,
+#createAccountBtn,
+#checkAccountIntegrityBtn,
+#saveMaintenanceBtn,
+#downloadAdminPdfBtn,
+#deleteAllBtn {
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 145, 55, .42) !important;
+    background: linear-gradient(180deg, rgba(28, 22, 17, .96), rgba(12, 15, 23, .96)) !important;
+    color: #fff7ed !important;
+    font-weight: 800 !important;
+    letter-spacing: .02em !important;
+    box-shadow: 0 12px 28px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+#clockInBtn:disabled,
+#clockOutBtn:disabled,
+button:disabled {
+    opacity: .56 !important;
+    filter: grayscale(.25) !important;
+}
+
+/* お知らせ投稿/削除ボタンは文字のみ */
+#addNoticeBtn .menuItemSvg,
+.noticeDeleteBtn .menuItemSvg,
+#addNoticeBtn svg,
+.noticeDeleteBtn svg {
+    display: none !important;
+}
+
+/* 勤務編集：白枠・白背景を排除して、出勤/退勤別ボタンを見やすく */
+.attendanceEditSetBlock,
+.attendanceEditSetBlockUnified,
+.attendanceEditSetBlockSeparate,
+.attendanceEditControl {
+    background: rgba(8, 12, 20, .88) !important;
+    border: 1px solid rgba(255, 145, 55, .28) !important;
+    color: #fff7ed !important;
+}
+
+.attendanceEditSetBlockSeparate {
+    border-radius: 18px !important;
+    padding: 14px !important;
+    display: grid !important;
+    gap: 12px !important;
+}
+
+.attendanceEditSetTitle {
+    color: #ffb86b !important;
+    font-size: 18px !important;
+    font-weight: 900 !important;
+}
+
+.attendanceEditControl {
+    border-radius: 16px !important;
+    padding: 12px !important;
+    display: grid !important;
+    gap: 9px !important;
+}
+
+.attendanceEditDivider {
+    height: 1px !important;
+    background: rgba(255,255,255,.09) !important;
+    margin: 2px 0 !important;
+}
+
+.historyEditInput,
+.attendanceEditControl input {
+    min-height: 44px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(255, 145, 55, .32) !important;
+    background: rgba(3, 7, 18, .78) !important;
+    color: #fff7ed !important;
+    padding: 0 10px !important;
+}
+
+.attendanceDeleteBtn {
+    border-color: rgba(248, 113, 113, .36) !important;
+    color: #fecaca !important;
+}
+
+@media (min-width: 720px) {
+    .kingsUnifiedFilterGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    .kingsEmployeeField {
+        grid-column: 1 / -1 !important;
+    }
+}

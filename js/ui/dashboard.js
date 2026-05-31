@@ -1,38 +1,52 @@
 import { dom } from "../dom.js"
 import { state } from "../state.js"
 import { escapeHtml } from "../utils.js"
+import { showError } from "../notify.js"
 
 export function renderAdminDashboard() {
-    const todayKey = getTodayKey()
+    try {
+        const todayKey = getTodayKey()
+        const allRecords = Array.isArray(state.allRecords) ? state.allRecords : []
+        const allHolidays = Array.isArray(state.allHolidays) ? state.allHolidays : []
+        const allUsers = Array.isArray(state.allUsers) ? state.allUsers : []
 
-    const todayRecords = state.allRecords.filter((record) => {
-        return getDateKey(record.time) === todayKey
-    })
+        const todayRecords = allRecords.filter((record) => {
+            return getDateKey(getRecordTimeValue(record)) === todayKey
+        })
 
-    const todayHolidays = state.allHolidays.filter((holiday) => {
-        return holiday.date === todayKey
-    })
+        const todayHolidays = allHolidays.filter((holiday) => {
+            return holiday.date === todayKey
+        })
 
-    const employeeStatuses = state.allUsers.map((user) => {
-        return getTodayEmployeeStatus(user, todayRecords, todayHolidays)
-    })
+        const employeeStatuses = allUsers.map((user) => {
+            return getTodayEmployeeStatus(user, todayRecords, todayHolidays)
+        })
 
-    const totalEmployees = state.allUsers.length
-    const workingCount = employeeStatuses.filter((item) => item.status === "working").length
-    const leftCount = employeeStatuses.filter((item) => item.status === "left").length
-    const restCount = employeeStatuses.filter((item) => item.status === "rest").length
-    const notYetCount = employeeStatuses.filter((item) => item.status === "notYet").length
+        const totalEmployees = allUsers.length
+        const workingCount = employeeStatuses.filter((item) => item.status === "working").length
+        const leftCount = employeeStatuses.filter((item) => item.status === "left").length
+        const restCount = employeeStatuses.filter((item) => item.status === "rest").length
+        const notYetCount = employeeStatuses.filter((item) => item.status === "notYet").length
 
-    dom.adminDashboard.innerHTML = `
-    <div class="dashboardCard employeeTotal"><span>社員数</span><strong>${totalEmployees}人</strong></div>
-    <div class="dashboardCard statusWorking"><span>出勤中</span><strong>${workingCount}人</strong></div>
-    <div class="dashboardCard statusLeft"><span>退勤済み</span><strong>${leftCount}人</strong></div>
-    <div class="dashboardCard statusRest"><span>休み</span><strong>${restCount}人</strong></div>
-    <div class="dashboardCard statusNotYet"><span>未出勤</span><strong>${notYetCount}人</strong></div>
-    `
+        if (dom.adminDashboard) {
+            dom.adminDashboard.innerHTML = `
+            <div class="dashboardCard employeeTotal"><span>社員数</span><strong>${totalEmployees}人</strong></div>
+            <div class="dashboardCard statusWorking"><span>出勤中</span><strong>${workingCount}人</strong></div>
+            <div class="dashboardCard statusLeft"><span>退勤済み</span><strong>${leftCount}人</strong></div>
+            <div class="dashboardCard statusRest"><span>休み</span><strong>${restCount}人</strong></div>
+            <div class="dashboardCard statusNotYet"><span>未出勤</span><strong>${notYetCount}人</strong></div>
+            `
+        }
 
-    renderTodayEmployeeStatusList(employeeStatuses)
-    renderAdminLatestNoticeCard()
+        renderTodayEmployeeStatusList(employeeStatuses)
+        renderAdminLatestNoticeCard()
+    } catch (error) {
+        console.error("renderAdminDashboard failed", error)
+        showError("ダッシュボードの表示に失敗しました", "DASH-001")
+        if (dom.adminDashboard) {
+            dom.adminDashboard.innerHTML = `<div class="emptyStateCard">ダッシュボードの表示に失敗しました<br><small>エラーコード：DASH-001</small></div>`
+        }
+    }
 }
 
 function renderAdminLatestNoticeCard() {
@@ -93,7 +107,7 @@ function getTodayEmployeeStatus(user, todayRecords, todayHolidays) {
             return isSameUser(record, user)
         })
         .sort((a, b) => {
-            return getTimeValue(a.time) - getTimeValue(b.time)
+            return getTimeValue(a) - getTimeValue(b)
         })
 
     const userHoliday = todayHolidays.find((holiday) => {
@@ -101,11 +115,11 @@ function getTodayEmployeeStatus(user, todayRecords, todayHolidays) {
     })
 
     const clockIns = userRecords.filter((record) => {
-        return record.type === "出勤"
+        return isClockInRecord(record)
     })
 
     const clockOuts = userRecords.filter((record) => {
-        return record.type === "退勤"
+        return isClockOutRecord(record)
     })
 
     const hasClockIn = clockIns.length > 0
@@ -118,12 +132,12 @@ function getTodayEmployeeStatus(user, todayRecords, todayHolidays) {
         latestClockIn &&
         (
             !latestClockOut ||
-            getTimeValue(latestClockIn.time) > getTimeValue(latestClockOut.time)
+            getTimeValue(latestClockIn) > getTimeValue(latestClockOut)
         )
 
     const isOvertimeWarning =
         isWorking &&
-        Date.now() - getTimeValue(latestClockIn.time) > 8 * 60 * 60 * 1000
+        Date.now() - getTimeValue(latestClockIn) > 8 * 60 * 60 * 1000
 
     if (userHoliday) {
         return createStatus(user, "休み", "statusRest", false, "rest")
@@ -142,6 +156,69 @@ function getTodayEmployeeStatus(user, todayRecords, todayHolidays) {
     }
 
     return createStatus(user, "未出勤", "statusNotYet", false, "notYet")
+}
+
+
+function formatDate(value) {
+    const date = getDate(value)
+    if (!date) return ""
+
+    return date.toLocaleString("ja-JP", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    })
+}
+
+function getRecordTimeValue(record) {
+    return record?.time ?? record?.timestamp ?? record?.clockedAt ?? record?.datetime ?? record?.createdAt ?? record
+}
+
+function getAttendanceType(record) {
+    const rawText = String(
+        record?.type ??
+        record?.attendanceType ??
+        record?.kind ??
+        record?.status ??
+        record?.action ??
+        record?.direction ??
+        record?.clockType ??
+        ""
+    ).trim()
+
+    const normalized = rawText
+        .toLowerCase()
+        .replace(/[\s_　-]/g, "")
+
+    if (
+        rawText === "出勤" ||
+        ["clockin", "checkin", "start", "in", "punchin", "workstart", "begin", "出社", "出勤時刻"].includes(normalized) ||
+        normalized.includes("clockin") ||
+        normalized.includes("checkin")
+    ) {
+        return "出勤"
+    }
+
+    if (
+        rawText === "退勤" ||
+        ["clockout", "checkout", "end", "out", "punchout", "workend", "finish", "退社", "退勤時刻"].includes(normalized) ||
+        normalized.includes("clockout") ||
+        normalized.includes("checkout")
+    ) {
+        return "退勤"
+    }
+
+    return rawText
+}
+
+function isClockInRecord(record) {
+    return getAttendanceType(record) === "出勤"
+}
+
+function isClockOutRecord(record) {
+    return getAttendanceType(record) === "退勤"
 }
 
 function createStatus(user, label, className, isOvertimeWarning, status = "notYet") {
@@ -187,19 +264,24 @@ function getDateKey(timeValue) {
 }
 
 function getDate(timeValue) {
-    if (timeValue?.seconds) {
-        return new Date(timeValue.seconds * 1000)
+    if (!timeValue) return null
+    if (timeValue instanceof Date) return timeValue
+    if (typeof timeValue === "number") return new Date(timeValue)
+    if (typeof timeValue === "string") {
+        const date = new Date(timeValue)
+        return isNaN(date.getTime()) ? null : date
     }
-
-    if (timeValue instanceof Date) {
-        return timeValue
+    if (typeof timeValue.toDate === "function") return timeValue.toDate()
+    if (typeof timeValue.toMillis === "function") return new Date(timeValue.toMillis())
+    if (typeof timeValue.seconds === "number") {
+        return new Date(timeValue.seconds * 1000 + Math.floor((timeValue.nanoseconds || 0) / 1000000))
     }
 
     return null
 }
 
 function getTimeValue(timeValue) {
-    const date = getDate(timeValue)
+    const date = getDate(getRecordTimeValue(timeValue))
 
     if (!date) return 0
 

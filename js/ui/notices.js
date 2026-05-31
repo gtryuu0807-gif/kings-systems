@@ -5,17 +5,20 @@ import { escapeHtml } from "../utils.js"
 import { confirmNotice, deleteNotice, isNoticeConfirmedByMe } from "../notices.js"
 
 const NOTICE_BODY_LIMIT_LINES = 20
+const LATEST_NOTICE_BODY_LIMIT_LINES = 10
 
 export function renderNotices() {
     if (!dom.noticeList) return
 
-    if (state.allNotices.length === 0) {
+    const visibleNotices = state.allNotices.filter(isNoticeVisibleNow)
+
+    if (visibleNotices.length === 0) {
         dom.noticeList.innerHTML = `<div class="noticeCard latestNoticeCard empty"><div class="noticeHeader"><span class="menuItemSvg icon-notice" aria-hidden="true"></span><strong>お知らせ</strong></div><div class="noticeEmpty">お知らせはありません</div></div>`
         return
     }
 
-    const latest = state.allNotices[0]
-    const restCount = Math.max(0, state.allNotices.length - 1)
+    const latest = visibleNotices[0]
+    const restCount = Math.max(0, visibleNotices.length - 1)
     const isConfirmed = isNoticeConfirmedByMe(latest)
     const isNew = isNewNotice(latest.createdAt)
 
@@ -28,13 +31,12 @@ export function renderNotices() {
                 </div>
                 ${isNew ? createNewBadgeSvg() : ""}
             </div>
-            <button type="button" class="latestNoticeSummary" data-notice-detail="${escapeHtml(latest.id)}">
+            <div class="latestNoticeSummary latestNoticeSummaryStatic">
                 <strong>${escapeHtml(latest.title)}</strong>
                 <span>${createNoticeScheduleText(latest)}</span>
-                <em>詳細を見る ＞</em>
-            </button>
-            <div id="latestNoticeDetail" class="latestNoticeDetail" hidden>
-                ${createNoticeBodyHtml(latest)}
+            </div>
+            <div id="latestNoticeDetail" class="latestNoticeDetail">
+                ${createNoticeBodyHtml(latest, LATEST_NOTICE_BODY_LIMIT_LINES)}
                 <div class="noticeMetaBox">
                     <div>投稿者：${escapeHtml(latest.authorName || "投稿者不明")}</div>
                     <div>投稿日：${escapeHtml(formatDate(latest.createdAt))}</div>
@@ -45,7 +47,7 @@ export function renderNotices() {
             </div>
             ${restCount > 0 ? `<button type="button" class="noticeListToggleBtn" data-closed-label="他${restCount}件あります" aria-expanded="false">他${restCount}件あります</button>` : ""}
             <div id="noticeAllList" class="noticeAllList" hidden>
-                ${state.allNotices.slice(1).map((notice) => `<button type="button" class="noticeMiniItem" data-notice-mini="${escapeHtml(notice.id)}"><strong>${isNewNotice(notice.createdAt) ? "NEW " : ""}${escapeHtml(notice.title)}</strong><span>${escapeHtml(formatDate(notice.createdAt))}</span></button>`).join("")}
+                ${visibleNotices.slice(1).map((notice) => `<button type="button" class="noticeMiniItem" data-notice-mini="${escapeHtml(notice.id)}"><strong>${isNewNotice(notice.createdAt) ? "NEW " : ""}${escapeHtml(notice.title)}</strong><span>${escapeHtml(formatDate(notice.createdAt))}</span></button>`).join("")}
             </div>
         </div>
     `
@@ -78,7 +80,7 @@ export function renderAdminNoticeList() {
                     ${notice.endAt ? `<div>終了：${escapeHtml(formatInputDate(notice.endAt))}</div>` : ""}
                 </div>
                 <div class="adminNoticeConfirmBox"><strong>確認した社員（${confirmedUsers.length}人）</strong>${createConfirmedUsersHtml(confirmedUsers, "管理者")}</div>
-                <button class="noticeDeleteBtn" data-notice-id="${escapeHtml(notice.id)}"><span class="menuItemSvg icon-trash" aria-hidden="true"></span>お知らせを削除</button>
+                <button class="noticeDeleteBtn" data-notice-id="${escapeHtml(notice.id)}">お知らせを削除</button>
             </div>
         `
     }).join("")
@@ -123,18 +125,18 @@ function setupNoticeButtons(container) {
         target.innerHTML = escapeHtml(nextText).replaceAll("\n", "<br>")
         target.classList.toggle("noticeBodyExpanded", !isOpen)
         button.dataset.open = isOpen ? "false" : "true"
-        button.textContent = isOpen ? "全文を見る" : "閉じる"
+        button.textContent = isOpen ? "続きを読む" : "閉じる"
     }))
 }
 
-function createNoticeBodyHtml(notice) {
+function createNoticeBodyHtml(notice, limitLines = NOTICE_BODY_LIMIT_LINES) {
     const body = String(notice.body || "")
     const lines = body.split(/\r?\n/)
-    const isLongBody = lines.length > NOTICE_BODY_LIMIT_LINES
-    const previewText = isLongBody ? lines.slice(0, NOTICE_BODY_LIMIT_LINES).join("\n") : body
+    const isLongBody = lines.length > limitLines
+    const previewText = isLongBody ? lines.slice(0, limitLines).join("\n") : body
     const fullBodyId = `noticeBody_${String(notice.id || Math.random()).replaceAll("-", "_")}_${Math.random().toString(36).slice(2)}`
     if (!isLongBody) return `<div class="noticeBody">${escapeHtml(body).replaceAll("\n", "<br>")}</div>`
-    return `<div class="noticeBody noticeBodyPreview" id="${fullBodyId}">${escapeHtml(previewText).replaceAll("\n", "<br>")}</div><button class="noticeBodyToggleBtn" data-target-id="${fullBodyId}" data-preview="${escapeHtml(previewText)}" data-full="${escapeHtml(body)}" data-open="false">全文を見る</button>`
+    return `<div class="noticeBody noticeBodyPreview" id="${fullBodyId}">${escapeHtml(previewText).replaceAll("\n", "<br>")}</div><button class="noticeBodyToggleBtn" data-target-id="${fullBodyId}" data-preview="${escapeHtml(previewText)}" data-full="${escapeHtml(body)}" data-open="false">続きを読む</button>`
 }
 
 function createNewBadgeSvg() { return `<span class="noticeNewBadge svgNewBadge" aria-label="新着">NEW</span>` }
@@ -147,6 +149,16 @@ function createConfirmedUsersHtml(confirmedUsers, mode) {
     const hiddenCount = Math.max(0, count - previewUsers.length)
     const fullListId = `confirmedList_${mode}_${Math.random().toString(36).slice(2)}`
     return `${mode === "管理者" ? "" : `<div class="confirmedUserSummary">確認済み：${count}人</div>`}<div class="confirmedPreviewList">${previewUsers.map((user) => `<span class="confirmedPreviewItem">${escapeHtml(user.name || user.email || "社員")}</span>`).join("")}${hiddenCount > 0 ? `<span class="confirmedMoreBadge">+${hiddenCount}</span>` : ""}</div>${count >= 10 ? `<button class="confirmedToggleBtn" data-target-id="${fullListId}">すべて見る</button><div id="${fullListId}" class="confirmedFullList">${confirmedUsers.map((user, index) => `<div class="confirmedUserItem"><span>${index + 1}</span><strong>${escapeHtml(user.name || user.email || "社員")}</strong></div>`).join("")}</div>` : ""}`
+}
+
+
+function isNoticeVisibleNow(notice) {
+    const now = Date.now()
+    const start = notice.startAt ? new Date(notice.startAt).getTime() : 0
+    const end = notice.endAt ? new Date(notice.endAt).getTime() : 0
+    if (start && now < start) return false
+    if (end && now > end) return false
+    return true
 }
 
 function getNoticeStateLabel(notice) {

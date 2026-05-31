@@ -64,3 +64,12 @@ export function isClockOutBeforeClockIn(clockIn, clockOut) {
 
     return outDate.getTime() < inDate.getTime()
 }
+
+export function isSameClockMinute(clockIn, clockOut) {
+    const inDate = convertToDate(clockIn?.time ?? clockIn)
+    const outDate = convertToDate(clockOut?.time ?? clockOut)
+
+    if (!inDate || !outDate) return false
+
+    return Math.floor(inDate.getTime() / 60000) === Math.floor(outDate.getTime() / 60000)
+}

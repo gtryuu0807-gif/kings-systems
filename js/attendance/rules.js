@@ -5,10 +5,15 @@ import {
     isSameLocalDate,
     convertToDate,
     isClockOutBeforeClockIn,
-    isOver24Hours
+    isOver24Hours,
+    isSameClockMinute
 } from "./time.js"
 
 export function canDeleteRecord(targetRecord) {
+    return getDeleteRestrictionMessage(targetRecord) === ""
+}
+
+export function getDeleteRestrictionMessage(targetRecord) {
     const sameUserSameDayRecords = getSameUserSameWorkDateRecords(targetRecord)
     const sets = createSetsByTypeOrder(sameUserSameDayRecords)
 
@@ -19,17 +24,24 @@ export function canDeleteRecord(targetRecord) {
         )
     })
 
-    if (targetSetIndex === -1) return true
+    if (targetSetIndex === -1) return ""
+
+    const targetSet = sets[targetSetIndex]
+    const isClockInRecord = targetSet.clockIn?.id === targetRecord.id || targetRecord.type === "出勤"
+
+    if (isClockInRecord && targetSet.clockOut) {
+        return "同じ勤務セット内に退勤履歴があるため、出勤履歴は削除できません。先に退勤履歴を削除してください。"
+    }
 
     const laterSetExists = sets
         .slice(targetSetIndex + 1)
         .some((set) => set.clockIn || set.clockOut)
 
     if (laterSetExists) {
-        return false
+        return "後続セットの出勤・退勤を削除してから、このセットを削除してください"
     }
 
-    return true
+    return ""
 }
 
 export function validateAttendanceSets(records) {
@@ -48,6 +60,13 @@ export function validateAttendanceSets(records) {
 
     for (const set of sets) {
         if (set.clockIn && set.clockOut) {
+            if (isSameClockMinute(set.clockIn, set.clockOut)) {
+                return {
+                    ok: false,
+                    message: "出勤時刻と同じ時刻には退勤できません。退勤時刻を変更してください"
+                }
+            }
+
             if (isClockOutBeforeClockIn(set.clockIn, set.clockOut)) {
                 return {
                     ok: false,

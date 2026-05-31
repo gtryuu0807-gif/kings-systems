@@ -1,4 +1,5 @@
 import { state } from "./state.js"
+import { saveCurrentScreen, saveMainTab, saveAdminTab } from "./screenState.js"
 // Kings V3 menu router
 // Separates three menu contexts:
 // 1) Employee main screen menu: Main / Settings / Logout
@@ -19,9 +20,16 @@ export function installKingsV3MenuRoutePatch() {
     })
 
     document.addEventListener("click", (event) => {
-        if (event.target?.closest?.("#settingsBackToMainBtn")) {
+        if (event.target?.closest?.("#settingsBackToMainBtn, #infoBackToMainBtn")) {
             event.preventDefault()
             openMainTab("history")
+        }
+    }, true)
+
+    document.addEventListener("click", (event) => {
+        if (event.target?.closest?.("#settingsCheckUpdateBtn, #infoCheckUpdateBtn")) {
+            event.preventDefault()
+            location.reload()
         }
     }, true)
 
@@ -97,6 +105,11 @@ function routeMenu(route) {
         return
     }
 
+    if (route === "info") {
+        openInfoScreen()
+        return
+    }
+
     if (route === "settings") {
         openSettingsScreen()
         return
@@ -116,7 +129,10 @@ function routeMenu(route) {
 }
 
 function openMainTab(tabName = "history") {
+    saveCurrentScreen("main")
+    saveMainTab(tabName)
     closeSettingsScreen()
+    closeInfoScreen()
     forceBaseVisible("main")
     document.body.classList.remove("kt-screen-admin", "kt-transitioning", "kt-screen-switching", "kt-screen-run")
     document.body.classList.add("kt-main-ready", "kt-screen-main")
@@ -134,9 +150,39 @@ function openMainTab(tabName = "history") {
     })
 }
 
+function openInfoScreen() {
+    saveCurrentScreen("info")
+    forceBaseVisible("info")
+    document.body.classList.remove("kt-screen-main", "kt-screen-admin", "kt-screen-settings", "kt-transitioning", "kt-screen-switching", "kt-screen-run")
+    document.body.classList.add("kt-main-ready", "kt-screen-info")
+
+    window.requestAnimationFrame(() => {
+        const infoScreen = document.getElementById("infoScreen")
+        if (infoScreen) {
+            infoScreen.hidden = false
+            infoScreen.classList.add("show")
+            infoScreen.style.display = "block"
+        }
+        syncMenuContext()
+        emitScreenChanged()
+    })
+}
+
+function closeInfoScreen() {
+    const infoScreen = document.getElementById("infoScreen")
+    if (infoScreen) {
+        infoScreen.classList.remove("show")
+        infoScreen.hidden = true
+        infoScreen.style.display = "none"
+    }
+    document.body.classList.remove("kt-screen-info")
+}
+
 function openSettingsScreen() {
+    saveCurrentScreen("settings")
+    closeInfoScreen()
     forceBaseVisible("settings")
-    document.body.classList.remove("kt-screen-main", "kt-screen-admin", "kt-transitioning", "kt-screen-switching", "kt-screen-run")
+    document.body.classList.remove("kt-screen-main", "kt-screen-admin", "kt-screen-info", "kt-transitioning", "kt-screen-switching", "kt-screen-run")
     document.body.classList.add("kt-main-ready", "kt-screen-settings")
 
     window.requestAnimationFrame(() => {
@@ -162,7 +208,10 @@ function closeSettingsScreen() {
 }
 
 function openAdminTab(tabName = "dashboard") {
+    saveCurrentScreen("admin")
+    saveAdminTab(tabName)
     closeSettingsScreen()
+    closeInfoScreen()
     forceBaseVisible("admin")
     document.body.classList.remove("kt-screen-main", "kt-transitioning", "kt-screen-switching", "kt-screen-run")
     document.body.classList.add("kt-main-ready", "kt-screen-admin")
@@ -186,6 +235,7 @@ function forceBaseVisible(screen) {
     const mainScreen = document.getElementById("mainScreen")
     const adminScreen = document.getElementById("adminScreen")
     const settingsScreen = document.getElementById("settingsScreen")
+    const infoScreen = document.getElementById("infoScreen")
     const maintenanceScreen = document.getElementById("maintenanceScreen")
     const welcomeBox = document.getElementById("welcomeBox")
     const topMenu = document.getElementById("topMenu")
@@ -196,6 +246,12 @@ function forceBaseVisible(screen) {
     if (welcomeBox) welcomeBox.style.display = "flex"
     if (topMenu) topMenu.style.display = "block"
 
+    if (infoScreen) {
+        infoScreen.classList.toggle("show", screen === "info")
+        infoScreen.hidden = screen !== "info"
+        infoScreen.style.display = screen === "info" ? "block" : "none"
+    }
+
     if (settingsScreen) {
         settingsScreen.classList.toggle("show", screen === "settings")
         settingsScreen.hidden = screen !== "settings"
@@ -205,7 +261,7 @@ function forceBaseVisible(screen) {
     if (screen === "admin") {
         if (mainScreen) mainScreen.style.display = "none"
         if (adminScreen) adminScreen.style.display = "block"
-    } else if (screen === "settings") {
+    } else if (screen === "settings" || screen === "info") {
         if (mainScreen) mainScreen.style.display = "none"
         if (adminScreen) adminScreen.style.display = "none"
     } else {

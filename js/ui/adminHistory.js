@@ -7,7 +7,7 @@ import {
     getVisibleSets
 } from "./attendanceGroups.js"
 
-import { createAdminEditBlock } from "./attendanceEditParts.js"
+import { createAdminEditSetBlock } from "./attendanceEditParts.js"
 
 import {
     calculateDailyWorkTime,
@@ -24,6 +24,15 @@ import { renderAdminSummary } from "./summary.js"
 import { renderAdminWorkChart } from "./charts.js"
 
 export function renderAdminHistory() {
+    if (!state.hasAppliedAdminHistoryFilter) {
+        dom.adminHistory.innerHTML = `<div class="emptyStateCard historyInitialHiddenCard">社員・年・月を選択して「表示する」を押すと勤務履歴を表示します</div>`
+        if (dom.adminPrevPageBtn) dom.adminPrevPageBtn.disabled = true
+        if (dom.adminNextPageBtn) dom.adminNextPageBtn.disabled = true
+        renderAdminSummary()
+        renderAdminWorkChart()
+        return
+    }
+
     const targetUser = getSelectedAdminUser()
 
     if (!targetUser) {
@@ -96,9 +105,12 @@ export function renderAdminHistory() {
             const item = document.createElement("div")
             item.className = `adminItem historyItem ${getDailyStatusClass(dailyResult.status)}`
 
+            const hasAnyAttendanceRecord = Array.isArray(dayData.records) && dayData.records.length > 0
+
             if (
-                dailyResult.status === "holiday" ||
-                dailyResult.status === "autoHoliday"
+                !hasAnyAttendanceRecord &&
+                (dailyResult.status === "holiday" ||
+                dailyResult.status === "autoHoliday")
             ) {
                 renderHolidayAdminHistoryItem({
                     item,
@@ -188,15 +200,7 @@ function renderWorkAdminHistoryItem({
 }) {
     const visibleSets = getVisibleSets(dayData.sets)
 
-    const firstSet = visibleSets[0] || {
-        setNumber: 1,
-        clockIn: null,
-        clockOut: null
-    }
-
-    const secondSet = visibleSets[1]
-
-    item.innerHTML = `
+        item.innerHTML = `
     ${renderEditButton()}
 
     <div class="historyMainText">
@@ -210,12 +214,15 @@ function renderWorkAdminHistoryItem({
             総勤務 ${formatMinutes(dailyResult.workedMinutes)} / 残業 ${formatMinutes(dailyResult.overtimeMinutes)}
         </div>
 
+        <div class="historyAlwaysSetLines">
+            ${visibleSets.map((set, index) => renderSetLine(set, index + 1, dayData.dateKey)).join("")}
+        </div>
+
         <button type="button" class="historyDetailToggle">▼ 詳細を見る</button>
 
         <div class="historyDetailPanel">
             <div class="historySetLines">
-                ${renderSetLine(firstSet, 1, dayData.dateKey)}
-                ${secondSet ? renderSetLine(secondSet, 2, dayData.dateKey) : ""}
+                ${visibleSets.map((set, index) => renderSetLine(set, index + 1, dayData.dateKey)).join("")}
             </div>
 
             <div class="workTimeInfo">
@@ -230,47 +237,15 @@ function renderWorkAdminHistoryItem({
     const editArea = document.createElement("div")
     editArea.className = "historyEditArea"
 
-    editArea.appendChild(
-        createAdminEditBlock(
-            "1回目 出勤",
-            firstSet.clockIn,
-            "出勤",
-            targetUserData,
-            1
-        )
-    )
-
-    editArea.appendChild(
-        createAdminEditBlock(
-            "1回目 退勤",
-            firstSet.clockOut,
-            "退勤",
-            targetUserData,
-            1
-        )
-    )
-
-    if (secondSet) {
+    visibleSets.forEach((set, index) => {
         editArea.appendChild(
-            createAdminEditBlock(
-                "2回目 出勤",
-                secondSet.clockIn,
-                "出勤",
-                targetUserData,
-                2
+            createAdminEditSetBlock(
+                set,
+                index + 1,
+                targetUserData
             )
         )
-
-        editArea.appendChild(
-            createAdminEditBlock(
-                "2回目 退勤",
-                secondSet.clockOut,
-                "退勤",
-                targetUserData,
-                2
-            )
-        )
-    }
+    })
 
     item.appendChild(editArea)
 
@@ -307,9 +282,16 @@ function renderSetLine(set, setNumber, dateKey) {
 
     return `
     <div class="historySetLine">
-        ${setNumber === 1 ? "①" : "②"} ${escapeHtml(clockInText)} → ${escapeHtml(clockOutText)}${nextDayLabel}
+        ${getSetNumberLabel(setNumber)} ${escapeHtml(clockInText)} → ${escapeHtml(clockOutText)}${nextDayLabel}
     </div>
     `
+}
+
+function getSetNumberLabel(setNumber) {
+    if (setNumber === 1) return "①"
+    if (setNumber === 2) return "②"
+    if (setNumber === 3) return "③"
+    return `${setNumber}`
 }
 
 function isNextDayRecord(record, dateKey) {

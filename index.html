@@ -4,7 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Kings</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20260531k001">
+<style id="kingsCriticalBootGuard">
+html,body{background:#04060b;margin:0;min-height:100svh;}
+body.kt-booting #loginMount,
+body.kt-booting #appContent,
+body.kt-booting #headerMount{visibility:hidden;}
+body.kt-transitioning #loginMount{visibility:hidden;}
+#kingsBootOverlay{position:fixed;inset:0;z-index:2147483000;background:radial-gradient(circle at 50% 32%,rgba(255,138,31,.18),transparent 34%),linear-gradient(180deg,#05070c,#090f18 58%,#04060b);display:grid;place-items:center;pointer-events:none;}
+#kingsBootOverlay .bootLogoStage{text-align:center;filter:drop-shadow(0 0 24px rgba(255,210,150,.28));}
+#kingsBootOverlay .bootLogoText{font-family:Georgia,serif;font-size:clamp(56px,14vw,86px);line-height:1;color:#fff7dc;text-shadow:0 0 18px rgba(255,235,180,.55);}
+#kingsBootOverlay .bootLogoSub{margin-top:14px;color:#c69b69;font-size:clamp(10px,2.6vw,14px);font-weight:900;letter-spacing:.28em;white-space:nowrap;}
+#kingsBootOverlay .bootVersionText{position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:calc(24px + env(safe-area-inset-bottom))!important;text-align:center;color:rgba(255,247,220,.70);font-size:11px;font-weight:800;letter-spacing:.04em;line-height:1.35;z-index:2147483001;}
+</style>
+
+    <link rel="stylesheet" href="./css/kings-hotfix-2026-05-31b.css?v=20260531-cleanup-001">
+    <link rel="stylesheet" href="./css/kings-hotfix-2026-05-31d.css?v=20260531-hotfix-d-001">
+    <link rel="stylesheet" href="./css/kings-hotfix-2026-05-31e.css?v=20260531e001">
+    <link rel="stylesheet" href="./css/kings-hotfix-2026-05-31f.css?v=20260531f001">
+    <link rel="stylesheet" href="./css/kings-hotfix-2026-05-31g.css?v=20260531g001">
+<link rel="stylesheet" href="css/kings-hotfix-2026-05-31h.css?v=20260531h">
+<link rel="stylesheet" href="css/kings-hotfix-2026-05-31i.css?v=20260531i">
+<link rel="stylesheet" href="css/kings-hotfix-2026-05-31k.css?v=20260531k001">
 </head>
 <body class="kt-booting">
 
@@ -22,10 +43,11 @@
         <div id="maintenanceMount"></div>
         <div id="mainMount"></div>
         <div id="adminMount"></div>
+        <div id="infoMount"></div>
         <div id="settingsMount"></div>
     </div>
 </div>
 
-<script type="module" src="./js/bootstrap.js"></script>
+<script type="module" src="./js/bootstrap.js?v=20260531k001"></script>
 </body>
 </html>
